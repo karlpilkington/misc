@@ -1,0 +1,73 @@
+Miscellaneous scripts and samples
+---------------------------------
+Troy D. Hanson <tdh@tkhanson.net>
+
+Back to http://tkhanson.net[tkhanson.net main page].
+
+About
+~~~~~
+These are miscellaneous small template programs, utilities and scripts
+(Linux/Unix).  They are placed in the public domain. Anyone may use or modify
+these.
+
+Download options
+~~~~~~~~~~~~~~~~
+
+ * click here to http://tkhanson.net/misc/releases/misc.tar.bz2[download misc.tar.bz2]. 
+ * `wget http://tkhanson.net/misc/releases/misc.tar.bz2`
+ * `git clone http://tkhanson.net/misc.git`
+
+Contents
+~~~~~~~~
+
+Scripts/utilities
+^^^^^^^^^^^^^^^^^
+These are small scrips and utilities. These are placed in the public domain.
+
+[width="90%",cols="10^m,70,5",grid="none"]
+|=========================================================================================================================================================
+| fifor                   | execute commands whenever a fifo is readable (useful with a vim keystroke mapped to write the fifo) <<fifor,more>>      | Perl
+| md5watch                | list files changed since last run (in cron: `md5watch -u \| mail -s "Updated files" your@email.address`)                | Perl
+| iscan                   | program that reads a file descriptor 'incrementally' looking for a pattern (imagine grep on a socket fd)                | C
+| anb                     | list lines in file A but not in file B                                                                                  | Perl
+| bin2hex                 | convert stdin to hex bytes                                                                                              | Perl
+| hex2bin                 | convert hex string to binary bytes                                                                                      | Perl
+| setup                   | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc                                        | sh
+|=========================================================================================================================================================
+
+Usage samples for common libraries and tasks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+These are examples of using various libraries and doing common tasks.  These are placed in the public domain. 
+
+[width="90%",cols="10^m,70,5",grid="none"]
+|=========================================================================================================================================================
+| dlsym                   | example program showing usage of dlsym()                                                                                | C
+| looper                  | example program that iterates over lines of file                                                                        | C
+| pcre                    | example program showing usage of pcre library                                                                           | C
+| readline                | example program showing usage of readline library                                                                       | C
+| slurp                   | example program showing how to 'slurp' a file (read and mmap based versions)                                            | C
+| bloom                   | example program that builds a Bloom filter from lines of an input file, and tests lines of another file on it           | C
+| rw_wrap                 | do_read/do_write macros to wrap read/write, which loop until "len" bytes are read or written                            | C
+| utf                     | macros for utf8 character length, validity and utf32 conversion, and an example of using the iconv library              | C 
+|=========================================================================================================================================================
+
+[[fifor]]
+fifor
++++++
+Say you have `vim` running in one terminal, and wish to have `make` kicked off
+'in another window' whenever you type `F9` in vim. That's what `fifor` is for.
+It means "fifo for", in other words, "do something whenever a fifo is readable".
+For this example of triggering make from vim, include this line in your `~/.vimrc`:
+
+  map <F9> :!echo >/tmp/fifo<CR><CR>
+
+Now in the window where you want to have the make kicked off,
+
+  fifor make
+
+Now back in your vim window, whenever you hit `F9`, the make kicks off in the
+other window.  Note that if you want a chain of commands to run when the fifo
+triggers, separate them with a standalone semicolon, quoted so the shell ignores
+it: `fifor command1 \; command2`
+
+// vim: set tw=80 wm=2 syntax=asciidoc: 

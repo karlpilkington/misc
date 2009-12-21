@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# sets my preferences in some standard init files
+
+cat >>$HOME/.bash_profile <<EOF
+export PS1="\[\e[93;1m\][\u@\h \W]\[\e[0m\] "
+export LS_COLORS='no=00:di=01;34;04:ln=01;36;40:ex=01;31;40:'
+export EDITOR=vim
+alias ls="ls --color=auto"
+alias remember='if [ -z "$REMEMBER" ]; then REMEMBER=1; echo "remembering...  repeat when finished to record commands, or "unset REMEMBER" to cancel"; else unset REMEMBER; if [ ! -e $HOME/.remember ]; then touch $HOME/.remember; chmod 600 $HOME/.remember; fi; echo "storing history: "; date >> $HOME/.remember; fc -nl remember -1 | tee -a $HOME/.remember; echo >> $HOME/.remember; fi; true'
+EOF
+echo $HOME/.bash_profile
+
+cat >>$HOME/.gdbinit <<EOF
+set history filename $HOME/.gdb_history
+set history save on
+set history expansion on
+EOF
+echo $HOME/.gdbinit
+ 
+cat >>$HOME/.inputrc <<EOF
+set editing-mode vi
+set keymap vi-insert
+EOF
+echo $HOME/.inputrc
+
+cat >>$HOME/.vimrc <<EOF
+map <F5> I<!-- <Esc>A --><Esc>
+map <F6> 0:s/<!-- //<CR>:s/ -->//<CR>
+map <F7> I/* <Esc>A */<Esc>
+map <F8> 0:s/\/\* //<CR>:s/ \*\///<CR>
+map <F9> :!echo >/tmp/fifo<CR> :redraw!<CR>
+au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent execute "!chmod a+x <afile>" | endif | endif
+EOF
+echo $HOME/.vimrc
+
+echo "You may also need to run:"
+echo 'git config --global user.name "Your Name"'
+echo 'git config --global user.email "your@email.address"'
