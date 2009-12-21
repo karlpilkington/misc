@@ -1,0 +1,19 @@
+# the 'remember' function. 
+# put in .bashrc or .bash_profile 
+remember() {
+  if [ -z "$REMEMBER" ]
+    then REMEMBER=1
+    echo "repeat when finished to record commands, or unset REMEMBER to cancel"
+    else 
+      unset REMEMBER
+      if [ ! -e $HOME/.remember ]
+        then touch $HOME/.remember
+        chmod 600 $HOME/.remember
+      fi
+      echo "storing history: "
+      date >> $HOME/.remember
+      fc -nl remember -1 | tee -a $HOME/.remember
+      echo >> $HOME/.remember
+    fi
+  true
+}
