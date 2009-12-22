@@ -1,4 +1,4 @@
 TCP client/server
 Histogram profiling routine
 Logging routine
-Document 'remember' alias
+Better iscan implementation that counts matched prefix bytes
