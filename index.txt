@@ -1,73 +1,137 @@
-Miscellaneous scripts and samples
----------------------------------
+Scripts and Snippets
+--------------------
 Troy D. Hanson <tdh@tkhanson.net>
 
 Back to http://tkhanson.net[tkhanson.net main page].
 
 About
 ~~~~~
-These are miscellaneous small template programs, utilities and scripts
-(Linux/Unix).  They are placed in the public domain. Anyone may use or modify
-these.
+These are miscellaneous small scripts and snippets that I've written on Linux
+and OS X.  These are all placed in the public domain. 
 
 Download options
 ~~~~~~~~~~~~~~~~
+* Download http://tkhanson.net/misc/misc.tar.bz2[misc.tar.bz2]
+* Browse http://tkhanson.net/cgit.cgi/misc.git/tree[source tree]
+* Clone it: `git clone http://tkhanson.net/misc.git`
 
- * click here to http://tkhanson.net/misc/releases/misc.tar.bz2[download misc.tar.bz2]. 
- * `wget http://tkhanson.net/misc/releases/misc.tar.bz2`
- * `git clone http://tkhanson.net/misc.git`
+Scripts
+~~~~~~~
+[width="90%",cols="10^m,70,5",grid="none"]
+|=================================================================================================================
+| fifor      | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <<fifor,more>> | Perl
+| md5watch   | list files changed since last run <<md5watch,more>> | Perl
+| anb        | list lines in file A but not in file B | Perl
+| bin2hex    | convert stdin to hex bytes | Perl
+| hex2bin    | convert hex args to binary bytes on stdout | Perl
+| remember   | type "remember", run some commands you want to remember, then "remember -s" to save them <<remember,more>> | sh
+| setup      | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
+|=================================================================================================================
 
-Contents
+Snippets 
 ~~~~~~~~
-
-Scripts/utilities
-^^^^^^^^^^^^^^^^^
-These are small scrips and utilities. These are placed in the public domain.
-
+Examples of using common libraries and other reusable bits:
 [width="90%",cols="10^m,70,5",grid="none"]
-|=========================================================================================================================================================
-| fifor                   | execute commands whenever a fifo is readable (useful with a vim keystroke mapped to write the fifo) <<fifor,more>>      | Perl
-| md5watch                | list files changed since last run (in cron: `md5watch -u \| mail -s "Updated files" your@email.address`)                | Perl
-| iscan                   | program that reads a file descriptor 'incrementally' looking for a pattern (imagine grep on a socket fd)                | C
-| anb                     | list lines in file A but not in file B                                                                                  | Perl
-| bin2hex                 | convert stdin to hex bytes                                                                                              | Perl
-| hex2bin                 | convert hex string to binary bytes                                                                                      | Perl
-| setup                   | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc                                        | sh
-|=========================================================================================================================================================
+|=================================================================================================================
+| dlsym      | example of using dlsym() | C
+| looper     | example of iterating over lines of file | C
+| pcre       | example of using pcre library | C
+| readline   | example of using readline library | C
+| slurp      | example of using `read` or `mmap` to "slurp" a whole file | C
+| bloom      | builds a Bloom filter from lines of one text file, tests lines of another file on it | C
+| rw_wrap    | macros to wrap read/write, which loop until "len" bytes are read or written | C
+| utf8       | macros for utf8 handling including character length, validity and utf32 conversion | C 
+| iconv      | example of using the iconv library | C 
+| iscan      | sort of an incremental grep that reads a stream piecemeal scanning for a pattern | C
+|=================================================================================================================
 
-Usage samples for common libraries and tasks
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-These are examples of using various libraries and doing common tasks.  These are placed in the public domain. 
-
-[width="90%",cols="10^m,70,5",grid="none"]
-|=========================================================================================================================================================
-| dlsym                   | example program showing usage of dlsym()                                                                                | C
-| looper                  | example program that iterates over lines of file                                                                        | C
-| pcre                    | example program showing usage of pcre library                                                                           | C
-| readline                | example program showing usage of readline library                                                                       | C
-| slurp                   | example program showing how to 'slurp' a file (read and mmap based versions)                                            | C
-| bloom                   | example program that builds a Bloom filter from lines of an input file, and tests lines of another file on it           | C
-| rw_wrap                 | do_read/do_write macros to wrap read/write, which loop until "len" bytes are read or written                            | C
-| utf                     | macros for utf8 character length, validity and utf32 conversion, and an example of using the iconv library              | C 
-|=========================================================================================================================================================
+Notes on particular programs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [[fifor]]
 fifor
-+++++
+^^^^^
 Say you have `vim` running in one terminal, and wish to have `make` kicked off
-'in another window' whenever you type `F9` in vim. That's what `fifor` is for.
-It means "fifo for", in other words, "do something whenever a fifo is readable".
-For this example of triggering make from vim, include this line in your `~/.vimrc`:
-
-  map <F9> :!echo >/tmp/fifo<CR><CR>
-
-Now in the window where you want to have the make kicked off,
+'in a different window' whenever you type `F9` in vim. This is the sort of thing
+you can do with `fifor`. It means "fifo for", because it does "something" for
+every time a fifo becomes readable.  You specify the "something" you want to do
+simply as arguments to `fifor`:
 
   fifor make
 
-Now back in your vim window, whenever you hit `F9`, the make kicks off in the
-other window.  Note that if you want a chain of commands to run when the fifo
-triggers, separate them with a standalone semicolon, quoted so the shell ignores
-it: `fifor command1 \; command2`
+Now you just need a way to signal the fifo (`/tmp/fifo` by default) whenever you
+want your "something" to happen. I have this in `~/.vimrc`, so when I hit `F9`
+in vim, the make kicks off in the other window.  
+
+  map <F9> :!echo >/tmp/fifo<CR><CR>
+
+Note that if you want a chain of commands to run when the fifo triggers,
+separate them with a semicolon as its own argument (and quoted so the shell
+ignores it), like:
+
+  fifor command1 \; command2
+
+[[remember]]
+remember
+^^^^^^^^
+This is an easy way to record shell commands you might want to remember in the
+future. For example if you're installing a package, it's helpful to remember
+what build options you used. Run `remember` once before your shell
+commands, then run your commands, then run `remember -s` afterwards. The
+intervening commands will be copied from your bash history (so, you need to be
+using bash with history enabled). The copied lines get appended to a file 
+(readable only to you) called `$HOME/.remember`.
+
+  % remember how I installed curl
+  % wget http://curl.haxx.se/download/curl-7.19.7.tar.bz2
+  % tar xjf curl-7.19.7.tar.bz2
+  % cd curl-7.19.7
+  % ./configure --prefix=/home/local
+  % make
+  % make install
+  % remember -s
+
+This is what would be appended to your `$HOME/.remember` file:
+
+--------------------------------------------------------------------------------
+Sat Dec 19 21:45:31 PST 2009
+  remember how I installed curl
+  wget http://curl.haxx.se/download/curl-7.19.7.tar.bz2
+  tar xjf curl-7.19.7.tar.bz2
+  cd curl-7.19.7
+  ./configure --prefix=/home/local
+  make
+  make install
+--------------------------------------------------------------------------------
+
+NOTE: `remember` is not a script but rather a bash function that you paste into
+your `.bashrc` or `.bash_profile`. 
+
+[[md5watch]]
+md5watch
+^^^^^^^^
+This runs on an MD5 checksum on files in a directory hierarchy. It keeps a
+record of all their MD5 values (by default in a file called `~/.md5hist`) so
+that next time it is run, it can print out which files have changed.
+
+Generally use this with `-u` (update) so it records the new MD5 hash (of changed
+or new files), in addition to printing them. Without `-u`, it only prints them.
+
+  % cd /tmp
+  % echo hello > hello.txt
+  % md5watch -u
+  ./hello.txt new ...updated.
+  % echo 'hello, world!' > hello.txt
+  % md5watch -u
+  ./hello.txt changed since Mon Dec 21 14:48:00 2009 ...updated.
+
+You can place `md5watch -u` into cron like this to get a daily email of files
+whose content has changed.  This example excludes the top-level logs directory
+from being scanned.
+
+  5 0 * * *       $HOME/bin/md5watch -e ./logs -u
+
+While you could use `find` to list files modified in the last day (by
+modification timestamp), `md5watch` actually tests whether the content has changed.
 
 // vim: set tw=80 wm=2 syntax=asciidoc: 

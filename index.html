@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.3.4" />
+<meta name="generator" content="AsciiDoc 8.5.0" />
 <title></title>
 <style type="text/css">
 /* Debug borders */
@@ -91,7 +91,7 @@ span#author {
 }
 span#email {
 }
-span#revision {
+span#revnumber, span#revdate, span#revremark {
   font-family: sans-serif;
 }
 
@@ -118,8 +118,7 @@ div#preamble {
 div.tableblock, div.imageblock, div.exampleblock, div.verseblock,
 div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
 div.admonitionblock {
-  margin-right: 10%;
-  margin-top: 1.5em;
+  margin-top: 0.25em;
   margin-bottom: 1.5em;
 }
 div.admonitionblock {
@@ -160,9 +159,6 @@ div.sidebarblock > div.content {
   padding: 0.5em;
 }
 
-div.listingblock {
-  margin-right: 0%;
-}
 div.listingblock > div.content {
   border: 1px solid silver;
   background: #f4f4f4;
@@ -171,6 +167,7 @@ div.listingblock > div.content {
 
 div.quoteblock {
   padding-left: 2.0em;
+  margin-right: 10%;
 }
 div.quoteblock > div.attribution {
   padding-top: 0.5em;
@@ -179,6 +176,7 @@ div.quoteblock > div.attribution {
 
 div.verseblock {
   padding-left: 2.0em;
+  margin-right: 10%;
 }
 div.verseblock > div.content {
   white-space: pre;
@@ -211,8 +209,8 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-div.imageblock img { border: 1px solid silver; }
 span.image img { border-style: none; }
+a.image:visited { color: white; }
 
 dl {
   margin-top: 0.8em;
@@ -387,35 +385,32 @@ div#toc a:visited { color: blue; }
 <body>
 <div id="header">
 </div>
-<h2 id="_miscellaneous_scripts_and_samples">Miscellaneous scripts and samples</h2>
+<h2 id="_scripts_and_snippets">Scripts and Snippets</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>Troy D. Hanson &lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</p></div>
 <div class="paragraph"><p>Back to <a href="http://tkhanson.net">tkhanson.net main page</a>.</p></div>
 <h3 id="_about">About</h3><div style="clear:left"></div>
-<div class="paragraph"><p>These are miscellaneous small template programs, utilities and scripts
-(Linux/Unix).  They are placed in the public domain. Anyone may use or modify
-these.</p></div>
+<div class="paragraph"><p>These are miscellaneous small scripts and snippets that I&#8217;ve written on Linux
+and OS X.  These are all placed in the public domain.</p></div>
 <h3 id="_download_options">Download options</h3><div style="clear:left"></div>
 <div class="ulist"><ul>
 <li>
 <p>
-click here to <a href="http://tkhanson.net/misc/releases/misc.tar.bz2">download misc.tar.bz2</a>.
+Download <a href="http://tkhanson.net/misc/misc.tar.bz2">misc.tar.bz2</a>
 </p>
 </li>
 <li>
 <p>
-<tt>wget <a href="http://tkhanson.net/misc/releases/misc.tar.bz2">http://tkhanson.net/misc/releases/misc.tar.bz2</a></tt>
+Browse <a href="http://tkhanson.net/cgit.cgi/misc.git/tree">source tree</a>
 </p>
 </li>
 <li>
 <p>
-<tt>git clone <a href="http://tkhanson.net/misc.git">http://tkhanson.net/misc.git</a></tt>
+Clone it: <tt>git clone http://tkhanson.net/misc.git</tt>
 </p>
 </li>
 </ul></div>
-<h3 id="_contents">Contents</h3><div style="clear:left"></div>
-<h4 id="_scripts_utilities">Scripts/utilities</h4>
-<div class="paragraph"><p>These are small scrips and utilities. These are placed in the public domain.</p></div>
+<h3 id="_scripts">Scripts</h3><div style="clear:left"></div>
 <div class="tableblock">
 <table rules="none"
 width="90%"
@@ -424,47 +419,47 @@ cellspacing="0" cellpadding="4">
 <col width="11%" />
 <col width="82%" />
 <col width="5%" />
-<tbody valign="top">
+<tbody>
 <tr>
-<td align="center"><p class="table"><tt>fifor</tt></p></td>
-<td align="left"><p class="table">execute commands whenever a fifo is readable (useful with a vim keystroke mapped to write the fifo) <a href="#fifor">more</a></p></td>
-<td align="left"><p class="table">Perl</p></td>
+<td align="center" valign="top"><p class="table"><tt>fifor</tt></p></td>
+<td align="left" valign="top"><p class="table">run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <a href="#fifor">more</a></p></td>
+<td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>md5watch</tt></p></td>
-<td align="left"><p class="table">list files changed since last run (in cron: <tt>md5watch -u | mail -s "Updated files" your@email.address</tt>)</p></td>
-<td align="left"><p class="table">Perl</p></td>
+<td align="center" valign="top"><p class="table"><tt>md5watch</tt></p></td>
+<td align="left" valign="top"><p class="table">list files changed since last run <a href="#md5watch">more</a></p></td>
+<td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>iscan</tt></p></td>
-<td align="left"><p class="table">program that reads a file descriptor <em>incrementally</em> looking for a pattern (imagine grep on a socket fd)</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>anb</tt></p></td>
+<td align="left" valign="top"><p class="table">list lines in file A but not in file B</p></td>
+<td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>anb</tt></p></td>
-<td align="left"><p class="table">list lines in file A but not in file B</p></td>
-<td align="left"><p class="table">Perl</p></td>
+<td align="center" valign="top"><p class="table"><tt>bin2hex</tt></p></td>
+<td align="left" valign="top"><p class="table">convert stdin to hex bytes</p></td>
+<td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>bin2hex</tt></p></td>
-<td align="left"><p class="table">convert stdin to hex bytes</p></td>
-<td align="left"><p class="table">Perl</p></td>
+<td align="center" valign="top"><p class="table"><tt>hex2bin</tt></p></td>
+<td align="left" valign="top"><p class="table">convert hex args to binary bytes on stdout</p></td>
+<td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>hex2bin</tt></p></td>
-<td align="left"><p class="table">convert hex string to binary bytes</p></td>
-<td align="left"><p class="table">Perl</p></td>
+<td align="center" valign="top"><p class="table"><tt>remember</tt></p></td>
+<td align="left" valign="top"><p class="table">type "remember", run some commands you want to remember, then "remember -s" to save them <a href="#remember">more</a></p></td>
+<td align="left" valign="top"><p class="table">sh</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>setup</tt></p></td>
-<td align="left"><p class="table">configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc</p></td>
-<td align="left"><p class="table">sh</p></td>
+<td align="center" valign="top"><p class="table"><tt>setup</tt></p></td>
+<td align="left" valign="top"><p class="table">configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc</p></td>
+<td align="left" valign="top"><p class="table">sh</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<h4 id="_usage_samples_for_common_libraries_and_tasks">Usage samples for common libraries and tasks</h4>
-<div class="paragraph"><p>These are examples of using various libraries and doing common tasks.  These are placed in the public domain.</p></div>
+<h3 id="_snippets">Snippets</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Examples of using common libraries and other reusable bits:</p></div>
 <div class="tableblock">
 <table rules="none"
 width="90%"
@@ -473,72 +468,154 @@ cellspacing="0" cellpadding="4">
 <col width="11%" />
 <col width="82%" />
 <col width="5%" />
-<tbody valign="top">
+<tbody>
 <tr>
-<td align="center"><p class="table"><tt>dlsym</tt></p></td>
-<td align="left"><p class="table">example program showing usage of dlsym()</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>dlsym</tt></p></td>
+<td align="left" valign="top"><p class="table">example of using dlsym()</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>looper</tt></p></td>
-<td align="left"><p class="table">example program that iterates over lines of file</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>looper</tt></p></td>
+<td align="left" valign="top"><p class="table">example of iterating over lines of file</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>pcre</tt></p></td>
-<td align="left"><p class="table">example program showing usage of pcre library</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>pcre</tt></p></td>
+<td align="left" valign="top"><p class="table">example of using pcre library</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>readline</tt></p></td>
-<td align="left"><p class="table">example program showing usage of readline library</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>readline</tt></p></td>
+<td align="left" valign="top"><p class="table">example of using readline library</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>slurp</tt></p></td>
-<td align="left"><p class="table">example program showing how to <em>slurp</em> a file (read and mmap based versions)</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>slurp</tt></p></td>
+<td align="left" valign="top"><p class="table">example of using <tt>read</tt> or <tt>mmap</tt> to "slurp" a whole file</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>bloom</tt></p></td>
-<td align="left"><p class="table">example program that builds a Bloom filter from lines of an input file, and tests lines of another file on it</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>bloom</tt></p></td>
+<td align="left" valign="top"><p class="table">builds a Bloom filter from lines of one text file, tests lines of another file on it</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>rw_wrap</tt></p></td>
-<td align="left"><p class="table">do_read/do_write macros to wrap read/write, which loop until "len" bytes are read or written</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>rw_wrap</tt></p></td>
+<td align="left" valign="top"><p class="table">macros to wrap read/write, which loop until "len" bytes are read or written</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center"><p class="table"><tt>utf</tt></p></td>
-<td align="left"><p class="table">macros for utf8 character length, validity and utf32 conversion, and an example of using the iconv library</p></td>
-<td align="left"><p class="table">C</p></td>
+<td align="center" valign="top"><p class="table"><tt>utf8</tt></p></td>
+<td align="left" valign="top"><p class="table">macros for utf8 handling including character length, validity and utf32 conversion</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
+</tr>
+<tr>
+<td align="center" valign="top"><p class="table"><tt>iconv</tt></p></td>
+<td align="left" valign="top"><p class="table">example of using the iconv library</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
+</tr>
+<tr>
+<td align="center" valign="top"><p class="table"><tt>iscan</tt></p></td>
+<td align="left" valign="top"><p class="table">sort of an incremental grep that reads a stream piecemeal scanning for a pattern</p></td>
+<td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<h5 id="fifor">fifor</h5>
+<h3 id="_notes_on_particular_programs">Notes on particular programs</h3><div style="clear:left"></div>
+<h4 id="fifor">fifor</h4>
 <div class="paragraph"><p>Say you have <tt>vim</tt> running in one terminal, and wish to have <tt>make</tt> kicked off
-<em>in another window</em> whenever you type <tt>F9</tt> in vim. That&#8217;s what <tt>fifor</tt> is for.
-It means "fifo for", in other words, "do something whenever a fifo is readable".
-For this example of triggering make from vim, include this line in your <tt>~/.vimrc</tt>:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>map &lt;F9&gt; :!echo &gt;/tmp/fifo&lt;CR&gt;&lt;CR&gt;</tt></pre>
-</div></div>
-<div class="paragraph"><p>Now in the window where you want to have the make kicked off,</p></div>
+<em>in a different window</em> whenever you type <tt>F9</tt> in vim. This is the sort of thing
+you can do with <tt>fifor</tt>. It means "fifo for", because it does "something" for
+every time a fifo becomes readable.  You specify the "something" you want to do
+simply as arguments to <tt>fifor</tt>:</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><tt>fifor make</tt></pre>
 </div></div>
-<div class="paragraph"><p>Now back in your vim window, whenever you hit <tt>F9</tt>, the make kicks off in the
-other window.  Note that if you want a chain of commands to run when the fifo
-triggers, separate them with a standalone semicolon, quoted so the shell ignores
-it: <tt>fifor command1 \; command2</tt></p></div>
+<div class="paragraph"><p>Now you just need a way to signal the fifo (<tt>/tmp/fifo</tt> by default) whenever you
+want your "something" to happen. I have this in <tt>~/.vimrc</tt>, so when I hit <tt>F9</tt>
+in vim, the make kicks off in the other window.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>map &lt;F9&gt; :!echo &gt;/tmp/fifo&lt;CR&gt;&lt;CR&gt;</tt></pre>
+</div></div>
+<div class="paragraph"><p>Note that if you want a chain of commands to run when the fifo triggers,
+separate them with a semicolon as its own argument (and quoted so the shell
+ignores it), like:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>fifor command1 \; command2</tt></pre>
+</div></div>
+<h4 id="remember">remember</h4>
+<div class="paragraph"><p>This is an easy way to record shell commands you might want to remember in the
+future. For example if you&#8217;re installing a package, it&#8217;s helpful to remember
+what build options you used. Run <tt>remember</tt> once before your shell
+commands, then run your commands, then run <tt>remember -s</tt> afterwards. The
+intervening commands will be copied from your bash history (so, you need to be
+using bash with history enabled). The copied lines get appended to a file
+(readable only to you) called <tt>$HOME/.remember</tt>.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>% remember how I installed curl
+% wget http://curl.haxx.se/download/curl-7.19.7.tar.bz2
+% tar xjf curl-7.19.7.tar.bz2
+% cd curl-7.19.7
+% ./configure --prefix=/home/local
+% make
+% make install
+% remember -s</tt></pre>
+</div></div>
+<div class="paragraph"><p>This is what would be appended to your <tt>$HOME/.remember</tt> file:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Sat Dec 19 21:45:31 PST 2009
+  remember how I installed curl
+  wget http://curl.haxx.se/download/curl-7.19.7.tar.bz2
+  tar xjf curl-7.19.7.tar.bz2
+  cd curl-7.19.7
+  ./configure --prefix=/home/local
+  make
+  make install</tt></pre>
+</div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content"><tt>remember</tt> is not a script but rather a bash function that you paste into
+your <tt>.bashrc</tt> or <tt>.bash_profile</tt>.</td>
+</tr></table>
+</div>
+<h4 id="md5watch">md5watch</h4>
+<div class="paragraph"><p>This runs on an MD5 checksum on files in a directory hierarchy. It keeps a
+record of all their MD5 values (by default in a file called <tt>~/.md5hist</tt>) so
+that next time it is run, it can print out which files have changed.</p></div>
+<div class="paragraph"><p>Generally use this with <tt>-u</tt> (update) so it records the new MD5 hash (of changed
+or new files), in addition to printing them. Without <tt>-u</tt>, it only prints them.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>% cd /tmp
+% echo hello &gt; hello.txt
+% md5watch -u
+./hello.txt new ...updated.
+% echo 'hello, world!' &gt; hello.txt
+% md5watch -u
+./hello.txt changed since Mon Dec 21 14:48:00 2009 ...updated.</tt></pre>
+</div></div>
+<div class="paragraph"><p>You can place <tt>md5watch -u</tt> into cron like this to get a daily email of files
+whose content has changed.  This example excludes the top-level logs directory
+from being scanned.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>5 0 * * *       $HOME/bin/md5watch -e ./logs -u</tt></pre>
+</div></div>
+<div class="paragraph"><p>While you could use <tt>find</tt> to list files modified in the last day (by
+modification timestamp), <tt>md5watch</tt> actually tests whether the content has changed.</p></div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2009-12-20 21:48:29 EDT
+Last updated 2009-12-21 22:06:33 PDT
 </div>
 </div>
 </body>
