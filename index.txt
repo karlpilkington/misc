@@ -21,6 +21,7 @@ Scripts
 |=================================================================================================================
 | fifor      | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <<fifor,more>> | Perl
 | md5watch   | list files changed since last run <<md5watch,more>> | Perl
+| mailpl     | send email with attachments, configurable from address, etc | Perl
 | anb        | list lines in file A but not in file B | Perl
 | bin2hex    | convert stdin to hex bytes | Perl
 | hex2bin    | convert hex args to binary bytes on stdout | Perl
