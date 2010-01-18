@@ -25,6 +25,7 @@ Scripts
 | anb        | list lines in file A but not in file B | Perl
 | bin2hex    | convert stdin to hex bytes | Perl
 | hex2bin    | convert hex args to binary bytes on stdout | Perl
+| pagehits   | parse access.log and store daily hits for each url, or view cumulative hits | Perl
 | remember   | type "remember", run some commands you want to remember, then "remember -s" to save them <<remember,more>> | sh
 | setup      | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
 |=================================================================================================================
