@@ -47,12 +47,12 @@ Examples of using common libraries and other reusable bits:
 | iscan      | sort of an incremental grep that reads a stream piecemeal scanning for a pattern | C
 |=================================================================================================================
 
-Notes on particular programs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Additional notes
+----------------
 
 [[fifor]]
 fifor
-^^^^^
+~~~~~
 Say you have `vim` running in one terminal, and wish to have `make` kicked off
 'in a different window' whenever you type `F9` in vim. This is the sort of thing
 you can do with `fifor`. It means "fifo for", because it does "something" for
@@ -75,7 +75,7 @@ ignores it), like:
 
 [[remember]]
 remember
-^^^^^^^^
+~~~~~~~~
 This is an easy way to record shell commands you might want to remember in the
 future. For example if you're installing a package, it's helpful to remember
 what build options you used. Run `remember` once before your shell
@@ -111,7 +111,7 @@ your `.bashrc` or `.bash_profile`.
 
 [[md5watch]]
 md5watch
-^^^^^^^^
+~~~~~~~~
 This runs on an MD5 checksum on files in a directory hierarchy. It keeps a
 record of all their MD5 values (by default in a file called `~/.md5hist`) so
 that next time it is run, it can print out which files have changed.
