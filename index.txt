@@ -2,6 +2,8 @@ Scripts and Snippets
 --------------------
 Troy D. Hanson <tdh@tkhanson.net>
 
+include::sslogo.txt[]
+
 Back to http://tkhanson.net[tkhanson.net main page].
 
 About
