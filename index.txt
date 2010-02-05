@@ -15,7 +15,7 @@ Download options
 ~~~~~~~~~~~~~~~~
 * Download http://tkhanson.net/misc/misc.tar.bz2[misc.tar.bz2]
 * Browse http://tkhanson.net/cgit.cgi/misc.git/tree[source tree]
-* Clone it: `git clone http://tkhanson.net/misc.git`
+* Clone `git clone http://tkhanson.net/misc.git`
 
 // this defines an attribute called {t} used below
 //:t: http://tkhanson.net/cgit.cgi/misc.git/plain/
@@ -114,6 +114,9 @@ Sat Dec 19 21:45:31 PST 2009
 
 NOTE: `remember` is not a script but rather a bash function that you paste into
 your `.bashrc` or `.bash_profile`. 
+
+For another description of 'remember', see this
+http://troydhanson.wordpress.com/2010/01/28/scripts-and-snippets/[blog post].
 
 [[md5watch]]
 md5watch
