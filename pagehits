@@ -11,11 +11,12 @@ our $update;
 our $force;
 our $quiet;
 our $daily;
+our $lastday;
 our $help;
 our $dbmfile = $ENV{HOME} . "/.pagehits";
 
 sub usage {
-  print "usage: $0 [--daily] (print cumulative [daily] stats)\n";
+  print "usage: $0 [--daily|--lastday] (print cumulative [daily|lastday] stats)\n";
   print "usage: $0 --update [--force] [--quiet] <access.log> [access.log] (parse and store hits)\n";
   print "\ncommon options:\n";
   print "          --dbmfile <file> (default: $dbmfile)\n";
@@ -67,24 +68,28 @@ sub do_update {
     count_hit(\%hits,$_) for (<LOG>);
   }
   # record the hits in the persistent hash h (dbm file) 
-  for my $ud (keys %hits) {
-    my ($date,$url) = split /$;/, $ud;
-    if ($h{$ud} and ($h{$ud} > $hits{$ud}) and not $force) {
+  for my $du (keys %hits) {
+    my ($date,$url) = split /$;/, $du;
+    if ($h{$du} and ($h{$du} > $hits{$du}) and not $force) {
       die "would reduce hits for $url $date, re-run with force\n";
     }
-    $h{$ud} = $hits{$ud};
+    $h{$du} = $hits{$du};
   }
 } 
 
 sub show_hits {
   our %h;
   my %cumulative; # hit count per url (over all days)
-  for my $ud (sort keys %h) {
-    my ($date,$url) = split /$;/, $ud;
-    $cumulative{$url} += $h{$ud};
-    print "$date $h{$ud} $url\n" if $daily;
+  my @du_all = sort keys %h;
+  my $lastdate = (split(/$;/,$du_all[-1]))[0];
+  print "$lastdate:\n" if $lastday;
+  for my $du (@du_all) {
+    my ($date,$url) = split /$;/, $du;
+    $cumulative{$url} += $h{$du};
+    print "$date $h{$du} $url\n" if $daily;
+    print "$h{$du} $url\n" if $lastday && ($date == $lastdate);
   }
-  return if $daily;
+  return if $daily || $lastday;
   # print cumulative hit counts, greatest first
   for my $url (sort {$cumulative{$b} <=> $cumulative{$a}} keys %cumulative) {
     print $cumulative{$url}, " $url\n";
@@ -93,6 +98,7 @@ sub show_hits {
 
 usage unless GetOptions("verbose+"      => \$verbose,
                         "daily"         => \$daily,
+                        "lastday"       => \$lastday,
                         "update"        => \$update,
                         "force"         => \$force,
                         "quiet"         => \$quiet,
