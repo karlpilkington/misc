@@ -5,18 +5,19 @@ use strict;
 use warnings;
 use DB_File;
 use Getopt::Long;
+use Date::Calc qw(Add_Delta_Days Today);
 
 our $verbose=0;
 our $update;
 our $force;
 our $quiet;
 our $daily;
-our $lastday;
+our $yesterday;
 our $help;
 our $dbmfile = $ENV{HOME} . "/.pagehits";
 
 sub usage {
-  print "usage: $0 [--daily|--lastday] (print cumulative [daily|lastday] stats)\n";
+  print "usage: $0 [--daily|--yesterday] (print cumulative [daily|yesterday] stats)\n";
   print "usage: $0 --update [--force] [--quiet] <access.log> [access.log] (parse and store hits)\n";
   print "\ncommon options:\n";
   print "          --dbmfile <file> (default: $dbmfile)\n";
@@ -77,19 +78,27 @@ sub do_update {
   }
 } 
 
+sub yesterdate {
+  my ($y,$m,$d) = Today();
+  ($y,$m,$d) = Add_Delta_Days($y,$m,$d, -1);
+  $m = "0$m" if length($m)==1;
+  $d = "0$d" if length($d)==1;
+  return "$y$m$d";
+}
+
 sub show_hits {
   our %h;
   my %cumulative; # hit count per url (over all days)
   my @du_all = sort keys %h;
-  my $lastdate = (split(/$;/,$du_all[-1]))[0];
-  print "$lastdate:\n" if $lastday;
+  my $yesterdate = yesterdate;
+  print "$yesterdate:\n" if $yesterday;
   for my $du (@du_all) {
     my ($date,$url) = split /$;/, $du;
     $cumulative{$url} += $h{$du};
     print "$date $h{$du} $url\n" if $daily;
-    print "$h{$du} $url\n" if $lastday && ($date == $lastdate);
+    print "$h{$du} $url\n" if $yesterday && ($date == $yesterdate);
   }
-  return if $daily || $lastday;
+  return if $daily || $yesterday;
   # print cumulative hit counts, greatest first
   for my $url (sort {$cumulative{$b} <=> $cumulative{$a}} keys %cumulative) {
     print $cumulative{$url}, " $url\n";
@@ -98,7 +107,7 @@ sub show_hits {
 
 usage unless GetOptions("verbose+"      => \$verbose,
                         "daily"         => \$daily,
-                        "lastday"       => \$lastday,
+                        "yesterday"     => \$yesterday,
                         "update"        => \$update,
                         "force"         => \$force,
                         "quiet"         => \$quiet,
