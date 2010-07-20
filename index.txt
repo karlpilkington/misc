@@ -60,36 +60,32 @@ Additional notes
 [[fifor]]
 fifor
 ~~~~~
-Say you have `vim` running in one terminal, and wish to have `make`
-kicked off 'in a different window' whenever you type `\\` (backslash)
-in vim. This is the sort of thing you can do with `fifor`. It means
-"fifo for", because it does "something" for every time a fifo becomes
-readable.  But you need to do a one-time setup to create the fifo:
+Say you have `vim` running in one window, and wish to have `make` kicked off
+'in a different window' whenever you type backslash in vim. This is the sort of
+thing you can do with `fifor`.  This utility does "something" every time a fifo
+becomes readable.  You need to do a one-time setup to create the fifo:
 
   mkfifo /tmp/fifo
 
-In the window where you want the "something" to happen, you
-run `fifor` with the command to be run:
+In the window where you want the "something" to happen, start `fifor` with the
+command to be run:
 
   fifor make
 
-By default it will be looking for `/tmp/fifo` but you can use options
-to change what fifo file it is watching. (Run `fifor -h` for usage).
+Now it will wait. Anytime a line is written to `/tmp/fifo`, it will execute
+`make`.  (You can use options to specify a different fifo file. Run `fifor -h`
+for usage).  Note that if you want a 'sequence' of commands to run when the fifo
+triggers, separate each command in the sequence with a quoted semicolon:
 
-Note that if you want a chain of commands to run when the fifo triggers,
-separate them with a quoted semicolon (so the shell ignores it), like:
+  fifor make \; cp tool /usr/bin
 
-  fifor command1 \; command2
-
-Now whenever you want "something" to happen (`make`, in this case) you
-just need to write a line (anything) to the fifo.  You could just
-`echo > /tmp/fifo" to write an empty line to it. But the real benefit
-comes when you automate this by mapping it to a keystroke in `vim`. I
-have this in `~/.vimrc`, so when I hit backslash in vim, the make
-kicks off in the other window.  
+Whenever you want the commands to run, write a line (anything) to the fifo.  You
+could just `echo > /tmp/fifo` to write an empty line to it.  I automate this by
+mapping it to a keystroke in `vim`, using this line in `~/.vimrc`: 
 
   map <Bslash> :!echo >/tmp/fifo<CR><CR>
 
+Now whenever I hit backslash in vim, the make kicks off in the other window.  
 
 [[remember]]
 remember
