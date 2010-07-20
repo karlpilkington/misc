@@ -47,6 +47,7 @@ Examples of using common libraries and other reusable bits:
 | {t}readline[readline]| example of using readline library | C
 | {t}slurp[slurp]      | example of using `read` or `mmap` to "slurp" a whole file | C
 | {t}bloom[bloom]      | builds a Bloom filter from lines of one text file, tests lines of another file on it | C
+| {t}zlib[zlib]        | example of implementing a simple gzip/gunzip using the zlib C API | C
 | {t}rw_wrap[rw_wrap]  | macros to wrap read/write, which loop until "len" bytes are read or written | C
 | {t}utf8[utf8]        | macros for utf8 handling including character length, validity and utf32 conversion | C 
 | {t}iconv[iconv]      | example of using the iconv library | C 
@@ -59,25 +60,36 @@ Additional notes
 [[fifor]]
 fifor
 ~~~~~
-Say you have `vim` running in one terminal, and wish to have `make` kicked off
-'in a different window' whenever you type `F9` in vim. This is the sort of thing
-you can do with `fifor`. It means "fifo for", because it does "something" for
-every time a fifo becomes readable.  You specify the "something" you want to do
-simply as arguments to `fifor`:
+Say you have `vim` running in one terminal, and wish to have `make`
+kicked off 'in a different window' whenever you type `\\` (backslash)
+in vim. This is the sort of thing you can do with `fifor`. It means
+"fifo for", because it does "something" for every time a fifo becomes
+readable.  But you need to do a one-time setup to create the fifo:
+
+  mkfifo /tmp/fifo
+
+In the window where you want the "something" to happen, you
+run `fifor` with the command to be run:
 
   fifor make
 
-Now you just need a way to signal the fifo (`/tmp/fifo` by default) whenever you
-want your "something" to happen. I have this in `~/.vimrc`, so when I hit `F9`
-in vim, the make kicks off in the other window.  
-
-  map <F9> :!echo >/tmp/fifo<CR><CR>
+By default it will be looking for `/tmp/fifo` but you can use options
+to change what fifo file it is watching. (Run `fifor -h` for usage).
 
 Note that if you want a chain of commands to run when the fifo triggers,
-separate them with a semicolon as its own argument (and quoted so the shell
-ignores it), like:
+separate them with a quoted semicolon (so the shell ignores it), like:
 
   fifor command1 \; command2
+
+Now whenever you want "something" to happen (`make`, in this case) you
+just need to write a line (anything) to the fifo.  You could just
+`echo > /tmp/fifo" to write an empty line to it. But the real benefit
+comes when you automate this by mapping it to a keystroke in `vim`. I
+have this in `~/.vimrc`, so when I hit backslash in vim, the make
+kicks off in the other window.  
+
+  map <Bslash> :!echo >/tmp/fifo<CR><CR>
+
 
 [[remember]]
 remember
