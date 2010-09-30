@@ -7,6 +7,26 @@ export PS1="\[\e[93;1m\][\u@\h \W]\[\e[0m\] "
 export LS_COLORS='no=00:di=01;34;04:ln=01;36;40:ex=01;31;40:'
 export EDITOR=vim
 alias ls="ls --color=auto"
+function d2b {
+  echo "obase=2; $1" | bc
+}
+function b2d {
+  echo "ibase=2; $1" | bc
+}
+function h2d {
+  H=$(echo $1 | tr a-z A-Z)
+  echo "ibase=16; $H" | bc
+}
+function d2h {
+  echo "obase=16; $1" | bc
+}
+function b2h {
+  echo "obase=16; ibase=2; $1" | bc
+}
+function h2b {
+  H=$(echo $1 | tr a-z A-Z)
+  echo "ibase=16; obase=2; $H"  | bc
+}
 EOF
 if [ -f ./remember ]
 then
