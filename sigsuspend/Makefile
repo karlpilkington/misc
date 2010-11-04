@@ -1,8 +1,8 @@
-all: mgr_workers
+all: mworkers
 
-workers: mgr_workers.c
+mworkers: mworkers.c
 
 .PHONY: clean
 
 clean:
-	rm -f mgr_workers *.o
+	rm -f mworkers *.o

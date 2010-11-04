@@ -16,7 +16,9 @@
 int wr;    /* workers running */
 int wn=2;  /* workers needed */
 
-sigjmp_buf jmpbuf;
+sigjmp_buf jmp;
+/* signals that we'll unblock during sigsuspend */
+int sigs[] = {SIGHUP,SIGCHLD,SIGTERM,SIGALRM,SIGUSR1};
 
 typedef struct {
   pid_t pid;
@@ -25,27 +27,38 @@ typedef struct {
 
 worker_t *workers;
 
-int sighandler(int signo) {
-  siglongjmp(jmpbuf,signo);
+void sighandler(int signo) {
+  siglongjmp(jmp,signo);
 }
  
-void worker(int n) {
+void worker(int w) {
   pid_t pid;
+  int n;
 
   if ( (pid = fork()) == -1) {
     printf("fork error\n"); 
     exit(-1); 
   }
   if (pid > 0) { /* parent. */
+    printf("worker %d started\n", (int)pid);
     /* record worker */
-    workers[n].pid = pid;
-    workers[n].start = time();
+    workers[w].pid = pid;
+    workers[w].start = time(NULL);
     return;
   } 
+
   /* child here */
   /* setproctitle() or prctl(PR_SET_NAME) */
+
+  /* restore default signal handlers, then unblock all signasl */
+  for(n=0; n < sizeof(sigs)/sizeof(*sigs); n++) signal(sigs[n],SIG_DFL);
+  sigset_t all;
+  sigemptyset(&all);
+  sigprocmask(SIG_SETMASK,&all,NULL);
+
+  /* do something to simulate real work */
   int maxsleep = 30;
-  int awhile = 1.0*maxsleep*rand()/RAND_MAX;
+  int awhile = maxsleep*rand()/RAND_MAX*1.0;
   sleep(awhile);
   exit(0);
 }
@@ -57,42 +70,54 @@ int main(int argc, char *argv[]) {
     if ( (workers = malloc(sizeof(worker_t)*wn)) == NULL) 
         exit(-1);
 
-    /* block all signals */
-    sigprocmask(SIG_SETMASK,blocked,NULL);
+    /* block all signals. we stay blocked always except in sugsuspend */
+    sigset_t all;
+    sigfillset(&all);
+    sigprocmask(SIG_SETMASK,&all,NULL);
 
-    /* come back here every time a signal happens */
-    rc = sigsetjmp(jmpbuf,1);
-    switch(rc) {
-        case 0: /* initial */
-          /* bring up wn workers */
-          while(wr < wn) worker(wr++);
+    /* a smaller set of signals we'll block during sigsuspend */
+    sigset_t ss;
+    sigfillset(&ss);
+    for(n=0; n < sizeof(sigs)/sizeof(*sigs); n++) sigdelset(&ss, sigs[n]);
+
+    /* establish handlers for signals that'll be unblocked in sigusupend */
+    struct sigaction sa;
+    sa.sa_handler=sighandler; 
+    sa.sa_flags=0;
+    sigemptyset(&sa.sa_mask);
+    for(n=0; n < sizeof(sigs)/sizeof(*sigs); n++) sigaction(sigs[n], &sa, NULL);
+
+    /* here is a special line. we'll come back here whenever a signal ahppens */
+    int signo = sigsetjmp(jmp,1);
+
+    switch(signo) {
+        case 0:   /* not a signal yet, first time setup */
+          while(wr < wn) worker(wr++); /* bring up wn workers */
           break;
         case SIGCHLD:
           /* loop over children that have exited */
           while( (pid = waitpid(-1,&es,WNOHANG)) > 0) {
               for(n=0; n < wr; n++) if (workers[n].pid==pid) break;
               assert(n != wr);
-              int elapsed = time() - workers[n].start;
+              int elapsed = time(NULL) - workers[n].start;
               printf("pid %d exited after %d seconds: ", (int)pid, elapsed);
               if (WIFEXITED(es)) printf("exit status %d\n", (int)WEXITSTATUS(es));
               else if (WIFSIGNALED(es)) printf("signal %d\n", (int)WTERMSIG(es));
               if (n < wr-1) memmove(&workers[n],&workers[n+1],sizeof(worker_t)*(wr-1-n));
               wr--;
           }
-          /* bring up wn workers */
-          while(wr < wn) worker(wr++);
+          while(wr < wn) worker(wr++); /* bring up wn workers */
           break;
         case SIGALRM:
-          /* bring up wn workers */
-          while(wr < wn) worker(wr++);
+          while(wr < wn) worker(wr++); /* bring up wn workers */
           break;
         default:
-          printf("got signal %d\n", rc);
+          printf("got signal %d\n", signo);
           goto done;
           break;
     }
     /* wait for signals */
-    sigsuspend(unblock);
+    sigsuspend(&ss);
 
     /* the only way we get past this point
      * is from the "goto done" above, because
@@ -101,10 +126,11 @@ int main(int argc, char *argv[]) {
 
 done:
   /* reap any running workers */
-  while (nr) {
-    n = --nr;
+  while (wr) {
+    n = --wr;
     printf("terminating pid %d\n", workers[n]);
     kill(workers[n].pid, SIGTERM);
     waitpid(workers[n].pid, NULL, 0);
   }
 }
+
