@@ -18,7 +18,7 @@ int wn=2;  /* workers needed */
 
 sigjmp_buf jmp;
 /* signals that we'll unblock during sigsuspend */
-int sigs[] = {SIGHUP,SIGCHLD,SIGTERM,SIGALRM,SIGUSR1};
+int sigs[] = {SIGHUP,SIGCHLD,SIGTERM,SIGINT,SIGQUIT,SIGALRM,SIGUSR1};
 
 typedef struct {
   pid_t pid;
@@ -58,7 +58,7 @@ void worker(int w) {
 
   /* do something to simulate real work */
   int maxsleep = 30;
-  int awhile = maxsleep*rand()/RAND_MAX*1.0;
+  int awhile = 1.0*maxsleep*random()/RAND_MAX;
   sleep(awhile);
   exit(0);
 }
@@ -128,7 +128,7 @@ done:
   /* reap any running workers */
   while (wr) {
     n = --wr;
-    printf("terminating pid %d\n", workers[n]);
+    printf("terminating pid %d\n", workers[n].pid);
     kill(workers[n].pid, SIGTERM);
     waitpid(workers[n].pid, NULL, 0);
   }
