@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
     struct sigaction sa;
     sa.sa_handler=sighandler; 
     sa.sa_flags=0;
-    sigemptyset(&sa.sa_mask);
+    sigfillset(&sa.sa_mask);
     for(n=0; n < sizeof(sigs)/sizeof(*sigs); n++) sigaction(sigs[n], &sa, NULL);
 
     /* here is a special line. we'll come back here whenever a signal ahppens */
