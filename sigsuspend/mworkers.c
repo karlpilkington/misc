@@ -12,6 +12,7 @@
 /*
  *
  */
+#define SHORT_DELAY 10
 
 int wr;    /* workers running */
 int wn=2;  /* workers needed */
@@ -65,7 +66,7 @@ void worker(int w) {
 
 int main(int argc, char *argv[]) {
     pid_t pid;
-    int n,es;
+    int n,es,defer_restart;
 
     if ( (workers = malloc(sizeof(worker_t)*wn)) == NULL) 
         exit(-1);
@@ -96,17 +97,20 @@ int main(int argc, char *argv[]) {
           break;
         case SIGCHLD:
           /* loop over children that have exited */
+          defer_restart=0;
           while( (pid = waitpid(-1,&es,WNOHANG)) > 0) {
               for(n=0; n < wr; n++) if (workers[n].pid==pid) break;
               assert(n != wr);
               int elapsed = time(NULL) - workers[n].start;
+              if (elapsed < SHORT_DELAY) defer_restart=1;
               printf("pid %d exited after %d seconds: ", (int)pid, elapsed);
               if (WIFEXITED(es)) printf("exit status %d\n", (int)WEXITSTATUS(es));
               else if (WIFSIGNALED(es)) printf("signal %d\n", (int)WTERMSIG(es));
               if (n < wr-1) memmove(&workers[n],&workers[n+1],sizeof(worker_t)*(wr-1-n));
               wr--;
           }
-          while(wr < wn) worker(wr++); /* bring up wn workers */
+          if (defer_restart) alarm(SHORT_DELAY);
+          else while(wr < wn) worker(wr++); /* bring up wn workers */
           break;
         case SIGALRM:
           while(wr < wn) worker(wr++); /* bring up wn workers */
