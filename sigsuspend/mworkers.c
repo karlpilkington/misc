@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <assert.h>
 #include <signal.h>
 #include <setjmp.h>
@@ -10,12 +11,20 @@
 #include <sys/types.h>
 
 /*
+ *  This is a managed-worker implementation using signals.
+ *  The original process starts a number of sub-processes,
+ *  then restarts them when they die (delaying if too fast).
  *
+ *  What makes this implementation interesting is its use of
+ *  signals as the basis for the whole parent cycle. Notice
+ *  sigsetjmp, siglongjmp and sigsuspend. It makes for a very
+ *  simple switch statement as the whole parent implementation.
  */
 #define SHORT_DELAY 10
 
 int wr;    /* workers running */
 int wn=2;  /* workers needed */
+int ed=10; /* exit delay for child */
 
 sigjmp_buf jmp;
 /* signals that we'll unblock during sigsuspend */
@@ -27,6 +36,11 @@ typedef struct {
 } worker_t;
 
 worker_t *workers;
+
+void usage() {
+  fprintf(stderr,"usage: mworker [-n servers] [-d delay]\n");
+  exit(0);
+}
 
 void sighandler(int signo) {
   siglongjmp(jmp,signo);
@@ -51,22 +65,28 @@ void worker(int w) {
   /* child here */
   /* setproctitle() or prctl(PR_SET_NAME) */
 
-  /* restore default signal handlers, then unblock all signasl */
+  /* restore default signal handlers, then unblock all signals */
   for(n=0; n < sizeof(sigs)/sizeof(*sigs); n++) signal(sigs[n],SIG_DFL);
   sigset_t all;
   sigemptyset(&all);
   sigprocmask(SIG_SETMASK,&all,NULL);
 
   /* do something to simulate real work */
-  int maxsleep = 30;
-  int awhile = 1.0*maxsleep*random()/RAND_MAX;
-  sleep(awhile);
+  sleep(ed);
   exit(0);
 }
 
 int main(int argc, char *argv[]) {
     pid_t pid;
-    int n,es,defer_restart;
+    int n,es,defer_restart,opt;
+
+    while ( (opt = getopt(argc, argv, "n:d:h")) != -1) {
+      switch (opt) {
+        case 'n': wn = atoi(optarg); break;
+        case 'd': ed = atoi(optarg); break;
+        default: usage(); break;
+      }
+    }
 
     if ( (workers = malloc(sizeof(worker_t)*wn)) == NULL) 
         exit(-1);
@@ -109,7 +129,10 @@ int main(int argc, char *argv[]) {
               if (n < wr-1) memmove(&workers[n],&workers[n+1],sizeof(worker_t)*(wr-1-n));
               wr--;
           }
-          if (defer_restart) alarm(SHORT_DELAY);
+          if (defer_restart) {
+            fprintf(stderr,"servers restarting too fast, delaying\n"); 
+            alarm(SHORT_DELAY); 
+          }
           else while(wr < wn) worker(wr++); /* bring up wn workers */
           break;
         case SIGALRM:
