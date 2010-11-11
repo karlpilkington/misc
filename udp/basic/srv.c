@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
    *********************************************************/
   struct sockaddr_in sin;
   sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = INADDR_ANY;
+  sin.sin_addr.s_addr = htonl(INADDR_ANY);
   sin.sin_port = htons(port);
 
   /**********************************************************
