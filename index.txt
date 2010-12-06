@@ -43,6 +43,7 @@ Examples of using common libraries and other reusable bits:
 |=================================================================================================================
 | {t}dlsym[dlsym]      | example of using dlsym() | C
 | {t}looper[looper]    | example of iterating over lines of file | C
+| {t}lemon[lemon]      | example of using the Lemon parser generator | C
 | {t}udp[udp]          | example of UDP client and server | C
 | {t}tcp[tcp]          | example of TCP client and server | C
 | {t}dns[dns]          | example of doing DNS lookup | C
