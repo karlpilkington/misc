@@ -25,7 +25,7 @@ void new_server(parse_t *ps) {
     printf("missing name or port (%s line %d)\n", ps->file, ps->line);
     ps->rc = -1;
   }
-  newtop(ps->top, servers);
+  else newtop(ps->top, servers);
 }
 
 int main(int argc, char *argv[]) {
