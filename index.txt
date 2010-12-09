@@ -42,17 +42,18 @@ Examples of using common libraries and other reusable bits:
 [width="90%",cols="10^m,70,5",grid="none"]
 |=================================================================================================================
 | {t}dlsym[dlsym]      | example of using dlsym() | C
-| {t}looper[looper]    | example of iterating over lines of file | C
 | {t}lemon[lemon]      | example of using the Lemon parser generator | C
 | {t}udp[udp]          | example of UDP client and server | C
 | {t}tcp[tcp]          | example of TCP client and server | C
 | {t}dns[dns]          | example of doing DNS lookup | C
 | {t}pcre[pcre]        | example of using pcre library | C
 | {t}readline[readline]| example of using readline library | C
+| {t}looper[looper]    | example of iterating over lines of file | C
 | {t}slurp[slurp]      | example of using `read` or `mmap` to "slurp" a whole file | C
 | {t}mworkers[mworkers]| example of a parent process managing multiple worker processes using signals | C
 | {t}bloom[bloom]      | builds a Bloom filter from lines of one text file, tests lines of another file on it | C
 | {t}zlib[zlib]        | example of implementing a simple gzip/gunzip using the zlib C API | C
+| {t}tconf[tconf]      | simple function to read key-value configuration file entries | C
 | {t}rw_wrap[rw_wrap]  | macros to wrap read/write, which loop until "len" bytes are read or written | C
 | {t}utf8[utf8]        | macros for utf8 handling including character length, validity and utf32 conversion | C 
 | {t}iconv[iconv]      | example of using the iconv library | C 

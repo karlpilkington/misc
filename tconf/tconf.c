@@ -9,8 +9,9 @@ static const unsigned char nl[256] = {['\r']=1,['\n']=1};
 
 int tconf(char *file, tconf_t *tconf, int tclen, int opt) {
   
-  int rc = -1,klen,vlen;
-  char line[200],*k,*v;
+  char line[200],*k,*v, *kt, *vt, *tmp;
+  int rc = -1,klen,vlen,re;
+  tconf_func_t fptr;
   FILE *f=NULL;
   tconf_t *t;
 
@@ -51,6 +52,13 @@ int tconf(char *file, tconf_t *tconf, int tclen, int opt) {
           (*(char**)(t->addr))[vlen]='\0';
           break;
         case tconf_func:
+          fptr = (tconf_func_t)t->addr;
+          if ( (tmp = malloc(vlen+1+klen+1)) == NULL) goto done;
+          kt = &tmp[0]; if (klen) memcpy(kt, k, klen); kt[klen] = '\0';
+          vt = &tmp[klen+1]; if (vlen) memcpy(vt, v, vlen); vt[vlen] = '\0';
+          re = fptr(kt,vt);
+          free(tmp);
+          if (re) goto done;
           break;
         default:
           fprintf(stderr,"unknown tconf type %d\n",tconf->type);

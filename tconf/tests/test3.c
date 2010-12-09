@@ -8,7 +8,7 @@ struct {
 } Cf = {
   .name = "default",
   .servers = 1,
-  .enabled = 1,
+  .enabled = 0,
 };
 
 tconf_t tc[] = {{"servers", tconf_int, &Cf.servers},

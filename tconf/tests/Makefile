@@ -4,7 +4,7 @@ CFLAGS = -I..
 SRCS=$(wildcard *.c)
 OBJS=$(SRCS:.c=)
 
-$(OBJS): $(LIBTCONF)
+$(OBJS): $(SRCS) $(LIBTCONF)
 	for OBJ in $(OBJS); \
 	do $(CC) $(CFLAGS) -DCONF=\"$$OBJ.cf\" -o $$OBJ $$OBJ.c $(LIBTCONF); \
 	done
