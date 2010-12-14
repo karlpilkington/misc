@@ -45,6 +45,7 @@ Examples of using common libraries and other reusable bits:
 | {t}lemon[lemon]      | example of using the Lemon parser generator | C
 | {t}udp[udp]          | example of UDP client and server | C
 | {t}tcp[tcp]          | example of TCP client and server | C
+| {t}ifinfo[ifinfo]    | code to list network interfaces, their IPv4/v6 addresses and MACs | C
 | {t}dns[dns]          | example of doing DNS lookup | C
 | {t}pcre[pcre]        | example of using pcre library | C
 | {t}readline[readline]| example of using readline library | C
