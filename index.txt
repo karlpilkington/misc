@@ -49,6 +49,7 @@ Examples of using common libraries and other reusable bits:
 | {t}dns[dns]          | example of doing DNS lookup | C
 | {t}pcre[pcre]        | example of using pcre library | C
 | {t}readline[readline]| example of using readline library | C
+| {t}inotify[inotify]  | example of getting inotify file events (Linux 2.6.13 and higher) | C
 | {t}looper[looper]    | example of iterating over lines of file | C
 | {t}slurp[slurp]      | example of using `read` or `mmap` to "slurp" a whole file | C
 | {t}mworkers[mworkers]| example of a parent process managing multiple worker processes using signals | C
