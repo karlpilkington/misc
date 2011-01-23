@@ -34,31 +34,37 @@ int main(int argc, char *argv[]) {
   /* see inotify(7) as inotify_event has a trailing name
    * field allocated beyond the fixed structure; we must
    * allocate enough room for the kernel to populate it */
-  struct inotify_event *event;
-  size_t event_sz = sizeof(*event) + PATH_MAX;
-  if ( (event = malloc(event_sz)) == NULL) {
+  struct inotify_event *eb, *ev, *nx;
+  size_t eb_sz = sizeof(*eb) + PATH_MAX, sz;
+  if ( (eb = malloc(eb_sz)) == NULL) {
     fprintf(stderr, "out of memory\n");
     exit(-1);
   }
 
-  while ( (rc=read(fd,event,event_sz)) > 0) {
-    name = (event->len ? event->name : dir);
-    printf("%s\n", name);
-    if (event->mask & IN_ACCESS) printf(" IN_ACCESS\n");
-    if (event->mask & IN_ATTRIB) printf(" IN_ATTRIB\n");
-    if (event->mask & IN_CLOSE_WRITE) printf(" IN_CLOSE_WRITE\n");
-    if (event->mask & IN_CLOSE_NOWRITE) printf(" IN_CLOSE_NOWRITE\n");
-    if (event->mask & IN_CREATE) printf(" IN_CREATE\n");
-    if (event->mask & IN_DELETE) printf(" IN_DELETE\n");
-    if (event->mask & IN_DELETE_SELF) printf(" IN_DELETE_SELF\n");
-    if (event->mask & IN_MODIFY) printf(" IN_MODIFY\n");
-    if (event->mask & IN_MOVE_SELF) printf(" IN_MOVE_SELF\n");
-    if (event->mask & IN_MODIFY) printf(" IN_MODIFY\n");
-    if (event->mask & IN_MOVE_SELF) printf(" IN_MOVE_SELF\n");
-    if (event->mask & IN_MOVED_FROM) printf(" IN_MOVED_FROM\n");
-    if (event->mask & IN_MOVED_TO) printf(" IN_MOVED_TO\n");
-    if (event->mask & IN_OPEN) printf(" IN_OPEN\n");
-    printf("\n");
+  /* one read will produce one or more event structures */
+  while ( (rc=read(fd,eb,eb_sz)) > 0) {
+    for(ev = eb; rc > 0; ev = nx) {
+
+      sz = sizeof(*ev) + ev->len;
+      nx = ev + sz;
+      rc -= sz;
+
+      name = (ev->len ? ev->name : dir);
+      printf("%s ", name);
+      if (ev->mask & IN_ACCESS) printf(" IN_ACCESS");
+      if (ev->mask & IN_MODIFY) printf(" IN_MODIFY");
+      if (ev->mask & IN_ATTRIB) printf(" IN_ATTRIB");
+      if (ev->mask & IN_CLOSE_WRITE) printf(" IN_CLOSE_WRITE");
+      if (ev->mask & IN_CLOSE_NOWRITE) printf(" IN_CLOSE_NOWRITE");
+      if (ev->mask & IN_OPEN) printf(" IN_OPEN");
+      if (ev->mask & IN_MOVED_FROM) printf(" IN_MOVED_FROM");
+      if (ev->mask & IN_MOVED_TO) printf(" IN_MOVED_TO");
+      if (ev->mask & IN_CREATE) printf(" IN_CREATE");
+      if (ev->mask & IN_DELETE) printf(" IN_DELETE");
+      if (ev->mask & IN_DELETE_SELF) printf(" IN_DELETE_SELF");
+      if (ev->mask & IN_MOVE_SELF) printf(" IN_MOVE_SELF");
+      printf("\n");
+    }
   }
 
   close(fd);

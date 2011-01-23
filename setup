@@ -50,7 +50,7 @@ EOF
 echo $HOME/.inputrc
 
 cat >>$HOME/.vimrc <<EOF
-set si ts=2 sw=2 et hlsearch
+set si ts=2 sw=2 et hlsearch ic
 map <F5> I<!-- <Esc>A --><Esc>
 map <F6> 0:s/<!-- //<CR>:s/ -->//<CR>
 map <F7> I/* <Esc>A */<Esc>
