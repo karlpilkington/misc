@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     for(ev = eb; rc > 0; ev = nx) {
 
       sz = sizeof(*ev) + ev->len;
-      nx = ev + sz;
+      nx = (struct inotify_event*)((char*)ev + sz);
       rc -= sz;
 
       name = (ev->len ? ev->name : dir);
