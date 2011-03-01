@@ -21,21 +21,6 @@ Download options
 //:t: http://tkhanson.net/cgit.cgi/misc.git/plain/
 :t: http://tkhanson.net/cgit.cgi/misc.git/tree/
 
-Scripts
-~~~~~~~
-[width="90%",cols="10^m,70,5",grid="none"]
-|=================================================================================================================
-| {t}fifor[fifor]       | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <<fifor,read more>> | Perl
-| {t}md5watch[md5watch] | list files changed since last run <<md5watch,read more>> | Perl
-| {t}mailpl[mailpl]     | send email with attachments, configurable from address, etc | Perl
-| {t}anb[anb]           | list lines in file A but not in file B | Perl
-| {t}bin2hex[bin2hex]   | convert stdin to hex bytes | Perl
-| {t}hex2bin[hex2bin]   | convert hex args to binary bytes on stdout | Perl
-| {t}pagehits[pagehits] | parse access.log and store daily hits for each url, or view cumulative hits | Perl
-| {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them <<remember,read more>> | sh
-| {t}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
-|=================================================================================================================
-
 Snippets 
 ~~~~~~~~
 Examples of using common libraries and other reusable bits:
@@ -60,6 +45,21 @@ Examples of using common libraries and other reusable bits:
 | {t}utf8[utf8]        | macros for utf8 handling including character length, validity and utf32 conversion | C 
 | {t}iconv[iconv]      | example of using the iconv library | C 
 | {t}iscan[iscan]      | an incremental grep that reads a stream piecemeal scanning for a pattern | C
+|=================================================================================================================
+
+Scripts
+~~~~~~~
+[width="90%",cols="10^m,70,5",grid="none"]
+|=================================================================================================================
+| {t}fifor[fifor]       | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <<fifor,read more>> | Perl
+| {t}md5watch[md5watch] | list files changed since last run <<md5watch,read more>> | Perl
+| {t}mailpl[mailpl]     | send email with attachments, configurable from address, etc | Perl
+| {t}anb[anb]           | list lines in file A but not in file B | Perl
+| {t}bin2hex[bin2hex]   | convert stdin to hex bytes | Perl
+| {t}hex2bin[hex2bin]   | convert hex args to binary bytes on stdout | Perl
+| {t}pagehits[pagehits] | parse access.log and store daily hits for each url, or view cumulative hits | Perl
+| {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them <<remember,read more>> | sh
+| {t}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
 |=================================================================================================================
 
 Additional notes
