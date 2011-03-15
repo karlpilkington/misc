@@ -1,0 +1,3 @@
+sigio1 - SIGIO signal notification for a single file descriptor
+sigio2 - use RT signals to get differentiable readiness for 2 fd
+sigio3 - use signal I/o with inotify
