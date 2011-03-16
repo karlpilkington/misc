@@ -1,5 +1,4 @@
 #define _GNU_SOURCE
-#include <sys/inotify.h>
 #include <sys/types.h>
 #include <signal.h>
 #include <limits.h>
@@ -9,12 +8,6 @@
 #include <fcntl.h>
 #include <setjmp.h>
 #include <string.h>
-
-/* start this program with a directory argument.
- * then go into that directory and create, remove,
- * rename, or read and write to files and watch
- * as inotify receives the event notifications.
- * Requires Linux 2.6.13 or higher */
 
 sigjmp_buf jmp;
 /* signals that we'll unblock during sigsuspend; first is placeholder
