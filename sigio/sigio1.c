@@ -22,7 +22,7 @@ void spawn_child(int fd[2], char *greeting, char *goodbye) {
   sleep(1); write(fd[1],greeting,strlen(greeting));
   sleep(1); write(fd[1],goodbye, strlen(goodbye));
   close(fd[1]);
-  exit(-1);
+  exit(0);
 }
 
 int main(int argc, char *argv[]) {
