@@ -49,6 +49,13 @@ set keymap vi-insert
 EOF
 echo $HOME/.inputrc
 
+cat >>$HOME/.screenrc <<"EOF"
+shell -bash
+startup_message off # Turn off the splash screen
+caption always '%{= kK}%{w}%H %{K}%= %{= kw}%?%-Lw%?%{B}(%{W}%n*%f %t%?(%u)%?%{B})%{w}%?%+Lw%?%?%= %{K}%{B} %{w}%c%{K}'
+EOF
+echo $HOME/.screenrc
+
 cat >>$HOME/.vimrc <<"EOF"
 set si ts=2 sw=2 et hlsearch ic
 map <F5> I<!-- <Esc>A --><Esc>
