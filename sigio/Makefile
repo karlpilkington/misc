@@ -1,4 +1,4 @@
-all: sigio1 sigio2 
+all: sigio1 sigio2 sigio3
 
 .PHONY: clean
 

@@ -18,6 +18,7 @@ of this document is concerned only with asynchronous notification and not I/O.
 
 * sigio1 - using SIGIO to be notified when one descriptor is ready
 * sigio2 - using RT signals to be notified when any of "n" descriptors are ready
+* sigio3 - using inotify with signal notification
 
 SIGIO with one file descriptor (sigio1.c)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
