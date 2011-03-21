@@ -113,8 +113,6 @@ int main(int argc, char *argv[]) {
   sigfillset(&sa.sa_mask);
   for(n=0; n < sizeof(sigs)/sizeof(*sigs); n++) sigaction(sigs[n], &sa, NULL);
 
-  fd = setup_watch(argc,argv);
-
 
   /* here is a special line. we'll come back here whenever a signal happens */
   int signo = sigsetjmp(jmp,1);
@@ -122,6 +120,7 @@ int main(int argc, char *argv[]) {
   switch (signo) {
     case 0:
       /* initial setup. no signal yet */
+      setup_watch(argc,argv);
       break;
     case SIGIO:
       rc = read_events(fd);
@@ -143,5 +142,6 @@ int main(int argc, char *argv[]) {
    * one arrives we longjmp back to sigsetjmp! */
 
 done:
+  close(fd);
   return 0;
 }
