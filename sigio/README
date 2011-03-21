@@ -6,6 +6,16 @@ describes select and poll as synchronous forms of notification because we have
 to call these functions to be notified. In contrast signals provide true
 asynchronous notification.
 
+[NOTE]
+.Asynchronous notification vs asynchronous I/O
+While the notification is asynchronous when using signals, the I/O itself is
+not asynchronous even when performed using non-blocking descriptors.  Stephens
+describes in Network Programming that a non-blocking write will return if it
+cannot be immediately queued for sending. However with asynchronous I/O the
+write proceeds in the background, then the kernel notifies the program when the
+write completes.  This asynchronous I/O uses the POSIX aio_ functions. The rest
+of this document is concerned only with asynchronous notification and not I/O.
+
 * sigio1 - using SIGIO to be notified when one descriptor is ready
 * sigio2 - using RT signals to be notified when any of "n" descriptors are ready
 
@@ -23,20 +33,20 @@ Multiple descriptors and real time (RT) signals (sigio2.c)
 To receive signals when multiple descriptors are involved, we take extra steps
 to get notified about 'which' descriptor is ready. (Otherwise SIGIO just tells
 us that I/O is ready, but not on which descriptor). The key points are that we
-tell sigaction that we are using a handler that takes extra arguments (by 
-setting sa_sigaction instead of sa_handler, and specifying sa_flags as SA_SIGINFO).
-The result is that the signal handling function receives a siginfo_t structure
-which includes an si_fd field. It is this field that tells us which descriptor is
-ready.
+tell sigaction that we are using a handler that takes extra arguments (by
+setting sa_sigaction instead of sa_handler, and specifying sa_flags as
+SA_SIGINFO).  The result is that the signal handling function receives a
+siginfo_t structure which includes an si_fd field. It is this field that tells
+us which descriptor is ready.
 
-However there is a subtle point to be made here. In a multi-tasking server there
-may be several descriptors becoming ready for I/O, but signals such as SIGIO do 
-not "queue" (they are coalesced, losing their individual information about which 
-descriptor is ready). The solution is twofold: we use fcntl with F_SETSIG to tell the
-kernel "send us a different signal when I/O is ready", and by the way, the signal
-we choose is from the "real time" range of signals (>= SIGRTMIN). These RT signals
-have the important distinction of being queued rather than coalesced. The end result
-is that (supposing we choose SIGRTMIN as our signal) several of these may be queued
-up to our signal handling function, each telling us that a different descriptor
-is ready.
+However there is a subtle point to be made here. In a multi-tasking server
+there may be several descriptors becoming ready for I/O, but signals such as
+SIGIO do not "queue" (they are coalesced, losing their individual information
+about which descriptor is ready). The solution is twofold: we use fcntl with
+F_SETSIG to tell the kernel "send us a different signal when I/O is ready", and
+by the way, the signal we choose is from the "real time" range of signals (>=
+SIGRTMIN). These RT signals have the important distinction of being queued
+rather than coalesced. The end result is that several of the same signal (e.g.
+SIGRTMIN) may be queued up to our signal handling function, each notifying us
+that a different descriptor is ready.
 
