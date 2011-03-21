@@ -25,14 +25,10 @@ void usage(char *prog) {
 
 struct inotify_event *eb;
 size_t eb_sz = sizeof(*eb) + PATH_MAX;
+int fd;
 int setup_watch(int argc, char *argv[]) {
-  int i,fd,wd,mask = IN_ALL_EVENTS;
+  int i,wd,mask = IN_ALL_EVENTS;
   char *dir;
-
-  if ( (fd = inotify_init()) == -1) {
-    perror("inotify_init failed");
-    exit(-1); 
-  }
 
   for(i=1; i < argc; i++) {
     dir = argv[i];
@@ -86,10 +82,13 @@ int read_events(int fd) {
 }
 
 int main(int argc, char *argv[]) {
-  int fd, rc, n;
+  int rc, n;
 
   if (argc < 2) usage(argv[0]);
-  fd = setup_watch(argc,argv);
+  if ( (fd = inotify_init()) == -1) {
+    perror("inotify_init failed");
+    exit(-1); 
+  }
 
   /* request SIGIO to our pid when fd is ready; see fcntl(2) */
   int fl = fcntl(fd, F_GETFL);
@@ -113,6 +112,9 @@ int main(int argc, char *argv[]) {
   sa.sa_flags=0;             /* no extra information (not SA_SIGINFO* */
   sigfillset(&sa.sa_mask);
   for(n=0; n < sizeof(sigs)/sizeof(*sigs); n++) sigaction(sigs[n], &sa, NULL);
+
+  fd = setup_watch(argc,argv);
+
 
   /* here is a special line. we'll come back here whenever a signal happens */
   int signo = sigsetjmp(jmp,1);
