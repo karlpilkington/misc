@@ -58,6 +58,7 @@ Scripts
 | {t}anb[anb]           | list lines in file A but not in file B | Perl
 | {t}bin2hex[bin2hex]   | convert stdin to hex bytes | Perl
 | {t}hex2bin[hex2bin]   | convert hex args to binary bytes on stdout | Perl
+| {t}fcut[fcut]         | print region (from position s of length l) from a file | Perl
 | {t}pagehits[pagehits] | parse access.log and store daily hits for each url, or view cumulative hits | Perl
 | {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them <<remember,read more>> | sh
 | {t}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
