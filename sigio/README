@@ -18,8 +18,9 @@ of this document is concerned only with asynchronous notification and not I/O.
 
 * sigio1 - using SIGIO to be notified when one descriptor is ready
 * sigio2 - using RT signals to be notified when any of "n" descriptors are ready
-* sigio3 - using inotify with SIGIO notification (does not work; reason unknown)
-* sigio4 - using inotify with SIGRT notification (does not work; reason unknown)
+* sigio3 - a rewrite of sigio2 using sigwaitinfo instead of a signal handler
+* sigio4 - using inotify with SIGIO notification (does not work; reason unknown)
+* sigio5 - using inotify with SIGRT notification (does not work; reason unknown)
 
  Note that per inotify(7) kernels since 2.6.25 support signal-driven I/O
  notification when using inotify file descriptors. Nevertheless sigio3 and sigio4
@@ -72,3 +73,12 @@ Some secondary notes about sigio2:
   recognize that the secondary signal is still pending, and refrain from reading
   on the closed descriptor when that secondary signal arrives. In sigio2 this
   is done by remembering that we closed the fd already.
+
+sigwaitinfo (sigio3.c)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This is a direct conversion of sigio2.c into a simpler version that uses
+sigwaitinfo. This eliminates the signal handler entirely.  The signal is
+converted by the kernel into a direct function return from sigwaitinfo.
+The siginfo_t structure is an output parameter.
+
+NOTE: there is also a sigtimedwait which can be used to time out without SIGALRM.

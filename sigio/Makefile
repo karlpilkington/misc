@@ -1,6 +1,8 @@
-all: sigio1 sigio2 sigio3 sigio4
+
+PROGS = $(patsubst %.c,%,$(wildcard *.c))
+all: $(PROGS)
 
 .PHONY: clean
 
 clean:
-	rm -f sigio1 sigio2 sigio3 *.o
+	rm -f *.o $(PROGS)

@@ -1,4 +1,3 @@
-#define _GNU_SOURCE
 #include <sys/types.h>
 #include <errno.h>
 #include <sys/inotify.h>
@@ -13,9 +12,9 @@
 
 sigjmp_buf jmp;
 /* signals that we'll unblock during sigsuspend */
-int sigs[] = {0,SIGHUP,SIGPIPE,SIGTERM,SIGINT,SIGQUIT,SIGALRM};
+int sigs[] = {SIGIO,SIGHUP,SIGPIPE,SIGTERM,SIGINT,SIGQUIT,SIGALRM};
 
-void sighandler(int signo, siginfo_t *info, void *ucontext) {
+void sighandler(int signo) {
   siglongjmp(jmp,signo);
 }
 
@@ -84,7 +83,6 @@ int read_events(int fd) {
 
 int main(int argc, char *argv[]) {
   int rc, n;
-  sigs[0] = SIGRTMIN+0;  /* we'll choose this RT signal for I/O readiness */
 
   if (argc < 2) usage(argv[0]);
   if ( (fd = inotify_init()) == -1) {
@@ -96,7 +94,6 @@ int main(int argc, char *argv[]) {
   int fl = fcntl(fd, F_GETFL);
   fl |= O_ASYNC | O_NONBLOCK;
   fcntl(fd, F_SETFL, fl);
-  fcntl(fd, F_SETSIG, sigs[0]); 
   fcntl(fd, F_SETOWN, getpid()); 
 
   /* block all signals. we stay blocked always except in sugsuspend */
@@ -111,8 +108,8 @@ int main(int argc, char *argv[]) {
 
   /* establish handlers for signals that'll be unblocked in sigsuspend */
   struct sigaction sa;
-  sa.sa_sigaction=sighandler;  /* instead of sa_handler; takes extra args */
-  sa.sa_flags=SA_SIGINFO;      /* requests extra info in handler */
+  sa.sa_handler=sighandler;  /* no fd information (not sa_sigaction)  */
+  sa.sa_flags=0;             /* no extra information (not SA_SIGINFO* */
   sigfillset(&sa.sa_mask);
   for(n=0; n < sizeof(sigs)/sizeof(*sigs); n++) sigaction(sigs[n], &sa, NULL);
 
@@ -126,18 +123,13 @@ int main(int argc, char *argv[]) {
       setup_watch(argc,argv);
       break;
     case SIGIO:
-      printf("unexpected SIGIO\n");
+      rc = read_events(fd);
+      if (rc == 0) { close(fd); goto done; }
+      if (rc == -1 && errno != EWOULDBLOCK) {perror("error"); close(fd);}
       break;
     default:
-      if (signo == sigs[0]) {
-        printf("got SIGRTMIN %d\n", signo);
-        rc = read_events(fd);
-        if (rc == 0) { close(fd); goto done; }
-        if (rc == -1 && errno != EWOULDBLOCK) {perror("error"); close(fd);}
-      } else {
-        printf("got signal %d\n", signo);
-        goto done;
-      }
+      printf("got signal %d\n", signo);
+      goto done;
       break;
   }
 
