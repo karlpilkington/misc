@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 #include <sys/types.h>
+#include <errno.h>
 #include <signal.h>
 #include <limits.h>
 #include <stdio.h>
@@ -21,16 +22,18 @@ void sighandler(int signo, siginfo_t *info, void *ucontext) {
 }
 
 void spawn_child(int fd[2], char *greeting, char *goodbye) {
-  if (fork() != 0) return;  /* parent */
-  close(fd[0]);
+  if (fork() != 0) { close(fd[1]); return; }  /* parent */
+  close(fd[0]); /* child */
   sleep(1); write(fd[1],greeting,strlen(greeting));
   sleep(1); write(fd[1],goodbye, strlen(goodbye));
   close(fd[1]);
   exit(0);
 }
 
+int closed[2]; /* track whether we have closed the two fd's to children */
+
 int main(int argc, char *argv[]) {
-  int fl, fa[2], fb[2], rc, n, closed=0;
+  int fl, fa[2], fb[2], rc, n, nclosed=0;
   char buf[100];
 
   sigs[0] = SIGRTMIN+0;  /* we'll choose this RT signal for I/O readiness */
@@ -71,14 +74,29 @@ int main(int argc, char *argv[]) {
     case 0: /* initial setup, no signal yet */
       break;
     case SIGCHLD:
-      printf("sigchld\n"); /* note sigchld can happen before final SIGRT */
+      printf("sigchld\n"); /* note sigchld can happen before final I/O */
       break;
     default: /* want "case SIGRTMIN" but its not compile time constant */
       if (signo == sigs[0]) { /* SIGRTMIN */
-        rc = read(sigfd, buf, sizeof(buf));
-        if (rc > 0) printf("read(%d): %.*s", sigfd, rc, buf);
-        else if (rc == 0) {close(sigfd); if (++closed==2) goto done;}
-        else if (rc == -1) {perror("read error"); goto done;}
+        /* we must check if this fd is already closed; because a signal
+         * for I/O may have been queued before we issued final close */
+        if ((closed[0] == sigfd) || (closed[1] == sigfd)) break;
+        do {
+          rc = read(sigfd, buf, sizeof(buf));
+          if (rc > 0) printf("read(%d): %.*s", sigfd, rc, buf);
+        } while (rc > 0);
+
+        if (rc == 0)  {
+          close(sigfd);
+          closed[nclosed++] = sigfd;
+          if (nclosed==2) goto done;
+        }
+        else if (rc == -1) {
+          if (!(errno == EWOULDBLOCK || errno == EAGAIN)) {
+            perror("read error"); 
+            goto done;
+          }
+        }
       } else {
         printf("got signal %d\n", signo);
         goto done;

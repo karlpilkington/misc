@@ -56,3 +56,19 @@ rather than coalesced. The end result is that several of the same signal (e.g.
 SIGRTMIN) may be queued up to our signal handling function, each notifying us
 that a different descriptor is ready.
 
+Some secondary notes about sigio2:
+
+* SIGCHLD can occur before the final I/O. Data or EOF from the child 
+  may still be in the pipe waiting for the parent to read. We can't assume
+  that SIGCHLD means the descriptor to that child has been read completely.
+* When we read, we do a "draining" read. In a non-blocking program such
+  as sigio2, this reads buffers in a loop, until EOF or EAGAIN occurs.
+  If we did only a single read (and our read buffer was too short) we would
+  not be notified that more input was available. This is because signal-driven
+  I/O is 'edge-triggered'; it only notifies upon initial availability of I/O.
+* When we do a draining read, it is possible that new input arrives during the 
+  loop, resulting in another "I/O available" signal for this fd to be queued.
+  If we read through it and get EOF and close the descriptor, we need to 
+  recognize that the secondary signal is still pending, and refrain from reading
+  on the closed descriptor when that secondary signal arrives. In sigio2 this
+  is done by remembering that we closed the fd already.
