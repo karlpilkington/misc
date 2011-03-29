@@ -10,7 +10,6 @@
 #include <setjmp.h>
 #include <string.h>
 
-sigjmp_buf jmp;
 /* signals that we'll unblock during sigsuspend; first is placeholder
  * because SIGRTMIN isn't necessarily a compile-time define.  */
 int sigs[] = {0,SIGHUP,SIGCHLD,SIGTERM,SIGINT,SIGQUIT,SIGALRM};
