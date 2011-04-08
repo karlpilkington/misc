@@ -1,8 +1,10 @@
-all: mworkers
+SRCS=$(wildcard *.c)
+OBJS=$(patsubst %.c,%,$(SRCS))
+all: $(OBJS)
 
-mworkers: mworkers.c
+$(OBJS): $(SRCS)
 
 .PHONY: clean
 
 clean:
-	rm -f mworkers *.o
+	rm -f $(OBJS) *.o
