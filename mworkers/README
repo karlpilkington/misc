@@ -13,3 +13,6 @@ Programs that manage a set of workers
                 signal, it cancels the worker threads and 'joins' (collects)
                 them. However only the first worker can be collected. The
                 remaining worker(s) can be cancelled but hang on the join. (Why?)
+* tworkers3.c:  Variant of tworkers2; uses 'shutdown' with condition broadcast 
+		instead of pthread_cancel. Unlike tworkers2, upon receiving a
+                signal, this program successfully joins its threads and exits.
