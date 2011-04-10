@@ -1,0 +1,10 @@
+Programs that manage a set of workers
+=====================================
+
+  Programs that start with 'p' are multi-process workers,
+  programs that start with 't' are multi-thread workers.
+
+
+* pworkers1.c:  signal-based manager of 'n' worker processes (sigsuspend)
+* pworkers2.c:  signal-based manager of 'n' worker processes (sigwaitinfo)
+* tworkers1.c:  main thread keeps a queue serviced by 'n' worker threads 

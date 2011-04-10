@@ -2,7 +2,7 @@ SRCS=$(wildcard *.c)
 OBJS=$(patsubst %.c,%,$(SRCS))
 all: $(OBJS)
 
-threads_wqueue: threads_wqueue.c
+tworkers1: tworkers1.c
 	$(CC) $(CFLAGS) -pthread -o $@ $^
 
 .PHONY: clean
