@@ -8,3 +8,8 @@ Programs that manage a set of workers
 * pworkers1.c:  signal-based manager of 'n' worker processes (sigsuspend)
 * pworkers2.c:  signal-based manager of 'n' worker processes (sigwaitinfo)
 * tworkers1.c:  main thread keeps a queue serviced by 'n' worker threads 
+* tworkers2.c:  main thread keeps a queue serviced by 'n' worker threads.
+                This program has a bug. When the main thread receives a 
+                signal, it cancels the worker threads and 'joins' (collects)
+                them. However only the first worker can be collected. The
+                remaining worker(s) can be cancelled but hang on the join. (Why?)
