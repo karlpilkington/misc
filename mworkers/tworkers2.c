@@ -25,7 +25,12 @@ typedef struct work_t {
 work_t *head,*tail;
 pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+void cleanup(void *arg) {
+  pthread_mutex_unlock(&mtx);
+}
 void *worker(void *data) {
+  work_t *w;
+
   /* block all signals */
   sigset_t all;
   sigfillset(&all);
@@ -33,12 +38,14 @@ void *worker(void *data) {
 
  again:
   pthread_mutex_lock(&mtx);
+  pthread_cleanup_push(cleanup,NULL);
   while (!head) pthread_cond_wait(&cond, &mtx);
-  work_t *w = head;
+  w = head;
   head = head->next;
   if (!head) tail=NULL;
   fprintf(stderr,"thread %d claimed %s\n", (int)data, w->file);
-  pthread_mutex_unlock(&mtx);
+  pthread_cleanup_pop(1);
+  //pthread_mutex_unlock(&mtx);
 
   /* do work with w */
   sleep(1);

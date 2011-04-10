@@ -9,10 +9,14 @@ Programs that manage a set of workers
 * pworkers2.c:  signal-based manager of 'n' worker processes (sigwaitinfo)
 * tworkers1.c:  main thread keeps a queue serviced by 'n' worker threads 
 * tworkers2.c:  main thread keeps a queue serviced by 'n' worker threads.
-                This program has a bug. When the main thread receives a 
-                signal, it cancels the worker threads and 'joins' (collects)
-                them. However only the first worker can be collected. The
-                remaining worker(s) can be cancelled but hang on the join. (Why?)
+		When the main thread receives a signal, it cancels the worker
+                threads and 'joins' (collects) them. There is a trick needed
+                in this program: see the use of pthread_cleanup_push/pop.
+                Without their use, the mutex locked (when pthread_cond_wait
+                is canceled) would remain locked and prevent the other threads
+                from being able to cancel. By installing the pop handler to
+                release the mutex, it's released correctly in both the cancel 
+                scenario or in normal operation. (c.f. TLPI p.678).
 * tworkers3.c:  Variant of tworkers2; uses 'shutdown' with condition broadcast 
 		instead of pthread_cancel. Unlike tworkers2, upon receiving a
                 signal, this program successfully joins its threads and exits.
