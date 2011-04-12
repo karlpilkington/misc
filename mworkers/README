@@ -7,6 +7,8 @@ Programs that manage a set of workers
 
 * pworkers1.c:  signal-based manager of 'n' worker processes (sigsuspend)
 * pworkers2.c:  signal-based manager of 'n' worker processes (sigwaitinfo)
+                Using sigwaitinfo the main loop accepts the signal directly
+                so no signal handler is involved. This is a nice approach.
 * tworkers1.c:  main thread keeps a queue serviced by 'n' worker threads 
 * tworkers2.c:  main thread keeps a queue serviced by 'n' worker threads.
 		When the main thread receives a signal, it cancels the worker
@@ -17,6 +19,6 @@ Programs that manage a set of workers
                 from being able to cancel. By installing the pop handler to
                 release the mutex, it's released correctly in both the cancel 
                 scenario or in normal operation. (c.f. TLPI p.678).
-* tworkers3.c:  Variant of tworkers2; uses 'shutdown' with condition broadcast 
-		instead of pthread_cancel. Unlike tworkers2, upon receiving a
-                signal, this program successfully joins its threads and exits.
+* tworkers3.c:  Variant of tworkers2; uses a 'shutdown' variable with a
+		condition broadcast instead of pthread_cancel. Accomplishes
+		the same result as tworkers2 with less complexity.
