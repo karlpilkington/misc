@@ -34,6 +34,7 @@ Examples of using common libraries and other reusable bits:
 | {t}dns[dns]          | example of doing DNS lookup | C
 | {t}sigio[sigio]      | example of signal driven I/O notification | C
 | {t}pcre[pcre]        | example of using pcre library | C
+| {t}pcap[pcap]        | example of using libpcap to capture packets | C
 | {t}readline[readline]| example of using readline library | C
 | {t}inotify[inotify]  | example of getting inotify file events (Linux 2.6.13 and higher) | C
 | {t}looper[looper]    | example of iterating over lines of file | C
