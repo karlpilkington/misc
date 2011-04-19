@@ -1,0 +1,2 @@
+sniff1: a minimal libpcap program that prints packet lengths
+sniff2: can read packets from interface or from pcap file
