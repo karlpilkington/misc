@@ -1,9 +1,14 @@
 #include <stdio.h>
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <inttypes.h>
 #include <pcap.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 
 /* NOTES 
  *
@@ -69,19 +74,63 @@ void cb(u_char *unused, const struct pcap_pkthdr *hdr, const u_char *pkt) {
   /* vlan tags are 'interjected' before the ethertype; they are known by their
    * own ethertype (0x8100) followed by a TCI, after which the real etherype 
    * (or another double VLAN tag) occurs. Each VLAN tag adds two bytes to the
-   * frame size. */
+   * frame size. The TCI (tag control identifier) contains the VLAN ID (vid).*/
   if (etype==vlan) { 
-    tci_p = typep + 2; // tci: tag control identifier, has vlan id in low 12 bits
+    tci_p = typep + 2; 
     if (hdr->caplen < ((tci_p - pkt)+2)) return;
     memcpy(&tci, tci_p, sizeof(uint16_t));  
     tci = ntohs(tci);
-    vid = tci & 0xfff; // low 12 bits 
+    vid = tci & 0xfff; // vlan VID is in the low 12 bits of the TCI
     printf("vlan %d ", vid);
     typep = tci_p + 2;
     goto again; 
   }
   data = typep + 2;
   printf("\n"); /* end of frame level stuff */
+
+  const uint8_t *ip_datagram, *ip_hl, *ip_tos, *ip_len, *ip_id, *ip_fo, *ip_ttl, 
+          *ip_proto, *ip_sum, *ip_src, *ip_dst, *ip_opt, *ip_data;
+  uint8_t ip_version, ip_hdr_len, *ap;
+  uint16_t ip_lenh, ip_idh, ip_opts_len;
+  uint32_t ip_srch, ip_dsth;
+  if (etype == ip) {
+    ip_datagram = data;
+    if (hdr->caplen < ((ip_datagram - pkt) + 20)) return;
+    ip_hl = data;   
+       ip_hdr_len = (*ip_hl & 0x0f) * 4; assert(ip_hdr_len >= 20);
+       ip_opts_len = ip_hdr_len - 20;
+       ip_version = (*ip_hl & 0xf0) >> 4;
+    ip_tos = data + 1;
+    ip_len = data + 2;
+    ip_id =  data + 4;
+    ip_fo =  data + 6;
+    ip_ttl = data + 8;
+    ip_proto=data + 9;
+    ip_sum = data + 10;
+    ip_src = data + 12;
+    ip_dst = data + 16;
+    ip_opt = data + 20;
+    ip_data= data + 20 + ip_opts_len;
+
+    memcpy(&ip_lenh, ip_len, sizeof(uint16_t)); ip_lenh = ntohs(ip_lenh);
+    memcpy(&ip_idh, ip_id, sizeof(uint16_t)); ip_idh = ntohs(ip_idh);
+    printf(" IP vers: %d hdr_len: %d opts_len: %d id: %d ttl: %d, proto: %d ",
+     (unsigned)ip_version, (unsigned)ip_hdr_len, (unsigned)ip_opts_len, 
+     (unsigned)ip_idh, (unsigned)(*ip_ttl), (unsigned)(*ip_proto));
+    memcpy(&ip_srch, ip_src, sizeof(uint32_t)); ip_srch = ntohl(ip_srch);
+    memcpy(&ip_dsth, ip_dst, sizeof(uint32_t)); ip_dsth = ntohl(ip_dsth);
+    printf("src: %d.%d.%d.%d ", (ip_srch & 0xff000000) >> 24,
+                                (ip_srch & 0x00ff0000) >> 16,
+                                (ip_srch & 0x0000ff00) >>  8,
+                                (ip_srch & 0x000000ff) >>  0);
+    printf("dst: %d.%d.%d.%d ", (ip_dsth & 0xff000000) >> 24,
+                                (ip_dsth & 0x00ff0000) >> 16,
+                                (ip_dsth & 0x0000ff00) >>  8,
+                                (ip_dsth & 0x000000ff) >>  0);
+    data += ip_lenh;
+    printf("\n"); /* end of IP datagram level */
+  }
+
 }
 
 int main(int argc, char *argv[]) {
