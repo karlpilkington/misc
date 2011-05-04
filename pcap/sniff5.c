@@ -50,6 +50,7 @@ char *macf(const uint8_t *mac) {
 void cb(u_char *unused, const struct pcap_pkthdr *hdr, const u_char *pkt) {
   /* data link: ethernet frame */
   enum {other,arp,rarp,ip,vlan,ipv6} etype=other;
+  enum {none,icmp,igmp,tcp,udp} ipproto=none;
   char *etypes[] = {"other","arp","rarp","ip","vlan","ipv6"};
   const uint8_t *dst_mac=pkt, *src_mac=pkt+6, *typep=pkt+12;
   const uint8_t *data = pkt+14, *tci_p;
@@ -117,6 +118,13 @@ void cb(u_char *unused, const struct pcap_pkthdr *hdr, const u_char *pkt) {
     printf(" IP vers: %d hdr_len: %d opts_len: %d id: %d ttl: %d, proto: %d ",
      (unsigned)ip_version, (unsigned)ip_hdr_len, (unsigned)ip_opts_len, 
      (unsigned)ip_idh, (unsigned)(*ip_ttl), (unsigned)(*ip_proto));
+    switch((unsigned)(*ip_proto)) {
+      case 1: ipproto = icmp; printf("(icmp) "); break;
+      case 2: ipproto = igmp; printf("(igmp) "); break;
+      case 6: ipproto = tcp; printf("(tcp) "); break;
+      case 17: ipproto = udp; printf("(udp) "); break;
+      default: ipproto = none; printf("(none) "); break;
+    }
     memcpy(&ip_srch, ip_src, sizeof(uint32_t)); ip_srch = ntohl(ip_srch);
     memcpy(&ip_dsth, ip_dst, sizeof(uint32_t)); ip_dsth = ntohl(ip_dsth);
     printf("src: %d.%d.%d.%d ", (ip_srch & 0xff000000) >> 24,
