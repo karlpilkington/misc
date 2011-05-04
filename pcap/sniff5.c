@@ -89,6 +89,10 @@ void cb(u_char *unused, const struct pcap_pkthdr *hdr, const u_char *pkt) {
   data = typep + 2;
   printf("\n"); /* end of frame level stuff */
 
+  /*****************************************************************************
+  * IP datagram 
+   ****************************************************************************/
+
   const uint8_t *ip_datagram, *ip_hl, *ip_tos, *ip_len, *ip_id, *ip_fo, *ip_ttl, 
           *ip_proto, *ip_sum, *ip_src, *ip_dst, *ip_opt, *ip_data;
   uint8_t ip_version, ip_hdr_len, *ap;
@@ -135,8 +139,52 @@ void cb(u_char *unused, const struct pcap_pkthdr *hdr, const u_char *pkt) {
                                 (ip_dsth & 0x00ff0000) >> 16,
                                 (ip_dsth & 0x0000ff00) >>  8,
                                 (ip_dsth & 0x000000ff) >>  0);
-    data += ip_lenh;
+    data = ip_data;
     printf("\n"); /* end of IP datagram level */
+
+  /*****************************************************************************
+  * UDP datagram or TCP segment
+   ****************************************************************************/
+
+    const uint8_t *srcpp, *dstpp;
+    uint16_t srcport, dstport;
+    if (ipproto == udp || ipproto == tcp) {
+      srcpp = data;
+      dstpp = data + sizeof(uint16_t);
+      memcpy(&srcport, srcpp, sizeof(uint16_t));
+      memcpy(&dstport, dstpp, sizeof(uint16_t));
+      srcport = ntohs(srcport);
+      dstport = ntohs(dstport);
+      printf("  %s src port: %d dst port: %d ", (ipproto==tcp)?"tcp":"udp",
+       (unsigned)srcport, (unsigned)dstport);
+    }
+    const uint8_t *seqp, *ackp, *hlenp, *flagp, *winp, *optp, *datp;
+    uint8_t hlen, flags;
+    uint32_t seqno, ackno;
+    uint16_t winsz;
+    if (ipproto == tcp) {
+      seqp = data + 2*sizeof(uint16_t);
+      ackp = seqp + sizeof(uint32_t);
+      hlenp = ackp + sizeof(uint32_t);
+      flagp = hlenp + 1;
+      winp = hlenp + sizeof(int16_t);
+      datp = hlenp + 2 * sizeof(uint16_t);
+
+      memcpy(&seqno, seqp, sizeof(uint32_t));
+      seqno = ntohl(seqno);
+      memcpy(&ackno, ackp, sizeof(uint32_t));
+      ackno = ntohl(ackno);
+      hlen = (((*hlenp) & 0xf0) >> 4) * 4;
+      flags = (*flagp) & 0x3f;
+      memcpy(&winsz,winp,sizeof(uint16_t));
+      winsz = ntohs(winsz);
+      printf(" seq %u ack %u hlen: %u win: %u ", seqno, ackno, (unsigned)hlen, 
+       (unsigned)winsz);
+      printf("%c%c%c%c%c%c ", (flags&0x20)?'u':'-', (flags&0x10)?'a':'-', 
+       (flags&0x08)?'p':'-', (flags&0x04)?'r':'-', (flags&0x02)?'s':'-', 
+       (flags&0x01)?'f':'-');
+    }
+    printf("\n"); /* end of transport level */
   }
 
 }
