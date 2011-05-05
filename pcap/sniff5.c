@@ -191,7 +191,7 @@ void cb(u_char *unused, const struct pcap_pkthdr *hdr, const u_char *pkt) {
 
 int main(int argc, char *argv[]) {
   char *dev=NULL,*file=NULL;
-  int opt,rc=-1;
+  int opt,rc=-1, lt;
   pcap_t *p=NULL;
 
   while ( (opt=getopt(argc,argv,"vr:i:h")) != -1) {
@@ -209,6 +209,12 @@ int main(int argc, char *argv[]) {
 
   if (p == NULL) {
     fprintf(stderr, "can't open %s: %s\n", dev, err);
+    goto done;
+  }
+
+  /* confirm ethernet frame type; c.f. "man pcap-linktype" */
+  if ( (lt=pcap_datalink(p)) != 1) { /* LINKTYPE_ETHERNET */
+    fprintf(stderr, "not ethernet encapsulation: %d\n", lt);
     goto done;
   }
 
