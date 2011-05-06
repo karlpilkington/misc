@@ -47,6 +47,7 @@ Examples of using common libraries and other reusable bits:
 | {t}utf8[utf8]        | macros for utf8 handling including character length, validity and utf32 conversion | C 
 | {t}iconv[iconv]      | example of using the iconv library | C 
 | {t}iscan[iscan]      | an incremental grep that reads a stream piecemeal scanning for a pattern | C
+| {t}pexit[pexit]      | a C program that gets signalled when its parent exits using prctl | C
 |=================================================================================================================
 
 Scripts
