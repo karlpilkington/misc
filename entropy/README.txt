@@ -56,8 +56,7 @@ Where p(v) is the probability of the byte value v. We've used SUM to
 mean the sigma notation.  Notice the entropy does not depend on the length
 of the byte stream (the length is factored in by virtue of the probabilities
 which are individually a count of a certain byte value v over the total count
-of bytes). So the entropy definition can be used over any length of byte
-stream.
+of bytes). The entropy can be calculated over any length of byte stream.
 
 Example 1
 ~~~~~~~~~
@@ -121,7 +120,7 @@ compared to the (approximate) 58 byte ideal compressed size:
 
 So it reduced the file from 1000 bytes to 118 bytes. That's still twice
 as large we think the best compression can achieve. Let's see if increasing
-the stream size allows bzip2 to more closely approach the entropic limit:
+the stream size allows bzip2 to more closely approach the entropic limit.
 
 Change the Perl program to generate 1,000,000 y/n bytes, run, and compare:
 
@@ -161,8 +160,8 @@ compressing.
 
 Empirical measurement of entropy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The last part of this document deals with how to take an arbitrary byte stream
-(data read from a file, for example) and calculate its entropy.
+Here we describe how to take an arbitrary byte stream (data read from a file,
+for example) and calculate its entropy.
 
 With the preceding background, this is a simple. First zero a counter for
 every possible symbol. Since we're dealing with bytes, we need an array of 256
@@ -181,30 +180,20 @@ I know its contents, and there is no more information needed -- it seemed to
 me that the probability of each byte didn't make sense. I knew with certainty
 what each byte already was. So does entropy of a known file make sense?  Well,
 this was not a mathematical mystery- I just had the wrong perspective on the
-terminology. Entropy is about communicating a stream from a sender to a
+terminology. Entropy is invoked when communicating a stream from a sender to a
 receiver who has no prior knowledge of the stream (or compressing and then
 de-compressing a stream without a priori knowledge of the result). It tells us
-how much information the receiver needs to reconstruct the stream. It does
-this by revealing how many bytes are needed given the initial number of bytes
-and their probability distribution.
+how much information the receiver needs to reconstruct the stream. If every
+symbol were equally likely, we'd need to send enough bits to distinguish each
+symbol (every time we send a symbol); since they're not necessarily equally
+likely, we can use fewer bits for the common ones.
 
-In practice, does the encoding scheme embed the probability distribution?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If we write a compressor and uncompressor and we know the probabiility
-distribution of the symbols we're dealing with, the encoding scheme may be
-manually selected to use the fewest bits for the most common symbols. So in
-this sense the sender and receiver can "embed" their knowledge of the
-probability distribution into the scheme. Since they both know the scheme
-ahead of time, this is really the key to the economy of future information
-exchange. (In other words we "transferred" some information- the scheme
-itself- between sender and receiver when we built them). This is still true if
-we get more clever with the encoding and have no prior assumption about
-probability embedded into the scheme; in this case the compressed stream may
-include the mapping from bits to symbols (in a sense this would reflect the
-probability distribution of whatever file was compressed). Ultimately this
-does not change the fact that the scheme was mutually agreed on by sender and
-receiver. Without such a scheme in place, the sender and receiver could only
-communicate in raw symbols (the receiver could only assume equal probability
-for every symbol). In other words the communication uses 8 bits per byte just
-as with a fully random (maximum entropy) stream.
- 
+Entropy reflects the data not how you send it
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Just because the entropy of a file is (for example), 2 bits per byte, we can
+still transmit it inefficiently (using 8 bits per byte). That doesn't change the
+entropy measure of the file itself. If the sender and receiver do not have an
+encoding scheme, they are disregarding an opportunity for efficiency
+quantified by entropy, but the entropy is unchanged. The entropy is a limit
+to which encoding schemes can strive to attain.
+
