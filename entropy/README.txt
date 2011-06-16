@@ -1,4 +1,7 @@
 Measuring Entropy in a Byte Stream
+----------------------------------
+Troy D. Hanson
+troy@tkhanson.net
 
 Entropy is a measure of the unpredictability of an information stream. A
 perfectly consistent stream of bits (all zeroes, or all ones) is totally
@@ -24,7 +27,10 @@ The quantity of entropy we will use is "bits per byte".
 
 Let's explain this unit more carefully. We know that (at least in modern
 computers) all bytes have 8 bits. We're not talking about measuring that. This
-measure tells us how many bits are _necessary_ to encode each byte.
+measure tells us how many bits are _necessary to encode_ each byte.
+
+Calculating entropy from a probability distribution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Suppose that we have a stream of bytes where every byte has only of two values
 (so two of the possible 256 values are used). We can tell immediately that
@@ -105,7 +111,7 @@ Let's try making a file with 1000 bytes where every byte is either 'y' or 'n'
 Run that and put its output into a temporary file /tmp/y.
 
 Let's run the popular compression tool 'bzip2' on it, and see how it does
-compared to the approximate 58 byte ideal final size:
+compared to the (approximate) 58 byte ideal compressed size:
 
   % ls -l /tmp/y
   -rw-r--r-- 1 thanson thanson 1000 2011-06-15 18:56 /tmp/y
@@ -113,8 +119,8 @@ compared to the approximate 58 byte ideal final size:
   % ls -l /tmp/y.bz2 
   -rw-r--r-- 1 thanson thanson 118 2011-06-15 18:56 /tmp/y.bz2
 
-So it's reduced the file from size 1000 bytes to 118 bytes. That's still twice
-as large we think the best compression can acheive. Let's see if increasing
+So it reduced the file from 1000 bytes to 118 bytes. That's still twice
+as large we think the best compression can achieve. Let's see if increasing
 the stream size allows bzip2 to more closely approach the entropic limit:
 
 Change the Perl program to generate 1,000,000 y/n bytes, run, and compare:
@@ -128,3 +134,77 @@ Change the Perl program to generate 1,000,000 y/n bytes, run, and compare:
 So, the compressed file is about 6% of its original size, which is close
 to the entropic limit of (58/1000) or about 5.8% of original size. Good job,
 bzip2.
+
+Back to theory for a moment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We never justified how our unit is "bits per byte". Actually, bytes in the
+document here are just our specific choice of 'symbols in some alphabet'. The
+formula does not depend on the specific unit being bytes. Then where did the
+bits come from? From the choice of a base-2 logarithm (a base 2 number is a
+bit). So our unit is really "bits per symbol". The symbol could be changed to
+"integers" (a 4 byte quantity typically) or something else, and everything
+would still work, as long as the probabilities are expressed on the symbols.
+
+Entropic limit as percent
+~~~~~~~~~~~~~~~~~~~~~~~~~
+One last observation. Above, we turned an entropy measure into a ideal
+percentage for a file size reduction. To be explicit about how to calculate
+that, we take minimal bits per symbol (the entropy) and divide by the  
+natural bits per symbol (here, that's 8). E.g., 
+
+  .467 / 8  = .058
+
+So 5.8% is the entropic limit we expect when compressing symbols having the
+probabilities in Example 4. This is regardless of how many symbols we're
+compressing. 
+
+
+Empirical measurement of entropy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The last part of this document deals with how to take an arbitrary byte stream
+(data read from a file, for example) and calculate its entropy.
+
+With the preceding background, this is a simple. First zero a counter for
+every possible symbol. Since we're dealing with bytes, we need an array of 256
+counters initialized to zero. Now step over every symbol (byte) in the input
+stream and increment its counter. At the end of the stream (or, every so many
+bytes, if you want to calculate entropy for chunks of the stream), calculate
+the probabilities from the counts. This is just dividing each count by the
+total number of symbols encountered. The result is a probability for each
+symbol, in the range 0-1. Now the entropy formula may be applied.
+
+Isn't entropy of a known file an oxymoron?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+In college it used to bother me to think of "probabilities" when we're talking
+about a stream of known values. In other words, if I already have a file, then
+I know its contents, and there is no more information needed -- it seemed to
+me that the probability of each byte didn't make sense. I knew with certainty
+what each byte already was. So does entropy of a known file make sense?  Well,
+this was not a mathematical mystery- I just had the wrong perspective on the
+terminology. Entropy is about communicating a stream from a sender to a
+receiver who has no prior knowledge of the stream (or compressing and then
+de-compressing a stream without a priori knowledge of the result). It tells us
+how much information the receiver needs to reconstruct the stream. It does
+this by revealing how many bytes are needed given the initial number of bytes
+and their probability distribution.
+
+In practice, does the encoding scheme embed the probability distribution?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If we write a compressor and uncompressor and we know the probabiility
+distribution of the symbols we're dealing with, the encoding scheme may be
+manually selected to use the fewest bits for the most common symbols. So in
+this sense the sender and receiver can "embed" their knowledge of the
+probability distribution into the scheme. Since they both know the scheme
+ahead of time, this is really the key to the economy of future information
+exchange. (In other words we "transferred" some information- the scheme
+itself- between sender and receiver when we built them). This is still true if
+we get more clever with the encoding and have no prior assumption about
+probability embedded into the scheme; in this case the compressed stream may
+include the mapping from bits to symbols (in a sense this would reflect the
+probability distribution of whatever file was compressed). Ultimately this
+does not change the fact that the scheme was mutually agreed on by sender and
+receiver. Without such a scheme in place, the sender and receiver could only
+communicate in raw symbols (the receiver could only assume equal probability
+for every symbol). In other words the communication uses 8 bits per byte just
+as with a fully random (maximum entropy) stream.
+ 
