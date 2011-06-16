@@ -172,6 +172,61 @@ the probabilities from the counts. This is just dividing each count by the
 total number of symbols encountered. The result is a probability for each
 symbol, in the range 0-1. Now the entropy formula may be applied.
 
+Practical considerations
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+No base-2 log function?
++++++++++++++++++++++++
+You might have noticed your programming language does not have a base2-log
+function, but it probably does have a function (called log(n)) which computes
+the natural log (base e). There's nothing to worry about because you can
+multiply a log in one base by a constant to express it in another base.
+
+  ln(n) = log(n) / log(2)
+
+So here the constant is 1/log(2). You could even do all the entropy
+calculations with log(n), and then scale the final entropy afterwards, by
+multiplying it by this constant c. (Because SUM(abc) = c(SUM(ab)).)
+
+Maybe log(n) is slow?
++++++++++++++++++++++
+Here is a final practical consideration. Maybe we don't want to call the log
+function all the time (suppose it's slow).  If we could just pre-calculate all
+the possible values we want from the log (or ln) we could make a nice table.
+But we need the log of all kinds of fractional values (probabilities a/b)!
+
+Here the properties of the logarithm are useful again:
+
+  log(a/b) = log(a) - log(b)
+
+If we can figure out all the possible values of integers a and b we might use,
+maybe that's more amenable to making a table than the fractional range of a/b.
+
+Most likely, in a real program we can figure out the range of a and b. Why?
+First remember that in our probability calculation, a is always less than b
+(a is in the range [0,b]), so we only need to consider the range of b. What 
+is the range of b? It is the maximum size of a stream (in other words, the
+maximum number of symbols) over which we might want to know the entropy.
+
+Suppose this size is, say, 1000 symbols (bytes). Then we only need to compute
+the first thousand log values.  (That is, for integers in the range [1,1000]).
+We left out zero because log(0) is not defined. In our program we'll need to
+notice any symbols whose count is 0, and just ignore that term of the entropy
+(since it contributes nothing) rather than trying to figure out the log of 0. 
+
+When we make our table of these first thousand log values, we can scale them
+too (to convert natural log to base-2 log) so we don't have to do that after
+each entropy calculation. Our table will be constructed like this:
+
+ tbl[i] = log(i) / log(2)
+
+And now tbl has the base-2 logarithm for i, for integer values of i in
+[1,1000]. Now in our program simply do a table lookup for ln(a) and ln(b)
+and subtract, in order to know the ln(a/b).
+
+Other thoughts
+~~~~~~~~~~~~~~
+
 Isn't entropy of a known file an oxymoron?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In college it used to bother me to think of "probabilities" when we're talking
@@ -196,4 +251,5 @@ entropy measure of the file itself. If the sender and receiver do not have an
 encoding scheme, they are disregarding an opportunity for efficiency
 quantified by entropy, but the entropy is unchanged. The entropy is a limit
 to which encoding schemes can strive to attain.
+
 
