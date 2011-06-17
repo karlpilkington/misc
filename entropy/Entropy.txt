@@ -1,7 +1,7 @@
 Measuring Entropy in a Byte Stream
-----------------------------------
-Troy D. Hanson
-tdh@tkhanson.net
+==================================
+Troy D. Hanson <tdh@tkhanson.net>
+v1.0.0, June 2011
 
 Entropy is a measure of the unpredictability of an information stream. A
 perfectly consistent stream of bits (all zeroes, or all ones) is totally
@@ -30,8 +30,7 @@ computers) all bytes have 8 bits. We're not talking about measuring that. This
 measure tells us how many bits are _necessary to encode_ each byte.
 
 Calculating entropy from a probability distribution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+---------------------------------------------------
 Suppose that we have a stream of bytes where every byte has only of two values
 (so two of the possible 256 values are used). We can tell immediately that
 every byte really only needs one bit to represent it. The entropy measure will
@@ -41,11 +40,11 @@ Recall
 ~~~~~~
 First recall that the base2-logarithm of a number n (we'll call it ln(n)) just
 tells us "how many bits are needed to distinguish n states". A byte has 256
-values, so it requires ln(256)=8 bits to distinguish them. (2^8 = 256).
+values, so it requires ln(256)=8 bits to distinguish them. (2^8^ = 256).
 
 Also recall negative exponents are a way of writing an inverse to a power; in
-other words 2^-3 is the same as 1/(2^3). So, the base-2 log of a fractional
-value like 1/4 is -2 (because 2^-2 = 1/(2^2) = 1/4).
+other words 2^-3^ is the same as 1/(2^3^). So, the base-2 log of a fractional
+value like 1/4 is -2 (because 2^-2^ = 1/(2^2^) = 1/4).
 
 Formula
 ~~~~~~~
@@ -65,7 +64,7 @@ Let's apply the formula to the example mentioned where a stream of bytes only
 takes on two distinct values with equal probabilities. Since 254 of the 256 
 values of a byte never occur, their probability is zero, so they do not
 contribute to the entropy measure. The two remaining byte values occur with
-p(v)=1/2. The base-2 logarithm of 1/2 is -1 (because 2^-1 = 1/2). Summing 
+p(v)=1/2. The base-2 logarithm of 1/2 is -1 (because 2^-1^ = 1/2). Summing 
 both of those terms (since they're the same, just multiply the term by two),
 
 2 * (1/2 * -1)  == -1
@@ -257,3 +256,16 @@ encoding scheme, they are disregarding an opportunity for efficiency
 quantified by entropy, but the entropy is unchanged. The entropy is a limit
 to which encoding schemes can strive to attain.
 
+Resources
+---------
+Here are some small C programs that implement entropy measure. These are placed
+in the public domain.
+
+* A http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy1.c[program]
+  that prints the entropy of stdin or a file, in bits per byte.
+* Similar http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy2.c[program]
+  that prints out the entropy every 1000 bytes. Uses a table of logs.
+* This http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/shlimit.c[program]
+  also shows the percentage to which the input file could be compressed.
+* A http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/mkprob.c[tool] that
+  produces byte streams having a given probability distribution, for testing.
