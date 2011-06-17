@@ -258,14 +258,29 @@ to which encoding schemes can strive to attain.
 
 Resources
 ---------
-Here are some small C programs that implement entropy measure. These are placed
-in the public domain.
+Here are http://tkhanson.net/cgit.cgi/misc.git/tree/entropy/[some C programs]
+that implement entropy measure. These are placed in the public domain.
 
 * A http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy1.c[program]
   that prints the entropy of stdin or a file, in bits per byte.
-* Similar http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy2.c[program]
-  that prints out the entropy every 1000 bytes. Uses a table of logs.
-* This http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/shlimit.c[program]
+* This http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/shlimit.c[version]
   also shows the percentage to which the input file could be compressed.
 * A http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/mkprob.c[tool] that
   produces byte streams having a given probability distribution, for testing.
+
+Example 1
+~~~~~~~~~
+Calculate entropy of a stream having (approx.) 1/3 and 2/3 ratio of two symbols:
+
+  ./mkprob -c 10000 33 67 | ./entropy1
+  0.92 bits per byte
+
+Example 2
+~~~~~~~~~
+Calculate the limit to which a particular stream of 10000 bytes could be compressed:
+
+  ./mkprob -c 10000 10 20 30 40 | ./shlimit 
+  1.85 bits per byte
+  This data can be reduced to 23% of its original size,
+  from 10000 bytes to about 2312 bytes.
+

@@ -772,8 +772,8 @@ to which encoding schemes can strive to attain.</p></div>
 </div>
 <h2 id="_resources">Resources</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Here are some small C programs that implement entropy measure. These are placed
-in the public domain.</p></div>
+<div class="paragraph"><p>Here are <a href="http://tkhanson.net/cgit.cgi/misc.git/tree/entropy/">some C programs</a>
+that implement entropy measure. These are placed in the public domain.</p></div>
 <div class="ulist"><ul>
 <li>
 <p>
@@ -783,13 +783,7 @@ A <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy1.c">progr
 </li>
 <li>
 <p>
-Similar <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy2.c">program</a>
-  that prints out the entropy every 1000 bytes. Uses a table of logs.
-</p>
-</li>
-<li>
-<p>
-This <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/shlimit.c">program</a>
+This <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/shlimit.c">version</a>
   also shows the percentage to which the input file could be compressed.
 </p>
 </li>
@@ -800,13 +794,29 @@ A <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/mkprob.c">tool</a
 </p>
 </li>
 </ul></div>
+<h3 id="_example_1_2">Example 1</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Calculate entropy of a stream having (approx.) 1/3 and 2/3 ratio of two symbols:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>./mkprob -c 10000 33 67 | ./entropy1
+0.92 bits per byte</tt></pre>
+</div></div>
+<h3 id="_example_2_2">Example 2</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Calculate the limit to which a particular stream of 10000 bytes could be compressed:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>./mkprob -c 10000 10 20 30 40 | ./shlimit
+1.85 bits per byte
+This data can be reduced to 23% of its original size,
+from 10000 bytes to about 2312 bytes.</tt></pre>
+</div></div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0<br />
-Last updated 2011-06-17 16:51:01 EDT
+Last updated 2011-06-17 16:59:58 EDT
 </div>
 </div>
 </body>

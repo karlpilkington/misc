@@ -11,7 +11,8 @@ Example 1
 ~~~~~~~~~
 Calculate entropy of a stream having (approx.) 1/3 and 2/3 ratio of two symbols:
 
-  ./mkprob -c 10000 33 67 | ./entropy2
+  ./mkprob -c 10000 33 67 | ./entropy1
+  0.92 bits per byte
 
 Example 2
 ~~~~~~~~~
