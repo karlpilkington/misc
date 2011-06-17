@@ -13,5 +13,7 @@ entropy2: entropy2.c
 shlimit: shlimit.c
 	$(CC) $(CFLAGS) -o $@ $< $(MATH)
 
+.PHONY: clean
+
 clean:
 	rm -f *.o $(OBJS)
