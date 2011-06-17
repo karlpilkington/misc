@@ -1,4 +1,4 @@
-CFLAGS = -g
+#CFLAGS = -g
 OBJS = mkprob entropy1 entropy2 shlimit
 MATH = -lm
 
