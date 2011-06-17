@@ -145,6 +145,13 @@ bit). So our unit is really "bits per symbol". The symbol could be changed to
 "integers" (a 4 byte quantity typically) or something else, and everything
 would still work, as long as the probabilities are expressed on the symbols.
 
+Range of entropy
+~~~~~~~~~~~~~~~~
+When our symbols are bytes, the entropy will always be in the range 0-8.
+If our symbols were in some other alphabet (not bytes) the range would
+be 0-n where n is the "bits per symbol" needed to distinguish all the
+symbols from each other. (E.g., If there are 16 symbols, n=ln(16)=4.)
+
 Entropic limit as percent
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 One last observation. Above, we turned an entropy measure into a ideal
