@@ -20,6 +20,7 @@ Download options
 // this defines an attribute called {t} used below
 //:t: http://tkhanson.net/cgit.cgi/misc.git/plain/
 :t: http://tkhanson.net/cgit.cgi/misc.git/tree/
+:e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html
 
 Snippets 
 ~~~~~~~~
@@ -37,17 +38,18 @@ Examples of using common libraries and other reusable bits:
 | {t}pcap[pcap]        | example of using libpcap to capture packets | C
 | {t}readline[readline]| example of using readline library | C
 | {t}inotify[inotify]  | example of getting inotify file events (Linux 2.6.13 and higher) | C
-| {t}looper[looper]    | example of iterating over lines of file | C
+| {t}entropy[entropy]  | code to measure entropy in a file or stream in bits per byte {e}[notes]| C
 | {t}slurp[slurp]      | example of using `read` or `mmap` to "slurp" a whole file | C
 | {t}mworkers[mworkers]| example of a parent process managing multiple worker processes | C
 | {t}bloom[bloom]      | builds a Bloom filter from lines of one text file, tests lines of another file on it | C
 | {t}zlib[zlib]        | example of implementing a simple gzip/gunzip using the zlib C API | C
 | {t}tconf[tconf]      | simple function to read key-value configuration file entries | C
 | {t}rw_wrap[rw_wrap]  | macros to wrap read/write, which loop until "len" bytes are read or written | C
-| {t}utf8[utf8]        | macros for utf8 handling including character length, validity and utf32 conversion | C 
 | {t}iconv[iconv]      | example of using the iconv library | C 
 | {t}iscan[iscan]      | an incremental grep that reads a stream piecemeal scanning for a pattern | C
 | {t}pexit[pexit]      | a C program that gets signalled when its parent exits using prctl | C
+| {t}utf8[utf8]        | macros for utf8 handling including character length, validity and utf32 conversion | C 
+| {t}looper[looper]    | example of iterating over lines of file | C
 |=================================================================================================================
 
 Scripts
