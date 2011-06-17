@@ -1,10 +1,16 @@
 CFLAGS = -g
-OBJS = mkprob entropy1
+OBJS = mkprob entropy1 entropy2 shlimit
 MATH = -lm
 
 all: $(OBJS)
 
 entropy1: entropy1.c
+	$(CC) $(CFLAGS) -o $@ $< $(MATH)
+
+entropy2: entropy2.c
+	$(CC) $(CFLAGS) -o $@ $< $(MATH)
+
+shlimit: shlimit.c
 	$(CC) $(CFLAGS) -o $@ $< $(MATH)
 
 clean:
