@@ -44,7 +44,8 @@ tells us "how many bits are needed to distinguish n states". A byte has 256
 values, so it requires ln(256)=8 bits to distinguish them. (2^8 = 256).
 
 Also recall negative exponents are a way of writing an inverse to a power; in
-other words 2^-3 is the same as 1/(2^3).
+other words 2^-3 is the same as 1/(2^3). So, the base-2 log of a fractional
+value like 1/4 is -2 (because 2^-2 = 1/(2^2) = 1/4).
 
 Formula
 ~~~~~~~
