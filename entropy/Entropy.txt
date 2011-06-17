@@ -35,7 +35,7 @@ Calculating entropy from a probability distribution
 Suppose that we have a stream of bytes where every byte has only of two values
 (so two of the possible 256 values are used). We can tell immediately that
 every byte really only needs one bit to represent it. The entropy measure will
-confirm that this stream has "2 bits per byte" of information content.
+confirm that this stream has "1 bit per byte" of information content.
 
 Recall
 ~~~~~~
@@ -82,7 +82,7 @@ equally likely bytes, the formula gives us an entropy of,
 
 Example 3
 ~~~~~~~~~
-Suppose we had a stream with only two byte values that ever occur, but they
+Suppose we had a stream with only two byte values that ever occur, and they
 occur with probability 2/3 and 1/3. The formula tells us the entropy is,
 
 -1 * ( (2/3 * ln(2/3)) + (1/3 * ln(1/3)) ) == .913 bits per byte
@@ -150,14 +150,11 @@ Entropic limit as percent
 One last observation. Above, we turned an entropy measure into a ideal
 percentage for a file size reduction. To be explicit about how to calculate
 that, we take minimal bits per symbol (the entropy) and divide by the  
-natural bits per symbol (here, that's 8). E.g., 
+natural bits per symbol (for bits per byte, that's 8). E.g., 
 
   .467 / 8  = .058
 
-So 5.8% is the entropic limit we expect when compressing symbols having the
-probabilities in Example 4. This is regardless of how many symbols we're
-compressing. 
-
+So a file whose entropy is .467 can be compressed to about 5.8% of its size.  
 
 Empirical measurement of entropy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -252,5 +249,4 @@ entropy measure of the file itself. If the sender and receiver do not have an
 encoding scheme, they are disregarding an opportunity for efficiency
 quantified by entropy, but the entropy is unchanged. The entropy is a limit
 to which encoding schemes can strive to attain.
-
 
