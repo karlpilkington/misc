@@ -1,0 +1,57 @@
+UNIX domain sockets
+===================
+Troy D. Hanson <tdh@tkhanson.net>
+
+Communication within a host
+---------------------------
+Using UNIX domain sockets, two processes on the same host can communicate.
+Using a stream socket, communication is bidirectional (like TCP) or using a
+datagram socket, communication is unidirectional (like UDP).
+
+Identity
+~~~~~~~~
+Instead of identifying a server by an IP address and port, a UNIX domain socket
+is known by a pathname. This pathname has a file in the filesystem. Note: the
+pathname persists after the server closes the listening socket, thus requiring
+the server to unlink it before re-establishing it.
+
+File permissions control who can connect
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For UNIX domain sockets, file and directory permissions restrict which processes
+on the host can open the file, and thus communicate with the server.  Therefore,
+UNIX domain sockets provide an advantage over Internet sockets (to which anyone
+can connect, unless extra authentication logic is implemented).
+
+Comparison with named pipes for IPC
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IPC within a Unix host by may be accomplished by several means including named
+pipes.  What circumstances favor the use of UNIX domain sockets versus pipes?
+The choice is influenced by these factors:
+
+Duplex::
+  Stream sockets provide bi-directional communication while named pipes are
+  uni-directional.
+
+Distinct clients::
+  Clients using sockets each have an independent connection to the server.
+  With named pipes, many clients may write to the pipe. The server cannot
+  distinguish input from the multiple clients. Since the server only has one
+  descriptor to read from the pipe, the clients' writes may inter-mingle if
+  they're over the limit (PIPE_BUF) for atomic writes.
+
+Method of creating and opening::
+  Sockets are created using socket and assigned their identity via bind. Named
+  pipes are created using mkfifo. To connect to a UNIX domain socket the normal
+  socket/connect calls are used, but a named pipe is written using regular file 
+  open and write. That makes them easier to use from a shell script for example.
+
+Linux Abstract Socket Namespace
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Linux has a special feature: if the pathname for a UNIX domain socket begins
+with a null character '\0', its name is not mapped into the filesystem. Thus it
+won't collide with other names in the filesystem.  Also, when a server closes
+its UNIX domain listening socket in the abstract namespace, its path is deleted;
+unlike regular UNIX domain socket files which persist after the server closes
+them.
+
+// vim: set tw=80 wm=2 aw syntax=asciidoc: 
