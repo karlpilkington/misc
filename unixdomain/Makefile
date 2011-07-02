@@ -1,12 +1,11 @@
 CFLAGS = -g
-OBJS = 
 ASCIIDOC=/usr/bin/asciidoc
 DOC = Unix_domain_sockets.html
+PROGS = srv
 
-all: $(DOC)
+all: $(PROGS) $(DOC)
 
-entropy1: entropy1.c
-	$(CC) $(CFLAGS) -o $@ $< $(MATH)
+srv: srv.c
 
 Unix_domain_sockets.html: Unix_domain_sockets.txt
 	if [ -x $(ASCIIDOC) ]; then $(ASCIIDOC) $<; fi
@@ -14,4 +13,4 @@ Unix_domain_sockets.html: Unix_domain_sockets.txt
 .PHONY: clean
 
 clean:
-	rm -f *.o $(OBJS)
+	rm -f *.o socket $(PROGS)
