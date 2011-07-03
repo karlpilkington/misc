@@ -136,7 +136,7 @@ int redir(tpl_bin *bbuf, UT_array *of, int *need_free) {
 }
 
 int do_rqst(char *line, int fd, int *cr) {
-  char *c=line, *start=NULL, *end=NULL;
+  char *c=line, *start=NULL, *end=NULL, **f, *file;
   tpl_node *tn=NULL,*tr=NULL;
   UT_array *of; /* output files for redirecting command reply */
   int rc = -1, need_free, rr;
@@ -167,6 +167,11 @@ int do_rqst(char *line, int fd, int *cr) {
    * a cp_cmd_t to return to caller. 
    * or deal with it according to <FILE and >FILE idea
    */
+   f=NULL;
+   while ( (f=utarray_next(of,f))) {
+     file = *f;
+     fprintf(stderr, "have this file to store output to [%s]\n", file);
+   }
 
   rc = 0;
 
@@ -215,7 +220,7 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
-  while ( (line=next_line()) != NULL) {
+  while ( (line=next_line()) != NULL) { /* FIXME while in here we can get EOF from socket */
     add_history(line);
     if (do_rqst(line,fd,&cr) == -1) break;
     if (cr) printf("non-zero exit status: %d\n",cr);
