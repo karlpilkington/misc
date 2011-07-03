@@ -37,7 +37,7 @@ char *next_line() {
   } else {  
     /* copy the mallocd readline buffer and free it */
     tmp = line;
-    if (len+1 < sizeof(buf)) {memcpy(buf, line, len); line=buf; buf[len]='\0';}
+    if (len+1 < sizeof(buf)) {memcpy(buf, line, len+1); line=buf;}
     else { fprintf(stderr, "line too long\n"); line=NULL; }
     free(tmp); 
   }
