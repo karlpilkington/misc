@@ -1,18 +1,23 @@
-
+CFLAGS = -I.
 LIB = libcontrolport.a
 SRCS = controlport.c tpl.c
 OBJS = $(patsubst %.c,%.o,$(SRCS))
-EXES = app1
 
-all: $(LIB) $(EXES)
+EXESRC = $(wildcard app*.c)
+EXES = $(patsubst %.c,%,$(EXESRC))
+
+all: $(LIB) $(EXES) cpcli
 
 $(OBJS): $(SRCS)
 
 $(LIB): $(OBJS)
 	ar cr $@ $^
 
-$(EXES): 
+$(EXES): $(EXESRC)
 	$(CC) $(CFLAGS) -o $@ $@.c -L. -lcontrolport
+
+cpcli: cpcli.c $(LIB)
+	$(CC) $(CFLAGS) -o $@ $< tpl.c -L. -lcontrolport
 
 .PHONY: clean
 

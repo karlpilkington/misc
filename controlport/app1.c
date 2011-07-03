@@ -5,7 +5,8 @@
 #include <string.h>
 #include "controlport.h"
 
-#define SOCKETNAME "\0" __FILE__
+//#define SOCKETNAME "\0" __FILE__
+#define SOCKETNAME "barney"
 
 int time_cmd(void *cp, cp_arg_t *arg, void *data) {
   time_t now = time(NULL);

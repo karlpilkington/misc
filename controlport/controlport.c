@@ -54,6 +54,7 @@ static int help_cmd(void *_cp, cp_arg_t *arg, void *data) {
 }
 
 static int unknown_cmd(void *cp, cp_arg_t *arg, void *data) {
+  printf("unknown command [%.*s]\n", arg->lenv[0], arg->argv[0]);
   char unknown_msg[] = "command not found";
   cp_add_reply(cp, unknown_msg, sizeof(unknown_msg)-1);
   return -1;
@@ -136,7 +137,8 @@ static int handle_client_request(cp_t *cp) {
   if (!cp->arg.argv || !cp->arg.lenv) {cp->want_disconnect=1; rc=-1; goto done;}
 
   while(tpl_unpack(cp->in,1) > 0) {
-    cp->arg.argv[i] = cp->bbuf.addr;
+    cp->arg.argv[i] = cp->bbuf.addr; 
+    printf("unpacked %.*s\n", (int)cp->bbuf.sz, cp->bbuf.addr); // FIXME
     cp->arg.lenv[i] = cp->bbuf.sz;
     i++;
   }
