@@ -41,7 +41,7 @@ char *next_line() {
   } else {  
     /* copy the mallocd readline buffer and free it */
     tmp = line;
-    if (len < sizeof(buf)) { memcpy(buf, line, len); line=buf; } 
+    if (len+1 < sizeof(buf)) {memcpy(buf, line, len); line=buf; buf[len]='\0';}
     else { fprintf(stderr, "line too long\n"); line=NULL; }
     free(tmp); 
   }
@@ -68,6 +68,7 @@ int main(int argc, char *argv[]) {
   }
   if (optind < argc) usage(argv[0]);
   snprintf(prompt,sizeof(prompt),"%s> ", path);
+  using_history();
 
   if ( (fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
     perror("socket error");
@@ -90,6 +91,7 @@ int main(int argc, char *argv[]) {
 
   while ( (line=next_line()) != NULL) {
     printf("line is %s\n",line);
+    add_history(line);
     //send_rqst(line);
     //recv_resp();
   }
