@@ -1,4 +1,5 @@
-CFLAGS = -I.
+CFLAGS = -I. 
+CFLAGS += -g
 LIB = libcontrolport.a
 SRCS = controlport.c tpl.c
 OBJS = $(patsubst %.c,%.o,$(SRCS))
@@ -17,7 +18,7 @@ $(EXES): $(EXESRC) $(LIB)
 	$(CC) $(CFLAGS) -o $@ $@.c -L. -lcontrolport
 
 cpcli: cpcli.c $(LIB)
-	$(CC) $(CFLAGS) -o $@ $< tpl.c -L. -lcontrolport
+	$(CC) $(CFLAGS) -o $@ $< tpl.c -L. -lcontrolport -lreadline
 
 .PHONY: clean
 
