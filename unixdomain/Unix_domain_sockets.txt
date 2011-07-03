@@ -5,8 +5,8 @@ Troy D. Hanson <tdh@tkhanson.net>
 Communication within a host
 ---------------------------
 UNIX domain sockets are a method by which processes on the same host can
-communicate. Communication is bidirectional (like TCP) with stream sockets
-and unidirectional with datagram sockets (like UDP).
+communicate. Communication is bidirectional with stream sockets
+and unidirectional with datagram sockets.
 
   fd = socket(AF_UNIX, SOCK_STREAM, 0);
 
@@ -20,7 +20,6 @@ pathname for them to find each other. The server binds the pathname to the socke
   memset(&addr, 0, sizeof(addr));
   addr.sun_family = AF_UNIX;
   strncpy(addr.sun_path, "socket", sizeof(addr.sun_path)-1);
-
   bind(fd, (struct sockaddr*)&addr, sizeof(addr));
 
 The resulting pathname is visible in the filesystem, like: 
@@ -38,7 +37,6 @@ server exits. If the server subsequently restarts, the file prevents re-binding:
   bind error: Address already in use
 
 So, servers should unlink the socket pathname prior to binding it.
-
 
 File permissions control who can connect
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

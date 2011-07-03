@@ -559,8 +559,8 @@ footnotes: function () {
 <h2 id="_communication_within_a_host">Communication within a host</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>UNIX domain sockets are a method by which processes on the same host can
-communicate. Communication is bidirectional (like TCP) with stream sockets
-and unidirectional with datagram sockets (like UDP).</p></div>
+communicate. Communication is bidirectional with stream sockets
+and unidirectional with datagram sockets.</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><tt>fd = socket(AF_UNIX, SOCK_STREAM, 0);</tt></pre>
@@ -574,11 +574,8 @@ pathname for them to find each other. The server binds the pathname to the socke
 <pre><tt>struct sockaddr_un addr;
 memset(&amp;addr, 0, sizeof(addr));
 addr.sun_family = AF_UNIX;
-strncpy(addr.sun_path, "socket", sizeof(addr.sun_path)-1);</tt></pre>
-</div></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>bind(fd, (struct sockaddr*)&amp;addr, sizeof(addr));</tt></pre>
+strncpy(addr.sun_path, "socket", sizeof(addr.sun_path)-1);
+bind(fd, (struct sockaddr*)&amp;addr, sizeof(addr));</tt></pre>
 </div></div>
 <div class="paragraph"><p>The resulting pathname is visible in the filesystem, like:</p></div>
 <div class="literalblock">
@@ -670,7 +667,7 @@ A <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/cli.c">client<
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-07-02 20:09:25 EDT
+Last updated 2011-07-02 20:11:43 EDT
 </div>
 </div>
 </body>
