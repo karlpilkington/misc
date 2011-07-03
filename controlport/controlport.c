@@ -117,7 +117,7 @@ void cp_add_cmd(void *_cp, char *name, cp_cmd_f *cmdf, void *data) {
   cw->data = data;
 }
 
-static int handle_client_request(cp_t *cp) {
+static void handle_client_request(cp_t *cp) {
   int rc, cr, n, i=0;
 
   assert (cp->in == NULL);
@@ -130,11 +130,11 @@ static int handle_client_request(cp_t *cp) {
   if (rc == -1) {cp->want_disconnect=1; goto done;} // EOF or input error 
 
   /* unpack the tpl into argc/argv/lenv for the command callback */
-  if ( (n = tpl_Alen(cp->in,1)) == 0) {cp->want_disconnect=1; rc=-1; goto done;}
+  if ( (n = tpl_Alen(cp->in,1)) == 0) {cp->want_disconnect=1; goto done;}
   cp->arg.argc = n;
   cp->arg.argv = malloc( n*sizeof(char*));
   cp->arg.lenv = malloc( n*sizeof(size_t));
-  if (!cp->arg.argv || !cp->arg.lenv) {cp->want_disconnect=1; rc=-1; goto done;}
+  if (!cp->arg.argv || !cp->arg.lenv) {cp->want_disconnect=1; goto done;}
 
   while(tpl_unpack(cp->in,1) > 0) {
     cp->arg.argv[i] = cp->bbuf.addr; 
@@ -155,7 +155,7 @@ static int handle_client_request(cp_t *cp) {
 
   /* send reply back to client */
   tpl_pack(cp->out,0);
-  if (tpl_dump(cp->out, TPL_FD, cp->cl) == -1) {cp->want_disconnect=1; rc=-1; }
+  if (tpl_dump(cp->out, TPL_FD, cp->cl) == -1) {cp->want_disconnect=1; }
 
  done:
   if (cp->in) { tpl_free(cp->in); cp->in=NULL; }
@@ -163,7 +163,6 @@ static int handle_client_request(cp_t *cp) {
   while(cp->arg.argc) free(cp->arg.argv[--cp->arg.argc]);
   if (cp->arg.argv) { free(cp->arg.argv); cp->arg.argv=NULL; }
   if (cp->arg.lenv) { free(cp->arg.lenv); cp->arg.lenv=NULL; }
-  return rc;
 }
 
 int cp_run(void *_cp) {
