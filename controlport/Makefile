@@ -13,7 +13,7 @@ $(OBJS): $(SRCS)
 $(LIB): $(OBJS)
 	ar cr $@ $^
 
-$(EXES): $(EXESRC)
+$(EXES): $(EXESRC) $(LIB)
 	$(CC) $(CFLAGS) -o $@ $@.c -L. -lcontrolport
 
 cpcli: cpcli.c $(LIB)

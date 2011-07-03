@@ -192,6 +192,7 @@ int cp_run(void *_cp) {
   if (cp->fd != -1) { close(cp->fd); cp->fd = -1; }
   cp_cmd_w *cw, *tmp;
   HASH_ITER(hh, cp->cmds, cw, tmp) {
+    HASH_DEL(cp->cmds, cw);
     free(cw->cmd.name);
     free(cw);
   }
