@@ -116,18 +116,18 @@ char *slurp(char *file, size_t *len) {
 int redir(tpl_bin *bbuf, UT_array *of, int *need_free) {
   char *c = (char*)bbuf->addr;
   char *file;
-  int rc=0;
+  int rc=1;
 
   *need_free = 0;
   if (bbuf->sz <= 1) goto done;
-  if (*c != '<' && *c != '>') goto done;
+  if ((*c != '<') && (*c != '>')) goto done;
 
   file = strndup(c+1,bbuf->sz-1);
   if (*c == '>') { utarray_push_back(of, &file); rc=0; goto done;}
   if (*c == '<') {
     bbuf->addr = slurp(file, &bbuf->sz);
     *need_free = bbuf->addr ? 1 : 0;
-    rc=bbuf->addr?1:-1;
+    rc = bbuf->addr ? 1 : -1;
   }
   free(file);
 
@@ -144,6 +144,7 @@ int do_rqst(char *line, int fd, int *cr) {
 
   utarray_new(of, &ut_str_icd);
   tn = tpl_map("A(B)", &bbuf);
+  *cr = 0;
 
   /* parse the line into argv style words, pack and transmit the request */
   while(*c != '\0') {
@@ -161,14 +162,17 @@ int do_rqst(char *line, int fd, int *cr) {
 
   /* get the reply */
   tr = tpl_map("iA(B)", cr, &bbuf);
-  if (tpl_load(tr, TPL_FD, fd) == -1) goto done;
+  if (tpl_load(tr, TPL_FD, fd) == -1) {
+    fprintf(stderr,"error receiving server response\n");
+    goto done;
+  }
   tpl_unpack(tr,0);
   /* do something with the A(B) now. either put it in
    * a cp_cmd_t to return to caller. 
    * or deal with it according to <FILE and >FILE idea
    */
    f=NULL;
-   while ( (f=utarray_next(of,f))) {
+   while ( (f=(char**)utarray_next(of,f))) {
      file = *f;
      fprintf(stderr, "have this file to store output to [%s]\n", file);
    }

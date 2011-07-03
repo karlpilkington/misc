@@ -56,6 +56,7 @@ static int help_cmd(void *_cp, cp_arg_t *arg, void *data) {
 
 static int unknown_cmd(void *cp, cp_arg_t *arg, void *data) {
   char unknown_msg[] = "command not found";
+  if (arg->argc == 0) return 0;  /* no command; no-op */
   cp_add_reply(cp, unknown_msg, sizeof(unknown_msg)-1);
   return -1;
 }
@@ -119,6 +120,7 @@ void cp_add_cmd(void *_cp, char *name, cp_cmd_f *cmdf, void *data) {
 
 static void handle_client_request(cp_t *cp) {
   int rc, cr, n, i=0;
+  cp_cmd_w *cw;
 
   assert (cp->in == NULL);
   assert (cp->out == NULL);
@@ -130,7 +132,7 @@ static void handle_client_request(cp_t *cp) {
   if (rc == -1) {cp->want_disconnect=1; goto done;} // EOF or input error 
 
   /* unpack the tpl into argc/argv/lenv for the command callback */
-  if ( (n = tpl_Alen(cp->in,1)) == 0) {cp->want_disconnect=1; goto done;}
+  if ( (n = tpl_Alen(cp->in,1)) == 0) {cw = &unknown_cmdw; goto run;}
   cp->arg.argc = n;
   cp->arg.argv = malloc( n*sizeof(char*));
   cp->arg.lenv = malloc( n*sizeof(size_t));
@@ -143,11 +145,11 @@ static void handle_client_request(cp_t *cp) {
   }
 
   /* find the command callback */
-  cp_cmd_w *cw;
   HASH_FIND(hh, cp->cmds, cp->arg.argv[0], cp->arg.lenv[0], cw);
   if (!cw) cw = &unknown_cmdw;
 
   /* prepare the output area, run the callback */
+ run:
   cp->bbuf.addr = NULL;
   cp->out = tpl_map("iA(B)", &cr, &cp->bbuf);
   cr = cw->cmd.cmdf(cp, &cp->arg, cw->data);
