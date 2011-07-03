@@ -81,9 +81,9 @@ char *find_word(char *c, char **start, char **end) {
   return c;
 }
 
-int do_rqst(char *line, int fd) {
+int do_rqst(char *line, int fd, int *cr) {
   char *c=line, *start=NULL, *end=NULL;
-  tpl_node *tn=NULL;
+  tpl_node *tn=NULL,*tr=NULL;
   tpl_bin bbuf;
   int rc = -1;
 
@@ -99,16 +99,28 @@ int do_rqst(char *line, int fd) {
     tpl_pack(tn,1);
     start = end = NULL;
   }
+  if (tpl_dump(tn, TPL_FD, fd) == -1) goto done;
+
+  /* get the reply */
+  tr = tpl_map("iA(B)", cr, &bbuf);
+  if (tpl_load(tr, TPL_FD, fd) == -1) goto done;
+  tpl_unpack(tr,0);
+  /* do something with the A(B) now. either put it in
+   * a cp_cmd_t to return to caller. 
+   * or deal with it according to <FILE and >FILE idea
+   */
+
   rc = 0;
 
  done:
   if (tn) tpl_free(tn);
+  if (tr) tpl_free(tr);
   return rc;
 }
  
 int main(int argc, char *argv[]) {
   struct sockaddr_un addr;
-  int opt,fd,rc,rr,tr,err;
+  int opt,fd,rc,cr;
   tpl_bin bbuf;
   char *line;
 
@@ -146,9 +158,11 @@ int main(int argc, char *argv[]) {
 
   while ( (line=next_line()) != NULL) {
     add_history(line);
-    if (do_rqst(line,fd) == -1) break;
+    if (do_rqst(line,fd,&cr) == -1) break;
+    if (cr) printf("non-zero exit status: %d\n",cr);
   }
 
+  clear_history();
   return 0;
 }
 
