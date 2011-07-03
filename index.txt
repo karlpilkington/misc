@@ -21,6 +21,7 @@ Download options
 //:t: http://tkhanson.net/cgit.cgi/misc.git/plain/
 :t: http://tkhanson.net/cgit.cgi/misc.git/tree/
 :e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html
+:f: http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html
 
 Snippets 
 ~~~~~~~~
@@ -31,6 +32,7 @@ Examples of using common libraries and other reusable bits:
 | {t}lemon[lemon]      | example of using the Lemon parser generator | C
 | {t}udp[udp]          | example of UDP client and server | C
 | {t}tcp[tcp]          | example of TCP client and server | C
+| {t}unixdomain[unixdomain] | example of UNIX domain socket client and server {f}[notes] | C
 | {t}ifinfo[ifinfo]    | code to list network interfaces, their IPv4/v6 addresses and MACs | C
 | {t}dns[dns]          | example of doing DNS lookup | C
 | {t}sigio[sigio]      | example of signal driven I/O notification | C

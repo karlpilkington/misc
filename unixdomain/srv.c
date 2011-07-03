@@ -3,12 +3,15 @@
 #include <sys/un.h>
 #include <stdlib.h>
 
-char *socket_path = "./socket";
+//char *socket_path = "./socket";
+char *socket_path = "\0hidden";
 
 int main(int argc, char *argv[]) {
   struct sockaddr_un addr;
   char buf[100];
   int fd,cl,rc;
+
+  if (argc > 1) socket_path=argv[1];
 
   if ( (fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
     perror("socket error");
@@ -40,8 +43,14 @@ int main(int argc, char *argv[]) {
     while ( (rc=read(cl,buf,sizeof(buf))) > 0) {
       printf("read %u bytes: %.*s\n", rc, rc, buf);
     }
-    if (rc == 0) printf("EOF\n");
-    else if (rc == -1) perror("read");
+    if (rc == -1) {
+      perror("read");
+      exit(-1);
+    }
+    else if (rc == 0) {
+      printf("EOF\n");
+      close(cl);
+    }
   }
 
 
