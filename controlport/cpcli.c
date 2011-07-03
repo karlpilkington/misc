@@ -92,14 +92,13 @@ int do_rqst(char *line, int fd) {
   /* parse the line into argv style words, pack and transmit the request */
   while(*c != '\0') {
     if ( (c = find_word(c,&start,&end)) == NULL) goto done;
+    //fprintf(stderr,"[%.*s]\n", (int)(end-start), start);
     assert(start && end);
     bbuf.addr =   start;
     bbuf.sz = end-start;
-    fprintf(stderr,"[%.*s] ", (int)bbuf.sz, (char*)bbuf.addr);
     tpl_pack(tn,1);
     start = end = NULL;
   }
-  fprintf(stderr,"\n");
   rc = 0;
 
  done:
