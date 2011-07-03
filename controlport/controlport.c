@@ -47,6 +47,7 @@ static int help_cmd(void *_cp, cp_arg_t *arg, void *data) {
   cp_cmd_w *cw, *tmp;
   HASH_ITER(hh, cp->cmds, cw, tmp) {
     utstring_printf(t, "%s\n", cw->cmd.name);
+    // TODO long help
   }
   cp_add_reply(cp,utstring_body(t),utstring_len(t));
   utstring_free(t);
@@ -54,7 +55,6 @@ static int help_cmd(void *_cp, cp_arg_t *arg, void *data) {
 }
 
 static int unknown_cmd(void *cp, cp_arg_t *arg, void *data) {
-  printf("unknown command [%.*s]\n", arg->lenv[0], arg->argv[0]);
   char unknown_msg[] = "command not found";
   cp_add_reply(cp, unknown_msg, sizeof(unknown_msg)-1);
   return -1;
@@ -63,7 +63,7 @@ static int unknown_cmd(void *cp, cp_arg_t *arg, void *data) {
 // so we point to this record if we need to invoke it.
 static cp_cmd_w unknown_cmdw = {{"unknown",unknown_cmd}};
 
-static int shutdown_cmd(void *_cp, cp_arg_t *arg, void *data) {
+static int stop_cmd(void *_cp, cp_arg_t *arg, void *data) {
   cp_t *cp = (cp_t*)_cp;
   cp->want_shutdown=1;
   cp_disconnect(cp);
@@ -94,7 +94,7 @@ void *cp_init(char *path, cp_cmd_t *cmds, void *data, int timeout) {
 
   cp_add_cmd(cp, "help", help_cmd, NULL);
   cp_add_cmd(cp, "quit", quit_cmd, NULL);
-  cp_add_cmd(cp, "shutdown", shutdown_cmd, NULL);
+  cp_add_cmd(cp, "stop", stop_cmd, NULL);
   for(cmd=cmds; cmd && cmd->name; cmd++) cp_add_cmd(cp,cmd->name,cmd->cmdf,data);
 
  done:
@@ -138,7 +138,6 @@ static void handle_client_request(cp_t *cp) {
 
   while(tpl_unpack(cp->in,1) > 0) {
     cp->arg.argv[i] = cp->bbuf.addr; 
-    printf("unpacked %.*s\n", (int)cp->bbuf.sz, cp->bbuf.addr); // FIXME
     cp->arg.lenv[i] = cp->bbuf.sz;
     i++;
   }

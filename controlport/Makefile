@@ -22,4 +22,4 @@ cpcli: cpcli.c $(LIB)
 .PHONY: clean
 
 clean:
-	rm -f *.o $(LIB) $(EXES)
+	rm -f *.o $(LIB) $(EXES) cpcli
