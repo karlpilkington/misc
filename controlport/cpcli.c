@@ -1,5 +1,6 @@
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -50,6 +51,61 @@ char *next_line() {
   if (file && !line) fclose(filef);
   return line;
 }
+
+/* This little parsing function finds one word at a time from the
+ * input line. It supports double quotes to group words together. */
+const int ws[256] = {[' ']=1, ['\t']=1};
+char *find_word(char *c, char **start, char **end) {
+  int in_qot=0;
+  while ((*c != '\0') && ws[*c]) c++; // skip leading whitespace
+  if (*c == '"') { in_qot=1; c++; }
+  *start=c;
+  if (in_qot) {
+    while ((*c != '\0') && (*c != '"')) c++;
+    *end = c;
+    if (*c == '"') { 
+      in_qot=0; c++; 
+      if ((*c != '\0') && !ws[*c]) {
+        fprintf(stderr,"text follows quoted text without space\n"); return NULL;
+      }
+    }
+    else {fprintf(stderr,"quote mismatch\n"); return NULL;}
+  }
+  else {
+    while ((*c != '\0') && (*c != ' ')) {
+      if (*c == '"') {fprintf(stderr,"start-quote within word\n"); return NULL; }
+      c++;
+    }
+    *end = c;
+  }
+  return c;
+}
+
+int do_rqst(char *line, int fd) {
+  char *c=line, *start=NULL, *end=NULL;
+  tpl_node *tn=NULL;
+  tpl_bin bbuf;
+  int rc = -1;
+
+  tn = tpl_map("A(B)", &bbuf);
+
+  /* parse the line into argv style words, pack and transmit the request */
+  while(*c != '\0') {
+    if ( (c = find_word(c,&start,&end)) == NULL) goto done;
+    assert(start && end);
+    bbuf.addr =   start;
+    bbuf.sz = end-start;
+    fprintf(stderr,"[%.*s] ", (int)bbuf.sz, (char*)bbuf.addr);
+    tpl_pack(tn,1);
+    start = end = NULL;
+  }
+  fprintf(stderr,"\n");
+  rc = 0;
+
+ done:
+  if (tn) tpl_free(tn);
+  return rc;
+}
  
 int main(int argc, char *argv[]) {
   struct sockaddr_un addr;
@@ -90,10 +146,8 @@ int main(int argc, char *argv[]) {
   }
 
   while ( (line=next_line()) != NULL) {
-    printf("line is %s\n",line);
     add_history(line);
-    //send_rqst(line);
-    //recv_resp();
+    if (do_rqst(line,fd) == -1) break;
   }
 
   return 0;
