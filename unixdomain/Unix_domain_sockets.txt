@@ -63,15 +63,15 @@ Distinct clients::
   distinguish the clients from each other-- the server has only one descriptor 
   to read from the named pipe. Because the named pipe has only read descriptor
   and possibly-multiple writers, random interleaving can also occur if a client
-  writes more than PIPE_BUF bytes in one operation. Since pipes have these
+  writes more than `PIPE_BUF` bytes in one operation. Since pipes have these
   limitations, UNIX domain sockets should be used if there are multiple clients
   that need to be distinguishable or which write long messages to the server.
 
 Method of creating and opening::
   Sockets are created using `socket` and assigned their identity via `bind`. Named
   pipes are created using `mkfifo`. To connect to a UNIX domain socket the normal
-  socket/connect calls are used, but a named pipe is written using regular file 
-  open and write. That makes them easier to use from a shell script for example.
+  `socket`/`connect` calls are used, but a named pipe is written using regular file 
+  `open` and `write`. That makes them easier to use from a shell script for example.
 
 Linux Abstract Socket Namespace
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -625,7 +625,7 @@ Distinct clients
   distinguish the clients from each other-- the server has only one descriptor
   to read from the named pipe. Because the named pipe has only read descriptor
   and possibly-multiple writers, random interleaving can also occur if a client
-  writes more than PIPE_BUF bytes in one operation. Since pipes have these
+  writes more than <tt>PIPE_BUF</tt> bytes in one operation. Since pipes have these
   limitations, UNIX domain sockets should be used if there are multiple clients
   that need to be distinguishable or which write long messages to the server.
 </p>
@@ -637,8 +637,8 @@ Method of creating and opening
 <p>
   Sockets are created using <tt>socket</tt> and assigned their identity via <tt>bind</tt>. Named
   pipes are created using <tt>mkfifo</tt>. To connect to a UNIX domain socket the normal
-  socket/connect calls are used, but a named pipe is written using regular file
-  open and write. That makes them easier to use from a shell script for example.
+  <tt>socket</tt>/<tt>connect</tt> calls are used, but a named pipe is written using regular file
+  <tt>open</tt> and <tt>write</tt>. That makes them easier to use from a shell script for example.
 </p>
 </dd>
 </dl></div>
@@ -670,7 +670,7 @@ A <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/cli.c">client<
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-07-02 20:06:58 EDT
+Last updated 2011-07-02 20:09:25 EDT
 </div>
 </div>
 </body>
