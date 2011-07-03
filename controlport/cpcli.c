@@ -1,12 +1,17 @@
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <sys/un.h>
+#include <sys/types.h>
+#include <fcntl.h>
 #include <assert.h>
 #include <stdio.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "tpl.h"
+#include "utarray.h"
 
 char *path = "socket"; 
 char prompt[100];
@@ -81,12 +86,63 @@ char *find_word(char *c, char **start, char **end) {
   return c;
 }
 
+char *slurp(char *file, size_t *len) {
+  struct stat s;
+  char *buf;
+  int fd;
+  if (stat(file, &s) == -1) {
+      fprintf(stderr,"can't stat %s: %s\n", file, strerror(errno));
+      return NULL;
+  }
+  *len = s.st_size;
+  if ( (fd = open(file, O_RDONLY)) == -1) {
+      fprintf(stderr,"can't open %s: %s\n", file, strerror(errno));
+      return NULL;
+  }
+  buf = malloc(*len);
+  if (buf) {
+    if (read(fd, buf,*len) != *len) {
+       fprintf(stderr,"read failure\n");
+       free(buf); buf=NULL;
+    }
+  }
+  close(fd);
+  return buf;
+}
+
+/* this helper finds <File and >File words in the command.
+ * It replaces <File with the contents of file or
+ * records the >File so we can store output to it later.*/
+int redir(tpl_bin *bbuf, UT_array *of, int *need_free) {
+  char *c = (char*)bbuf->addr;
+  char *file;
+  int rc=0;
+
+  *need_free = 0;
+  if (bbuf->sz <= 1) goto done;
+  if (*c != '<' && *c != '>') goto done;
+
+  file = strndup(c+1,bbuf->sz-1);
+  if (*c == '>') { utarray_push_back(of, &file); rc=0; goto done;}
+  if (*c == '<') {
+    bbuf->addr = slurp(file, &bbuf->sz);
+    *need_free = bbuf->addr ? 1 : 0;
+    rc=bbuf->addr?1:-1;
+  }
+  free(file);
+
+ done:
+  return rc;
+}
+
 int do_rqst(char *line, int fd, int *cr) {
   char *c=line, *start=NULL, *end=NULL;
   tpl_node *tn=NULL,*tr=NULL;
+  UT_array *of; /* output files for redirecting command reply */
+  int rc = -1, need_free, rr;
   tpl_bin bbuf;
-  int rc = -1;
 
+  utarray_new(of, &ut_str_icd);
   tn = tpl_map("A(B)", &bbuf);
 
   /* parse the line into argv style words, pack and transmit the request */
@@ -96,7 +152,9 @@ int do_rqst(char *line, int fd, int *cr) {
     assert(start && end);
     bbuf.addr =   start;
     bbuf.sz = end-start;
-    tpl_pack(tn,1);
+    if ( (rr = redir(&bbuf,of,&need_free)) > 0) tpl_pack(tn,1);
+    else if (rr < 0) goto done; // rr==0 requires no action
+    if (need_free) free(bbuf.addr);
     start = end = NULL;
   }
   if (tpl_dump(tn, TPL_FD, fd) == -1) goto done;
@@ -113,6 +171,7 @@ int do_rqst(char *line, int fd, int *cr) {
   rc = 0;
 
  done:
+  utarray_free(of);
   if (tn) tpl_free(tn);
   if (tr) tpl_free(tr);
   return rc;
