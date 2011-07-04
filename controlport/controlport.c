@@ -55,7 +55,7 @@ static int help_cmd(void *_cp, cp_arg_t *arg, void *data) {
 }
 
 static int unknown_cmd(void *cp, cp_arg_t *arg, void *data) {
-  char unknown_msg[] = "command not found";
+  char unknown_msg[] = "command not found\n";
   if (arg->argc == 0) return 0;  /* no command; no-op */
   cp_add_reply(cp, unknown_msg, sizeof(unknown_msg)-1);
   return -1;
