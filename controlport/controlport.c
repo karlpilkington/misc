@@ -121,6 +121,7 @@ void cp_add_cmd(void *_cp, char *name, cp_cmd_f *cmdf, void *data) {
 static void handle_client_request(cp_t *cp) {
   int rc, cr, n, i=0;
   cp_cmd_w *cw;
+  void *tmp;
 
   assert (cp->in == NULL);
   assert (cp->out == NULL);
@@ -141,6 +142,11 @@ static void handle_client_request(cp_t *cp) {
   while(tpl_unpack(cp->in,1) > 0) {
     cp->arg.argv[i] = cp->bbuf.addr; 
     cp->arg.lenv[i] = cp->bbuf.sz;
+    /* unfortunate baggage to null-terminate the argv */
+    tmp = realloc(cp->arg.argv[i], cp->arg.lenv[i]+1);
+    if (tmp) cp->arg.argv[i] = tmp;
+    else {cp->want_disconnect=1; goto done;}
+    cp->arg.argv[i][cp->arg.lenv[i]]='\0';
     i++;
   }
 
