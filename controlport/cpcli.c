@@ -155,7 +155,7 @@ void write_file(tpl_bin *bbuf, char *file) {
 int do_rqst(char *line, int fd, int *cr) {
   char *c=line, *start=NULL, *end=NULL, **f, *file;
   tpl_node *tn=NULL,*tr=NULL;
-  UT_array *of; /* output files for redirecting command reply */
+  UT_array *of; /* optional output files for command response channels */
   int i, rc = -1, need_free, rr;
   tpl_bin bbuf;
 
@@ -191,7 +191,7 @@ int do_rqst(char *line, int fd, int *cr) {
   for(i=0; tpl_unpack(tr,1) > 0; i++) {
     if (i==0 || verbose) printf("%.*s", (int)bbuf.sz, (char*)bbuf.addr);
     if ( (f = (char**)utarray_eltptr(of,i))) write_file(&bbuf,*f);
-    free(bbuf.addr);
+    if (bbuf.addr) free(bbuf.addr);
   }
   
   rc = 0;
@@ -241,7 +241,7 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
-  while ( (line=next_line()) != NULL) { /* FIXME while in here we can get EOF from socket */
+  while ( (line=next_line()) != NULL) {
     add_history(line);
     if (do_rqst(line,fd,&cr) == -1) break;
   }
