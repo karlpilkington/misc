@@ -32,30 +32,24 @@ char buf[256]; // max line length
 int fd;        // connection to unix domain socket (control port)
 
 /* the control port can became readable when we aren't expecting a response.
- * this probably means the control port is shutting down. drain any output
- * and confirm its EOF. any other I/O without EOF here would be a bug. */
+ * this probably means the control port is shutting down. check for this.
+ * if found, confirm its EOF. any other I/O without EOF here would be a bug. */
 int last_gasp(int fd) {
   char buf[100];
   fd_set rfds;
   int sr,rc;
 
-  assert(fd > 0); FD_ZERO(&rfds); FD_SET(fd, &rfds);
-  struct timeval ts = {.tv_sec=0,.tv_usec=1000000}; /* 1 ms */
-  sr = select(1, &rfds, NULL, NULL, &ts);
-
-  if (sr == 0) return 0; /* timeout; no EOF on control port */
-  if (sr < 0) {fprintf(stderr,"select error: %s\n",strerror(errno)); goto done;}
-  assert((sr == 1) && FD_ISSET(fd, &rfds));
-
+  int flags;
+  flags = fcntl(fd, F_GETFL);
+  fcntl(fd, F_SETFL, flags | O_NONBLOCK);
   do {
     rc=read(fd,buf,sizeof(buf));
     if (rc > 0) fprintf(stderr,"control port: %.*s\n", rc, buf);
-    if (rc == -1) fprintf(stderr,"control port read error %s\n", strerror(errno));
     else if (rc == 0) fprintf(stderr,"control port: closed\n");
   } while(rc > 0);
+  fcntl(fd, F_SETFL, flags);
 
- done:
-  return 1;
+  return (rc==-1) ? 0 : 1;
 }
 
 char *next_line() {
