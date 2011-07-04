@@ -46,8 +46,8 @@ static int help_cmd(void *_cp, cp_arg_t *arg, void *data) {
   utstring_new(t);
   cp_cmd_w *cw, *tmp;
   HASH_ITER(hh, cp->cmds, cw, tmp) {
-    utstring_printf(t, "%s\n", cw->cmd.name);
-    // TODO long help
+    utstring_printf(t, "%-20s ", cw->cmd.name);
+    utstring_printf(t, "%s\n",    cw->cmd.help);
   }
   cp_add_reply(cp,utstring_body(t),utstring_len(t));
   utstring_free(t);
@@ -93,16 +93,18 @@ void *cp_init(char *path, cp_cmd_t *cmds, void *data, int timeout) {
     perror("bind error"); close(cp->fd); free(cp); cp=NULL; goto done;
   }
 
-  cp_add_cmd(cp, "help", help_cmd, NULL);
-  cp_add_cmd(cp, "quit", quit_cmd, NULL);
-  cp_add_cmd(cp, "stop", stop_cmd, NULL);
-  for(cmd=cmds; cmd && cmd->name; cmd++) cp_add_cmd(cp,cmd->name,cmd->cmdf,data);
+  cp_add_cmd(cp, "help", help_cmd, "this text", NULL);
+  cp_add_cmd(cp, "quit", quit_cmd, "close this session", NULL);
+  cp_add_cmd(cp, "stop", stop_cmd, "shutdown control port", NULL);
+  for(cmd=cmds; cmd && cmd->name; cmd++) {
+    cp_add_cmd(cp,cmd->name,cmd->cmdf,cmd->help,data);
+  }
 
  done:
   return cp;
 }
 
-void cp_add_cmd(void *_cp, char *name, cp_cmd_f *cmdf, void *data) {
+void cp_add_cmd(void *_cp, char *name, cp_cmd_f *cmdf, char *help, void *data) {
   cp_t *cp = (cp_t*)_cp;
   cp_cmd_w *cw;
 
@@ -112,6 +114,7 @@ void cp_add_cmd(void *_cp, char *name, cp_cmd_f *cmdf, void *data) {
     if ( (cw = malloc(sizeof(*cw))) == NULL) exit(-1);
     memset(cw,0,sizeof(*cw));
     cw->cmd.name = strdup(name);
+    cw->cmd.help = help ? strdup(help) : strdup("");
     HASH_ADD_KEYPTR(hh, cp->cmds, cw->cmd.name, strlen(cw->cmd.name), cw);
   }
   cw->cmd.cmdf = cmdf;
@@ -202,6 +205,7 @@ int cp_run(void *_cp) {
   HASH_ITER(hh, cp->cmds, cw, tmp) {
     HASH_DEL(cp->cmds, cw);
     free(cw->cmd.name);
+    free(cw->cmd.help);
     free(cw);
   }
   free(cp);

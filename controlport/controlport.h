@@ -14,10 +14,11 @@ typedef int (cp_cmd_f)(void *cp, cp_arg_t *arg, void *data);
 typedef struct {
   char *name;
   cp_cmd_f *cmdf;
+  char *help;
 } cp_cmd_t;
 
 void *cp_init(char *path, cp_cmd_t *cmds, void *data, int timeout);
-void cp_add_cmd(void*, char *name, cp_cmd_f *cmdf, void *data);
+void cp_add_cmd(void*, char *name, cp_cmd_f *cmdf, char *help, void *data);
 int cp_run(void*);
 void cp_shutdown(void*); /* callable from another thread */
 
