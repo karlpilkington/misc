@@ -135,11 +135,28 @@ int redir(tpl_bin *bbuf, UT_array *of, int *need_free) {
   return rc;
 }
 
+void write_file(tpl_bin *bbuf, char *file) {
+  int fd,rc;
+  fd = open(file, O_WRONLY|O_TRUNC|O_CREAT, 0644);
+  if (fd == -1) {
+    fprintf(stderr,"failed to open %s: %s\n", file, strerror(errno));
+    return;
+  }
+  rc = write(fd, bbuf->addr, bbuf->sz);
+  if (rc == bbuf->sz) {
+    if (verbose) fprintf(stderr,"Wrote %s: %zu bytes\n", file, bbuf->sz);
+  } else {
+    if (rc >=0) fprintf(stderr,"partial write to %s\n", file);
+    else fprintf(stderr,"error writing to %s: %s\n", file, strerror(errno));
+  }
+  close(fd);
+}
+
 int do_rqst(char *line, int fd, int *cr) {
   char *c=line, *start=NULL, *end=NULL, **f, *file;
   tpl_node *tn=NULL,*tr=NULL;
   UT_array *of; /* output files for redirecting command reply */
-  int rc = -1, need_free, rr;
+  int i, rc = -1, need_free, rr;
   tpl_bin bbuf;
 
   utarray_new(of, &ut_str_icd);
@@ -167,16 +184,16 @@ int do_rqst(char *line, int fd, int *cr) {
     goto done;
   }
   tpl_unpack(tr,0);
-  /* do something with the A(B) now. either put it in
-   * a cp_cmd_t to return to caller. 
-   * or deal with it according to <FILE and >FILE idea
-   */
-   f=NULL;
-   while ( (f=(char**)utarray_next(of,f))) {
-     file = *f;
-     fprintf(stderr, "have this file to store output to [%s]\n", file);
-   }
+  if (*cr) printf("non-zero exit status: %d\n", *cr);
+  if ( (i = tpl_Alen(tr,1)) > 1) printf("%u buffers received\n",i);
 
+  /* unpack reply buffers. print the first. put the requested ones into files.*/
+  for(i=0; tpl_unpack(tr,1) > 0; i++) {
+    if (i==0 || verbose) printf("%.*s", (int)bbuf.sz, (char*)bbuf.addr);
+    if ( (f = (char**)utarray_eltptr(of,i))) write_file(&bbuf,*f);
+    free(bbuf.addr);
+  }
+  
   rc = 0;
 
  done:
@@ -227,7 +244,6 @@ int main(int argc, char *argv[]) {
   while ( (line=next_line()) != NULL) { /* FIXME while in here we can get EOF from socket */
     add_history(line);
     if (do_rqst(line,fd,&cr) == -1) break;
-    if (cr) printf("non-zero exit status: %d\n",cr);
   }
 
   clear_history();
