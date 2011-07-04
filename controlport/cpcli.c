@@ -29,13 +29,44 @@ int verbose;
 char *file;
 FILE *filef;
 char buf[256]; // max line length
+int fd;        // connection to unix domain socket (control port)
+
+/* the control port became readable when we weren't expecting a response.
+ * this probably means the control port is shutting down. drain any output
+ * and confirm its EOF. any other I/O without EOF here would be a bug. */
+int last_gasp(int fd) {
+  char buf[100];
+  int rc;
+ again:
+  rc=read(fd,buf,sizeof(buf));
+  if (rc > 0) {fprintf(stderr,"control port: %.*s\n", rc, buf); goto again;}
+  if (rc == -1) fprintf(stderr,"control port read error %s\n", strerror(errno));
+  else if (rc == 0) fprintf(stderr,"control port: closed\n");
+  return 1;
+}
 
 char *next_line() {
   size_t len;
-  char *line,*tmp;
+  char *line=NULL,*tmp;
+  int sr;
 
   if (file) line=fgets(buf,sizeof(buf), filef);
-  else line=readline(prompt);  // must free it
+  else {
+    /* because we can wait indefinitely in interactive usage, it is desirable
+       to pay attention to both stdin or to the server socket descriptor in
+       case it closes (say, in response to the last command the user typed). */
+    assert(fd);
+    fd_set rfds;
+    FD_ZERO(&rfds);
+    FD_SET(STDIN_FILENO, &rfds);
+    FD_SET(fd, &rfds);
+    sr = select(2, &rfds, NULL, NULL, NULL);
+    if (sr<0) {fprintf(stderr,"select error: %s\n",strerror(errno)); goto done;}
+    if (sr == 0) {assert(0);} /* select timeout should not happen */
+    if (FD_ISSET(fd, &rfds)) { if (last_gasp(fd)) goto done; }
+
+    line=readline(prompt);  // must free it
+  }
   if (!line) goto done;
 
   len = strlen(line);
@@ -205,7 +236,7 @@ int do_rqst(char *line, int fd, int *cr) {
  
 int main(int argc, char *argv[]) {
   struct sockaddr_un addr;
-  int opt,fd,rc,cr;
+  int opt,rc,cr;
   tpl_bin bbuf;
   char *line;
 
