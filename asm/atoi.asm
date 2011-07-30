@@ -1,6 +1,7 @@
 [SECTION .text]; 
 
 extern printf
+extern atoi
 global main
 
 main:
@@ -11,10 +12,14 @@ main:
   push edi
   ; end boilerplate
 
-  push dword hello    ; args go last-first
-  push dword format   ; printf format
-  call printf
+  push dword aint     ; we're going to call atoi("123")
+  call atoi           ; output is in EAX (123 == 0x7b)
 
+  ; print it
+  push eax
+  push intformat
+  call printf
+  
   ; resume boilerplate
   pop edi
   pop esi
@@ -24,7 +29,6 @@ main:
   ret
 
 [SECTION .data]
-hello: db "Hello, world!",10,0
-format: db "%s",0
+intformat: db "atoi result: eax is %d",10,0
 aint: db "123",0
 
