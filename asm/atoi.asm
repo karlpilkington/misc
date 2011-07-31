@@ -14,11 +14,13 @@ main:
 
   push dword aint     ; we're going to call atoi("123")
   call atoi           ; output is in EAX (123 == 0x7b)
+  add esp, byte 4     ; clean up stack
 
   ; print it
   push eax
   push intformat
   call printf
+  add esp, byte 8     ; clean up stack (assuming 32 bit pointer size)
   
   ; resume boilerplate
   pop edi

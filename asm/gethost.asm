@@ -16,18 +16,21 @@ main:
   push 100            ; length of buf
   push buf
   call gethostname
+  add esp, byte 8     ; clean up stack (assuming 32 bit pointer size)
   mov ecx, eax
   jecxz success
 
  fail:
   push dword failed
   call puts
+  add esp, byte 4     ; clean up stack (assuming 32 bit pointer size)
   jmp done
 
  success:
   push buf
   push format
   call printf
+  add esp, byte 8     ; clean up stack (assuming 32 bit pointer size)
 
  done:
   ; resume boilerplate

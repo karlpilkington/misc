@@ -14,6 +14,7 @@ main:
   push dword hello    ; args go last-first
   push dword format   ; printf format
   call printf
+  add esp, byte 8     ; clean up stack (assuming 32 bit pointer size)
 
   ; resume boilerplate
   pop edi
