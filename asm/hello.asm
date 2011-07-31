@@ -27,5 +27,4 @@ main:
 [SECTION .data]
 hello: db "Hello, world!",10,0
 format: db "%s",0
-aint: db "123",0
 
