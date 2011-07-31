@@ -2,8 +2,6 @@ remember
 --------
 Troy D. Hanson <tdh@tkhanson.net>
 
-include::../sslogo.txt[]
-
 Back to http://tkhanson.net/misc[Scripts and Snippets].
 
 This is an easy way to record shell commands you might want to remember in the

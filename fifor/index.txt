@@ -2,8 +2,6 @@ fifor
 -----
 Troy D. Hanson <tdh@tkhanson.net>
 
-include::../sslogo.txt[]
-
 Back to http://tkhanson.net/misc[Scripts and Snippets].
 
 Say you have `vim` running in one window, and wish to have `make` kicked off
