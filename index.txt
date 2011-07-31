@@ -56,121 +56,26 @@ Examples of using common libraries and other reusable bits:
 | {t}asm[asm]          | a few x86 assembly programs that call into C library functions or are called from C | asm
 |=================================================================================================================
 
+:f: http://tkhanson.net/cgit.cgi/misc.git/plain/fifor/index.html
+:r: http://tkhanson.net/cgit.cgi/misc.git/plain/remember/index.html
+:m: http://tkhanson.net/cgit.cgi/misc.git/plain/md5watch/index.html
+
 Scripts
 ~~~~~~~
 [width="90%",cols="10^m,70,5",grid="none"]
 |=================================================================================================================
-| {t}fifor[fifor]       | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <<fifor,read more>> | Perl
+| {t}fifor[fifor]       | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) {f}[notes] | Perl
 | {t}downsample[downsample] |  reduce a text file to x% of its lines (default 10%) | Perl
-| {t}md5watch[md5watch] | list files changed since last run <<md5watch,read more>> | Perl
+| {t}md5watch[md5watch] | list files changed since last run {m}[notes] | Perl
 | {t}mailpl[mailpl]     | send email with attachments, configurable from address, etc | Perl
 | {t}anb[anb]           | list lines in file A but not in file B | Perl
 | {t}bin2hex[bin2hex]   | convert stdin to hex bytes | Perl
 | {t}hex2bin[hex2bin]   | convert hex args to binary bytes on stdout | Perl
 | {t}fcut[fcut]         | print region (from position s of length l) from a file | Perl
 | {t}pagehits[pagehits] | parse access.log and store daily hits for each url, or view cumulative hits | Perl
-| {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them <<remember,read more>> | sh
+| {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them {r}[notes] | sh
 | {t}rrd[rrd] | sample of using rrdtool | Perl
 | {t}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
 |=================================================================================================================
-
-Additional notes
-----------------
-
-[[fifor]]
-fifor
-~~~~~
-Say you have `vim` running in one window, and wish to have `make` kicked off
-'in a different window' whenever you type backslash in vim. This is the sort of
-thing you can do with `fifor`.  This utility does "something" every time a fifo
-becomes readable.  You need to do a one-time setup to create the fifo:
-
-  mkfifo /tmp/fifo
-
-In the window where you want the "something" to happen, start `fifor` with the
-command to be run:
-
-  fifor make
-
-Now it will wait. Anytime a line is written to `/tmp/fifo`, it will execute
-`make`.  (You can use options to specify a different fifo file. Run `fifor -h`
-for usage).  Note that if you want a 'sequence' of commands to run when the fifo
-triggers, separate each command in the sequence with a quoted semicolon:
-
-  fifor make \; cp tool /usr/bin
-
-Whenever you want the commands to run, write a line (anything) to the fifo.  You
-could just `echo > /tmp/fifo` to write an empty line to it.  I automate this by
-mapping it to a keystroke in `vim`, using this line in `~/.vimrc`: 
-
-  map <Bslash> :!echo >/tmp/fifo<CR><CR>
-
-Now whenever I hit backslash in vim, the make kicks off in the other window.  
-
-[[remember]]
-remember
-~~~~~~~~
-This is an easy way to record shell commands you might want to remember in the
-future. For example if you're installing a package, it's helpful to remember
-what build options you used. Run `remember` once before your shell
-commands, then run your commands, then run `remember -s` afterwards. The
-intervening commands will be copied from your bash history (so, you need to be
-using bash with history enabled). The copied lines get appended to a file 
-(readable only to you) called `$HOME/.remember`.
-
-  % remember how I installed curl
-  % wget http://curl.haxx.se/download/curl-7.19.7.tar.bz2
-  % tar xjf curl-7.19.7.tar.bz2
-  % cd curl-7.19.7
-  % ./configure --prefix=/home/local
-  % make
-  % make install
-  % remember -s
-
-This is what would be appended to your `$HOME/.remember` file:
-
---------------------------------------------------------------------------------
-Sat Dec 19 21:45:31 PST 2009
-  remember how I installed curl
-  wget http://curl.haxx.se/download/curl-7.19.7.tar.bz2
-  tar xjf curl-7.19.7.tar.bz2
-  cd curl-7.19.7
-  ./configure --prefix=/home/local
-  make
-  make install
---------------------------------------------------------------------------------
-
-NOTE: `remember` is not a script but rather a bash function that you paste into
-your `.bashrc` or `.bash_profile`. 
-
-For another description of 'remember', see this
-http://troydhanson.wordpress.com/2010/01/28/scripts-and-snippets/[blog post].
-
-[[md5watch]]
-md5watch
-~~~~~~~~
-This runs on an MD5 checksum on files in a directory hierarchy. It keeps a
-record of all their MD5 values (by default in a file called `~/.md5hist`) so
-that next time it is run, it can print out which files have changed.
-
-Generally use this with `-u` (update) so it records the new MD5 hash (of changed
-or new files), in addition to printing them. Without `-u`, it only prints them.
-
-  % cd /tmp
-  % echo hello > hello.txt
-  % md5watch -u
-  ./hello.txt new ...updated.
-  % echo 'hello, world!' > hello.txt
-  % md5watch -u
-  ./hello.txt changed since Mon Dec 21 14:48:00 2009 ...updated.
-
-You can place `md5watch -u` into cron like this to get a daily email of files
-whose content has changed.  This example excludes the top-level logs directory
-from being scanned.
-
-  5 0 * * *       $HOME/bin/md5watch -e ./logs -u
-
-While you could use `find` to list files modified in the last day (by
-modification timestamp), `md5watch` actually tests whether the content has changed.
 
 // vim: set tw=80 wm=2 nowrap syntax=asciidoc: 

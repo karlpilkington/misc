@@ -735,7 +735,7 @@ cellspacing="0" cellpadding="4">
 <tbody>
 <tr>
 <td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/fifor">fifor</a></tt></p></td>
-<td align="left" valign="top"><p class="table">run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <a href="#fifor">read more</a></p></td>
+<td align="left" valign="top"><p class="table">run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/fifor/index.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
@@ -745,7 +745,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/md5watch">md5watch</a></tt></p></td>
-<td align="left" valign="top"><p class="table">list files changed since last run <a href="#md5watch">read more</a></p></td>
+<td align="left" valign="top"><p class="table">list files changed since last run <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/md5watch/index.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
@@ -780,7 +780,7 @@ cellspacing="0" cellpadding="4">
 </tr>
 <tr>
 <td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/remember">remember</a></tt></p></td>
-<td align="left" valign="top"><p class="table">type "remember", run some commands you want to remember, then "remember -s" to save them <a href="#remember">read more</a></p></td>
+<td align="left" valign="top"><p class="table">type "remember", run some commands you want to remember, then "remember -s" to save them <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/remember/index.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">sh</p></td>
 </tr>
 <tr>
@@ -797,112 +797,11 @@ cellspacing="0" cellpadding="4">
 </table>
 </div>
 </div>
-<h2 id="_additional_notes">Additional notes</h2>
-<div class="sectionbody">
-<h3 id="fifor">fifor</h3><div style="clear:left"></div>
-<div class="paragraph"><p>Say you have <tt>vim</tt> running in one window, and wish to have <tt>make</tt> kicked off
-<em>in a different window</em> whenever you type backslash in vim. This is the sort of
-thing you can do with <tt>fifor</tt>.  This utility does "something" every time a fifo
-becomes readable.  You need to do a one-time setup to create the fifo:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>mkfifo /tmp/fifo</tt></pre>
-</div></div>
-<div class="paragraph"><p>In the window where you want the "something" to happen, start <tt>fifor</tt> with the
-command to be run:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>fifor make</tt></pre>
-</div></div>
-<div class="paragraph"><p>Now it will wait. Anytime a line is written to <tt>/tmp/fifo</tt>, it will execute
-<tt>make</tt>.  (You can use options to specify a different fifo file. Run <tt>fifor -h</tt>
-for usage).  Note that if you want a <em>sequence</em> of commands to run when the fifo
-triggers, separate each command in the sequence with a quoted semicolon:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>fifor make \; cp tool /usr/bin</tt></pre>
-</div></div>
-<div class="paragraph"><p>Whenever you want the commands to run, write a line (anything) to the fifo.  You
-could just <tt>echo &gt; /tmp/fifo</tt> to write an empty line to it.  I automate this by
-mapping it to a keystroke in <tt>vim</tt>, using this line in <tt>~/.vimrc</tt>:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>map &lt;Bslash&gt; :!echo &gt;/tmp/fifo&lt;CR&gt;&lt;CR&gt;</tt></pre>
-</div></div>
-<div class="paragraph"><p>Now whenever I hit backslash in vim, the make kicks off in the other window.</p></div>
-<h3 id="remember">remember</h3><div style="clear:left"></div>
-<div class="paragraph"><p>This is an easy way to record shell commands you might want to remember in the
-future. For example if you&#8217;re installing a package, it&#8217;s helpful to remember
-what build options you used. Run <tt>remember</tt> once before your shell
-commands, then run your commands, then run <tt>remember -s</tt> afterwards. The
-intervening commands will be copied from your bash history (so, you need to be
-using bash with history enabled). The copied lines get appended to a file
-(readable only to you) called <tt>$HOME/.remember</tt>.</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>% remember how I installed curl
-% wget http://curl.haxx.se/download/curl-7.19.7.tar.bz2
-% tar xjf curl-7.19.7.tar.bz2
-% cd curl-7.19.7
-% ./configure --prefix=/home/local
-% make
-% make install
-% remember -s</tt></pre>
-</div></div>
-<div class="paragraph"><p>This is what would be appended to your <tt>$HOME/.remember</tt> file:</p></div>
-<div class="listingblock">
-<div class="content">
-<pre><tt>Sat Dec 19 21:45:31 PST 2009
-  remember how I installed curl
-  wget http://curl.haxx.se/download/curl-7.19.7.tar.bz2
-  tar xjf curl-7.19.7.tar.bz2
-  cd curl-7.19.7
-  ./configure --prefix=/home/local
-  make
-  make install</tt></pre>
-</div></div>
-<div class="admonitionblock">
-<table><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content"><tt>remember</tt> is not a script but rather a bash function that you paste into
-your <tt>.bashrc</tt> or <tt>.bash_profile</tt>.</td>
-</tr></table>
-</div>
-<div class="paragraph"><p>For another description of <em>remember</em>, see this
-<a href="http://troydhanson.wordpress.com/2010/01/28/scripts-and-snippets/">blog post</a>.</p></div>
-<h3 id="md5watch">md5watch</h3><div style="clear:left"></div>
-<div class="paragraph"><p>This runs on an MD5 checksum on files in a directory hierarchy. It keeps a
-record of all their MD5 values (by default in a file called <tt>~/.md5hist</tt>) so
-that next time it is run, it can print out which files have changed.</p></div>
-<div class="paragraph"><p>Generally use this with <tt>-u</tt> (update) so it records the new MD5 hash (of changed
-or new files), in addition to printing them. Without <tt>-u</tt>, it only prints them.</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>% cd /tmp
-% echo hello &gt; hello.txt
-% md5watch -u
-./hello.txt new ...updated.
-% echo 'hello, world!' &gt; hello.txt
-% md5watch -u
-./hello.txt changed since Mon Dec 21 14:48:00 2009 ...updated.</tt></pre>
-</div></div>
-<div class="paragraph"><p>You can place <tt>md5watch -u</tt> into cron like this to get a daily email of files
-whose content has changed.  This example excludes the top-level logs directory
-from being scanned.</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><tt>5 0 * * *       $HOME/bin/md5watch -e ./logs -u</tt></pre>
-</div></div>
-<div class="paragraph"><p>While you could use <tt>find</tt> to list files modified in the last day (by
-modification timestamp), <tt>md5watch</tt> actually tests whether the content has changed.</p></div>
-</div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-07-31 08:51:38 EDT
+Last updated 2011-07-31 14:47:18 EDT
 </div>
 </div>
 </body>
