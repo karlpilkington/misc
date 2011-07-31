@@ -1,23 +1,14 @@
-EXE = hello atoi gethost
+EXE = hello atoi gethost addc
 all: $(EXE)
 
-gethost: gethost.o
-	gcc -o $@ $^
+# make has an implicit rule to expect the targets like hello to
+# depend on hello.o; and here we define our own implicit rule
+# so that .o depends on .asm
 
-gethost.o: gethost.asm
-	nasm -f elf $^
+%.o: %.asm
+	nasm -f elf $<
 
-atoi: atoi.o
-	gcc -o $@ $^
-
-atoi.o: atoi.asm
-	nasm -f elf $^
-
-hello: hello.o
-	gcc -o $@ $^
-
-hello.o: hello.asm
-	nasm -f elf $^
+addc: addc.o add.o
 
 .PHONY: clean
 
