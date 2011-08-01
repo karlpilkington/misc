@@ -32,10 +32,15 @@ int c60_load_map(c60_t *c60, char *file, UT_string *err) {
       goto done;
     }
     if ( (s = zmq_socket(c60->zcontext, ZMQ_PUSH)) == NULL) {
-      utstring_printf(err,"%s: can't connect to %s\n", file, uri);
+      utstring_printf(err,"%s: can't connect to %s: %s\n", file, uri,
+        zmq_strerror(errno));
       goto done;
     }
-    /* TODO bind or connect it */
+    if (zmq_connect(s, uri) != 0) {
+      utstring_printf(err,"%s: can't connect to %s: %s\n", file, uri,
+        zmq_strerror(errno));
+      goto done;
+    }
     for(i=start; i<=end; i++) {
       c60->bucket[i].socket = s;
     }
