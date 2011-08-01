@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include <zmq.h>
 #include "c60_internal.h"
 #include "utstring.h"
@@ -60,3 +61,12 @@ int c60_load_map(c60_t *c60, char *file, UT_string *err) {
   }
   return rc;
 }
+
+int c60_get_bucket(const char *dest) {
+  assert(dest);
+  const char *c;
+  int hash=0;
+  for(c=dest; *c != '\0'; c++) hash = hash * 33 + *c;
+  return hash & (C60_NUM_BUCKETS-1);
+}
+
