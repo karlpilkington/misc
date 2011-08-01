@@ -26,11 +26,10 @@ main:
 
   mov ebx, [ebp+16]   ; envp
  next:
-  mov esi, [ebx]
-  mov ecx, esi
+  mov ecx, [ebx]
   jecxz done
 
-  push dword esi;
+  push dword ecx;
   push dword fmt;
   call printf
   add esp, byte 8;     ; clean up stack

@@ -1,4 +1,4 @@
-EXE = hello atoi gethost addc
+EXE = hello atoi gethost addc penv
 all: $(EXE)
 
 # make has an implicit rule to expect the targets like hello to
