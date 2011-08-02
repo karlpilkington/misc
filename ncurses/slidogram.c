@@ -20,7 +20,7 @@ void usage(char *prog) {
 
 char buf[1000];
 int main(int argc, char *argv[]) {
-  int i, j, opt,rc,fd, rows, cols, x, y, *data, d, sum=0, height;
+  int i, j, opt, rc,fd, rows, cols, *data, d, max, height, bytes;
   fd_set rfds; 
   char *c;
 
@@ -68,33 +68,38 @@ int main(int argc, char *argv[]) {
     if (FD_ISSET(STDIN_FILENO,&rfds)) goto done;
 
     /* fifo is readable if we're here.. read and update screen */
-    rc = read(fd,buf,sizeof(buf));
+    rc = read(fd,buf,sizeof(buf)-1);
     if (rc < 0) {
       if (errno == EAGAIN || errno == EWOULDBLOCK) continue;
       fprintf(stderr,"read: %s\n", strerror(errno)); 
       goto done;
     }
     if (rc == 0) continue;  /* writer closed; wait for another one */
+    buf[rc]='\0'; /* so we can use it with sscanf */
     c = buf;
-    if (*c != ',') {fprintf(stderr,"syntax error\n"); goto done; }
-    if (sscanf(++c,"%u",&d) != 1) {fprintf(stderr,"syntax error\n"); goto done; }
+    while (rc) {
+      if (sscanf(c,",%u%n",&d,&bytes) == 0) {
+        fprintf(stderr,"syntax error\n"); 
+        goto done; 
+      }
+      //fprintf(stderr,"read %d bytes from [%.*s]\n",bytes,rc,c);
+      assert(bytes <= rc);
+      rc -= bytes;
+      c += bytes;
+      for(i=1;i<cols;i++) data[i-1] = data[i]; data[cols-1] = d;
+    }
 
     /* push data into last column, shifting other columns left to make room */
-    sum -= data[0]; sum += d;
-    for(i=1;i<cols;i++) data[i-1] = data[i];
-    data[cols-1] = d;
+    for(max=0, i=0;i<cols;i++) {if (data[i]>max) max=data[i];}
 
     /* draw and refresh */
     clear();
     attron(A_REVERSE);
-    if (sum) {
-      for(i=0; i<cols; i++) {
-        height = (int)((1.0 * data[i] / sum) * rows);
-        if (height == 0) height=1;
-        for(j=rows-1; j >= rows-height; j--) {
-          assert(j >= 0); assert(i >= 0); assert(j < rows); assert(i < cols);
-          mvaddch(j,i,' ');
-        }
+    for(i=0; i<cols; i++) {
+      height = (int)((1.0 * data[i] / max) * rows);
+      for(j=rows-1; j >= rows-height; j--) {
+        assert(j >= 0); assert(i >= 0); assert(j < rows); assert(i < cols);
+        mvaddch(j,i,' ');
       }
     }
     refresh();
