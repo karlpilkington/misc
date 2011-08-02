@@ -26,7 +26,13 @@ void *c60_client_init_fromfile(char *file, UT_string *err) {
 void c60_client_close(void *_c60) {
   c60_t *c60 = (c60_t*)_c60;
   int i;
-  zmq_term(c60->zcontext); /* no need to zmq_close its sockets */
+  for(i=0; i< C60_NUM_BUCKETS; i++) {
+    if (c60->bucket[i]->socket) {
+      zmq_close(c60->bucket[i]->socket);
+      c60->bucket[i]->socket = NULL;
+    }
+  }
+  zmq_term(c60->zcontext); 
   /* TODO any deep cleaning if c60 grows */
   free(c60);
 }
@@ -36,7 +42,7 @@ int c60_send(void *_c60, char *dest, char *msg, size_t len) {
   c60_t *c60 = (c60_t*)_c60;
   int b;
   b = c60_get_bucket(dest);
-  if (zmq_send(c60->bucket[b].socket, msg, len, 0) == -1) {
+  if (zmq_send(c60->bucket[b]->socket, msg, len, 0) == -1) {
   }
   return -1;
 }

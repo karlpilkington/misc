@@ -13,7 +13,7 @@ typedef struct {
 
 typedef struct {
   void *zcontext; /* zero MQ context */
-  c60_conn bucket[C60_NUM_BUCKETS];
+  c60_conn *bucket[C60_NUM_BUCKETS];
 } c60_t;
 
 int c60_load_map(c60_t *c60, char *file, UT_string *err);

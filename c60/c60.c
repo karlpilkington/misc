@@ -5,7 +5,7 @@
 #include "utstring.h"
 
 int c60_load_map(c60_t *c60, char *file, UT_string *err) {
-  int rc = -1, lines=0;
+  int rc = -1, lines=0, linger_timeout_msec=10*1000;
   unsigned start, end, i;
   char line[100], cmd[100], uri[100]; /* TODO safer parse */
   FILE *f=NULL;
@@ -37,17 +37,23 @@ int c60_load_map(c60_t *c60, char *file, UT_string *err) {
         zmq_strerror(errno));
       goto done;
     }
+    if (zmq_setsockopt(s, ZMQ_LINGER, &linger_timeout_msec, sizeof(int)) != 0) {
+      utstring_printf(err,"can't set options: %s: %s\n", zmq_strerror(errno));
+      goto done;
+    }
     if (zmq_connect(s, uri) != 0) {
       utstring_printf(err,"%s: can't connect to %s: %s\n", file, uri,
         zmq_strerror(errno));
       goto done;
     }
+    c60_conn *c = calloc(1,sizeof(c60_conn));  /* FIXME leaked on close */
+    c->socket = s;
     for(i=start; i<=end; i++) {
-      c60->bucket[i].socket = s;
+      c60->bucket[i] = c;
     }
   }
   for(i=0; i<C60_NUM_BUCKETS; i++) {
-    if (c60->bucket[i].socket == NULL) {
+    if (c60->bucket[i]->socket == NULL) {
       utstring_printf(err,"%s: unassigned bucket: %u\n", file, i);
       goto done;
     }
