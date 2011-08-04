@@ -22,3 +22,13 @@ Programs that manage a set of workers
 * tworkers3.c:  Variant of tworkers2; uses a 'shutdown' variable with a
 		condition broadcast instead of pthread_cancel. Accomplishes
 		the same result as tworkers2 with less complexity.
+
+
+--------------------------------------------------------------------------------
+
+
+Also included:
+
+  afta.c     This program runs a sub-program, forcing it to quit after x seconds
+             e.g. "afta 10s /bin/sleep 50"
+
