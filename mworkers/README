@@ -29,6 +29,7 @@ Programs that manage a set of workers
 
 Also included:
 
-  afta.c     This program runs a sub-program, forcing it to quit after x seconds
-             e.g. "afta 10s /bin/sleep 50"
+ quitafter.c:   Runs a sub-program, forcing it to quit after x seconds, e.g.:
+
+                    quitafter 10s /bin/sleep 50
 

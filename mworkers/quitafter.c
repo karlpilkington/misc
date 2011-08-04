@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     alarm(n);
     pid = run_child(argc, argv);
 
-    int signo = sigwaitinfo(&all,NULL);
+    int signo = sigwaitinfo(&all,NULL); // could use sigtimedwait
     switch(signo) {
       case SIGCHLD: 
         if (verbose) fprintf(stderr,"child exited\n");
