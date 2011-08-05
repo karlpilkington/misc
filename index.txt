@@ -20,7 +20,6 @@ Download options
 // this defines an attribute called {t} used below
 //:t: http://tkhanson.net/cgit.cgi/misc.git/plain/
 :t: http://tkhanson.net/cgit.cgi/misc.git/tree/
-:e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html
 :f: http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html
 
 Snippets 
@@ -41,7 +40,6 @@ Examples of using common libraries and other reusable bits:
 | {t}inotify[inotify]  | example of getting inotify file events (Linux 2.6.13 and higher) | C
 | {t}unixdomain[unixdomain]   | example of UNIX domain socket client and server {f}[notes] | C
 | {t}controlport[controlport] | a control port library: an administrative interface to a server | C
-| {t}entropy[entropy]  | code to measure entropy in a file or stream in bits per byte {e}[notes]| C
 | {t}mworkers[mworkers]| example of a parent process managing multiple worker processes | C
 | {t}bloom[bloom]      | builds a Bloom filter from lines of one text file, tests lines of another file on it | C
 | {t}zlib[zlib]        | example of implementing a simple gzip/gunzip using the zlib C API | C
