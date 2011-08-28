@@ -26,9 +26,20 @@ Setting up ditaa
 
 Run ditaa on this file in sample1.txt:
 
+  +-------------+     +-------------+
+  |             |     |             |
+  |  SUPER      |---->|  CONDUCTING |
+  |             |     +-------------+
+  +-------------+
+
     java -jar ditaa0_9.jar sample1.txt
 
-This writes the file sample1.png.
+This writes the file sample1.png: 
+
+image::sample1.png[]
+
+Above, we manually included the png image into this Asciidoc text. 
+The final section of this document will automate the process.
 
 Ditaa within Asciidoc
 ---------------------
