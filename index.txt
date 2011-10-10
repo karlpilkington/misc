@@ -21,6 +21,7 @@ Download options
 //:t: http://tkhanson.net/cgit.cgi/misc.git/plain/
 :t: http://tkhanson.net/cgit.cgi/misc.git/tree/
 :f: http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html
+:e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy.html
 
 Snippets 
 ~~~~~~~~
@@ -34,14 +35,16 @@ Examples of using common libraries and other reusable bits:
 | {t}ifinfo[ifinfo]    | code to list network interfaces, their IPv4/v6 addresses and MACs | C
 | {t}dns[dns]          | example of doing DNS lookup | C
 | {t}sigio[sigio]      | example of signal driven I/O notification | C
+| {t}asm[asm]          | a few x86 assembly programs that call C library functions or are called from C | asm
+| {t}inotify[inotify]  | example of getting inotify file events (Linux 2.6.13 and higher) | C
+| {t}mworkers[mworkers]| example of a parent process managing multiple worker processes | C
 | {t}pcre[pcre]        | example of using pcre library | C
 | {t}pcap[pcap]        | example of using libpcap to capture packets | C
 | {t}readline[readline]| example of using readline library | C
-| {t}inotify[inotify]  | example of getting inotify file events (Linux 2.6.13 and higher) | C
 | {t}unixdomain[unixdomain]   | example of UNIX domain socket client and server {f}[notes] | C
 | {t}controlport[controlport] | a control port library: an administrative interface to a server | C
-| {t}mworkers[mworkers]| example of a parent process managing multiple worker processes | C
 | {t}bloom[bloom]      | builds a Bloom filter from lines of one text file, tests lines of another file on it | C
+| {t}entropy[entropy]  | measuring entropy of a byte stream {e}[notes] | C
 | {t}zlib[zlib]        | example of implementing a simple gzip/gunzip using the zlib C API | C
 | {t}tconf[tconf]      | simple function to read key-value configuration file entries | C
 | {t}rw_wrap[rw_wrap]  | macros to wrap read/write, which loop until "len" bytes are read or written | C
@@ -51,7 +54,6 @@ Examples of using common libraries and other reusable bits:
 | {t}pexit[pexit]      | a C program that gets signalled when its parent exits using prctl | C
 | {t}utf8[utf8]        | macros for utf8 handling including character length, validity and utf32 conversion | C 
 | {t}looper[looper]    | example of iterating over lines of input from file or stdin using readline | C
-| {t}asm[asm]          | a few x86 assembly programs that call into C library functions or are called from C | asm
 |=================================================================================================================
 
 :f: http://tkhanson.net/cgit.cgi/misc.git/plain/fifor/index.html
@@ -77,5 +79,9 @@ Scripts
 | {t}ditaa_example[ditaa] | embedding ditaa diagrams into Asciidoc documents {d}[notes] | ditaa
 | {t}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
 |=================================================================================================================
+
+Other resources
+~~~~~~~~~~~~~~~
+1. http://tkhanson.net/virtual_memory.pdf[Virtual Memory in a Nutshell] slides I wrote in 2009.
 
 // vim: set tw=80 wm=2 nowrap syntax=asciidoc: 
