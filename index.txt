@@ -21,7 +21,7 @@ Download options
 //:t: http://tkhanson.net/cgit.cgi/misc.git/plain/
 :t: http://tkhanson.net/cgit.cgi/misc.git/tree/
 :f: http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html
-:e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy.html
+:e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html
 
 Snippets 
 ~~~~~~~~
