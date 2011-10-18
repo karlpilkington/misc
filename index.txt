@@ -44,6 +44,7 @@ Examples of using common libraries and other reusable bits:
 | {t}unixdomain[unixdomain]   | example of UNIX domain socket client and server {f}[notes] | C
 | {t}controlport[controlport] | a control port library: an administrative interface to a server | C
 | {t}bloom[bloom]      | builds a Bloom filter from lines of one text file, tests lines of another file on it | C
+| {t}ts[timeseries]    | a time series library, series comprised of arbitrary elements | C
 | {t}entropy[entropy]  | measuring entropy of a byte stream {e}[notes] | C
 | {t}zlib[zlib]        | example of implementing a simple gzip/gunzip using the zlib C API | C
 | {t}tconf[tconf]      | simple function to read key-value configuration file entries | C
