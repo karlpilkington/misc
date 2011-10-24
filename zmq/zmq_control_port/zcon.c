@@ -105,10 +105,11 @@ int do_rqst(char *line) {
     }
     buf = zmq_msg_data(&rmsgs[msgr-1]); 
     sz = zmq_msg_size(&rmsgs[msgr-1]); 
-    printf("%.*s\n", (int)sz, (char*)buf);
+    printf("%.*s", (int)sz, (char*)buf);
     if (zmq_getsockopt(CF.req_socket, ZMQ_RCVMORE, &more, &more_sz)) more=0;
   } while (more);
   
+  printf("\n");
   rc = 0;
 
  done:

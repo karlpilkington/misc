@@ -29,8 +29,8 @@ void cp_add_cmd(void*, char *name, cp_cmd_f *cmdf, char *help, void *data);
 int cp_exec(void *_cp, void *zmq_reply_socket);
 
 /* these are used within command callbacks */
-#define cp_add_replys(a,b) cp_add_reply((a),(b),strlen(b))
 void cp_add_reply(void *, void *buf, size_t len);
+void cp_printf(void *, const char *fmt, ...);
 
 #if defined __cplusplus
  }

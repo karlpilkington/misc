@@ -175,3 +175,36 @@ void cp_add_reply(void *_cp, void *buf, size_t len) {
   memcpy(zmq_msg_data(msg),buf,len);
 }
 
+static void cp_printf_va(void *_cp, const char *fmt, va_list ap) {
+   int n;
+   va_list cp;
+   UT_string *s;
+   utstring_new(s);
+
+   while (1) {
+     va_copy(cp, ap);
+     n = vsnprintf (&s->d[s->i], s->n-s->i, fmt, cp);
+     va_end(cp);
+
+     if ((n > -1) && (n < (int)(s->n-s->i))) {
+       s->i += n;
+       goto done;
+     }
+
+     /* Else try again with more space. */
+     if (n > -1) utstring_reserve(s,n+1); /* exact */
+     else utstring_reserve(s,(s->n)*2);   /* 2x */
+   }
+
+  done:
+   cp_add_reply(cp, utstring_body(s), utstring_len(s));
+   utstring_free(s);
+}
+
+void cp_printf(void *_cp, const char *fmt, ...) {
+  va_list ap;
+  va_start(ap,fmt);
+  cp_printf_va(_cp, fmt, ap);
+  va_end(ap);
+}
+
