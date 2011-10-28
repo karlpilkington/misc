@@ -13,7 +13,7 @@ CFLAGS += ${EXTRA_CFLAGS}
 
 all: $(PROGS)
 
-$(PROGS): $(LIB) 
+$(PROGS): $(SRCS) $(LIB) 
 	$(CC) $(CFLAGS) -o $@ $(@).c $(LDFLAGS)
 
 .PHONY: clean

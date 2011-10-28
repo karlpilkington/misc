@@ -72,7 +72,8 @@ int do_rqst(char *line) {
   int nmsgs=0; zmq_msg_t *msgs = NULL;
   int rmsgs=0; zmq_msg_t *msgr = NULL;
   size_t sz, more_sz=sizeof(int64_t);
-  int64_t more=0; 
+  //int64_t more=0; 
+  int more_int; size_t more_int_sz = sizeof(more_int);
   int i, rc = -1;
 
   /* parse the line into argv style words, pack and transmit the request */
@@ -89,7 +90,7 @@ int do_rqst(char *line) {
 
   // send request
   for(i=0; i<nmsgs; i++) {
-    if (zmq_sendmsg(CF.req_socket, &msgs[i], (i<nmsgs-1)?ZMQ_SNDMORE:0)) {
+    if (zmq_sendmsg(CF.req_socket, &msgs[i], (i<nmsgs-1)?ZMQ_SNDMORE:0) == -1) {
       fprintf(stderr,"zmq_sendmsg: %s\n", zmq_strerror(errno));
       goto done;
     }
@@ -99,15 +100,16 @@ int do_rqst(char *line) {
   do {
     alloc_msg(rmsgs,msgr);
     zmq_msg_init(&rmsgs[msgr-1]);
-    if (zmq_recvmsg(CF.req_socket, &rmsgs[msgr-1], 0)) {
+    if (zmq_recvmsg(CF.req_socket, &rmsgs[msgr-1], 0) == -1) {
       fprintf(stderr,"zmq_recvmsg: %s\n", zmq_strerror(errno));
       goto done;
     }
     buf = zmq_msg_data(&rmsgs[msgr-1]); 
     sz = zmq_msg_size(&rmsgs[msgr-1]); 
     printf("%.*s", (int)sz, (char*)buf);
-    if (zmq_getsockopt(CF.req_socket, ZMQ_RCVMORE, &more, &more_sz)) more=0;
-  } while (more);
+    //if (zmq_getsockopt(CF.req_socket, ZMQ_RCVMORE, &more, &more_sz)) more=0;
+    if (zmq_getsockopt(CF.req_socket, ZMQ_RCVMORE, &more_int, &more_int_sz)) more_int=0;
+  } while (more_int);
   
   printf("\n");
   rc = 0;

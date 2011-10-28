@@ -91,7 +91,8 @@ int cp_exec(void *_cp, void *rep) {
   cp_cmd_w *cw;
   void *tmp;
   zmq_msg_t *msgs=NULL; int nmsgs=0;
-  int64_t more; size_t more_sz=sizeof(int64_t);
+  //int64_t more; size_t more_sz=sizeof(int64_t);
+  int more_int; size_t more_int_sz=sizeof(more_int);
 
   assert(cp->arg.argc == 0);
   assert(cp->nmsgs==0);
@@ -100,12 +101,13 @@ int cp_exec(void *_cp, void *rep) {
   do {
     alloc_msg(nmsgs,msgs);
     zmq_msg_init(&msgs[nmsgs-1]);
-    if (zmq_recvmsg(rep,&msgs[nmsgs-1],0)) {
+    if (zmq_recvmsg(rep,&msgs[nmsgs-1],0) == -1) {
       fprintf(stderr,"zmq_recvmsg: %s\n", zmq_strerror(errno));
       goto done;
     }
-    if (zmq_getsockopt(rep, ZMQ_RCVMORE, &more, &more_sz)) more=0;
-  } while(more);
+    //if (zmq_getsockopt(rep, ZMQ_RCVMORE, &more, &more_sz)) more=0;
+    if (zmq_getsockopt(rep, ZMQ_RCVMORE, &more_int, &more_int_sz)) more_int=0;
+  } while(more_int);
 
   if (nmsgs == 0) {cw = &unknown_cmdw; goto run;}
   cp->arg.argc = nmsgs;
@@ -138,7 +140,7 @@ int cp_exec(void *_cp, void *rep) {
     zmq_msg_close(&msg);
   }
   for(i=0; i < cp->nmsgs; i++) { // normal case, send non-empty command reply
-    if (zmq_sendmsg(rep, &cp->msgs[i], (i<(cp->nmsgs-1))?ZMQ_SNDMORE:0)) {
+    if (zmq_sendmsg(rep, &cp->msgs[i], (i<(cp->nmsgs-1))?ZMQ_SNDMORE:0) == -1) {
       fprintf(stderr,"zmq_sendmsg: %s\n", zmq_strerror(errno));
       goto done;
     }
@@ -147,8 +149,13 @@ int cp_exec(void *_cp, void *rep) {
   rc = 0; // success
 
  done:
-  while (nmsgs) zmq_msg_close(&msgs[--nmsgs]);
-  while (cp->nmsgs) zmq_msg_close(&cp->msgs[--cp->nmsgs]); cp->msgs=NULL;
+  while (nmsgs) zmq_msg_close(&msgs[--nmsgs]); 
+  if (msgs) free(msgs);
+
+  while (cp->nmsgs) zmq_msg_close(&cp->msgs[--cp->nmsgs]); 
+  if (cp->msgs) free(cp->msgs); 
+  cp->msgs=NULL;
+
   while(cp->arg.argc) free(cp->arg.argv[--cp->arg.argc]);
   if (cp->arg.argv) { free(cp->arg.argv); cp->arg.argv=NULL; }
   if (cp->arg.lenv) { free(cp->arg.lenv); cp->arg.lenv=NULL; }
@@ -175,16 +182,16 @@ void cp_add_reply(void *_cp, void *buf, size_t len) {
   memcpy(zmq_msg_data(msg),buf,len);
 }
 
-static void cp_printf_va(void *_cp, const char *fmt, va_list ap) {
+static void cp_printf_va(void *_cp, const char *fmt, va_list _ap) {
    int n;
-   va_list cp;
+   va_list ap;
    UT_string *s;
    utstring_new(s);
 
    while (1) {
-     va_copy(cp, ap);
-     n = vsnprintf (&s->d[s->i], s->n-s->i, fmt, cp);
-     va_end(cp);
+     va_copy(ap, _ap);
+     n = vsnprintf (&s->d[s->i], s->n-s->i, fmt, ap);
+     va_end(ap);
 
      if ((n > -1) && (n < (int)(s->n-s->i))) {
        s->i += n;
@@ -197,7 +204,7 @@ static void cp_printf_va(void *_cp, const char *fmt, va_list ap) {
    }
 
   done:
-   cp_add_reply(cp, utstring_body(s), utstring_len(s));
+   cp_add_reply(_cp, utstring_body(s), utstring_len(s));
    utstring_free(s);
 }
 

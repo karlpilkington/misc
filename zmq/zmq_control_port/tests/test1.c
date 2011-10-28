@@ -27,8 +27,15 @@ int version_cmd(void *cp, cp_arg_t *arg, void *data) {
   return 0;
 }
 
+int shutdown_cmd(void *cp, cp_arg_t *arg, void *data) {
+  cp_printf(cp,"Shutting down\n");
+  CF.request_exit=1;
+  return 0;
+}
+
 cp_cmd_t cmds[] = { 
   {"version",      version_cmd,      "version info"},
+  {"shutdown",     shutdown_cmd,     "shutdown server"},
   {NULL,           NULL,             NULL},
 };
 
@@ -88,6 +95,7 @@ int main(int argc, char *argv[]) {
  program_exit:
   if (CF.zcontrol_socket) zmq_close(CF.zcontrol_socket);
   if (CF.zmq_context) zmq_term(CF.zmq_context);
+  cp_free(CF.zcontrol);
   return 0;
 }
 
