@@ -3,7 +3,7 @@ all: $(OBJS)
 CFLAGS= -I. -Iinclude
 #CFLAGS+=-O2
 CFLAGS+=-g 
-CFLAGS+=-DZMQ_MAKE_VALGRIND_HAPPY=1
+#CFLAGS+=-DZMQ_MAKE_VALGRIND_HAPPY=1
 
 libzcontrol.a: zcontrol.o
 	ar cr $@ $^

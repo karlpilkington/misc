@@ -83,6 +83,9 @@ void cp_add_cmd(void *_cp, char *name, cp_cmd_f *cmdf, char *help, void *data) {
 #if ZMQ_VERSION_MAJOR == 2
 #define zmq_sendmsg zmq_send
 #define zmq_recvmsg zmq_recv
+#define zmq_rcvmore_t int64_t
+#else
+#define zmq_rcvmore_t int
 #endif
 #define alloc_msg(n,m) ((m)=realloc((m),(++(n))*sizeof(*(m))))
 int cp_exec(void *_cp, void *rep) {
@@ -91,8 +94,7 @@ int cp_exec(void *_cp, void *rep) {
   cp_cmd_w *cw;
   void *tmp;
   zmq_msg_t *msgs=NULL; int nmsgs=0;
-  //int64_t more; size_t more_sz=sizeof(int64_t);
-  int more_int; size_t more_int_sz=sizeof(more_int);
+  zmq_rcvmore_t more; size_t more_sz = sizeof(more);
 
   assert(cp->arg.argc == 0);
   assert(cp->nmsgs==0);
@@ -105,9 +107,8 @@ int cp_exec(void *_cp, void *rep) {
       fprintf(stderr,"zmq_recvmsg: %s\n", zmq_strerror(errno));
       goto done;
     }
-    //if (zmq_getsockopt(rep, ZMQ_RCVMORE, &more, &more_sz)) more=0;
-    if (zmq_getsockopt(rep, ZMQ_RCVMORE, &more_int, &more_int_sz)) more_int=0;
-  } while(more_int);
+    if (zmq_getsockopt(rep, ZMQ_RCVMORE, &more, &more_sz)) more=0;
+  } while(more);
 
   if (nmsgs == 0) {cw = &unknown_cmdw; goto run;}
   cp->arg.argc = nmsgs;

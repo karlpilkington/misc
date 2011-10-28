@@ -15,6 +15,9 @@
 #if ZMQ_VERSION_MAJOR == 2
 #define zmq_sendmsg zmq_send
 #define zmq_recvmsg zmq_recv
+#define zmq_rcvmore_t int64_t
+#else
+#define zmq_rcvmore_t int
 #endif
 
 struct _CF {
@@ -71,9 +74,8 @@ int do_rqst(char *line) {
   char *c=line, *start=NULL, *end=NULL, *buf;
   int nmsgs=0; zmq_msg_t *msgs = NULL;
   int rmsgs=0; zmq_msg_t *msgr = NULL;
-  size_t sz, more_sz=sizeof(int64_t);
-  //int64_t more=0; 
-  int more_int; size_t more_int_sz = sizeof(more_int);
+  size_t sz;
+  zmq_rcvmore_t more; size_t more_sz = sizeof(more);
   int i, rc = -1;
 
   /* parse the line into argv style words, pack and transmit the request */
@@ -107,9 +109,8 @@ int do_rqst(char *line) {
     buf = zmq_msg_data(&rmsgs[msgr-1]); 
     sz = zmq_msg_size(&rmsgs[msgr-1]); 
     printf("%.*s", (int)sz, (char*)buf);
-    //if (zmq_getsockopt(CF.req_socket, ZMQ_RCVMORE, &more, &more_sz)) more=0;
-    if (zmq_getsockopt(CF.req_socket, ZMQ_RCVMORE, &more_int, &more_int_sz)) more_int=0;
-  } while (more_int);
+    if (zmq_getsockopt(CF.req_socket, ZMQ_RCVMORE, &more, &more_sz)) more=0;
+  } while (more);
   
   printf("\n");
   rc = 0;
