@@ -1,3 +1,4 @@
+PREFIX=/usr/local
 OBJS=libzcontrol.a zcon 
 all: $(OBJS)
 CFLAGS= -I. -Iinclude
@@ -11,6 +12,11 @@ libzcontrol.a: zcontrol.o
 zcon: zcon.c 
 	$(CC) $(CFLAGS) -c $<
 	$(CC) $(CFLAGS) -o $@ $< -lzmq -lreadline 
+
+install: $(OBJS)
+	cp zcon $(PREFIX)/bin
+	cp libzcontrol.a $(PREFIX)/lib
+	cp zcontrol.h $(PREFIX)/include
 
 .PHONY: clean
 

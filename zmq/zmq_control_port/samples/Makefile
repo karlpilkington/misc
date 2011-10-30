@@ -1,4 +1,4 @@
-SRCS = $(wildcard test*.c) 
+SRCS = $(wildcard sample*.c) 
 PROGS = $(patsubst %.c,%,$(SRCS))
 
 LIBDIR = ..
@@ -7,7 +7,6 @@ LDFLAGS = -L$(LIBDIR) -lzcontrol -lzmq
 
 CFLAGS = -I$(LIBDIR)
 CFLAGS += -g
-#CFLAGS += -DZMQ_MAKE_VALGRIND_HAPPY=1
 CFLAGS += -Wall 
 CFLAGS += ${EXTRA_CFLAGS}
 

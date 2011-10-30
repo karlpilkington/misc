@@ -34,9 +34,9 @@ struct _CF {
 };
 
 void usage(char *prog) {
-  fprintf(stderr, "usage: %s [-v] [-s server]\n", prog);
+  fprintf(stderr, "usage: %s [-v] [-e endpoint]\n", prog);
   fprintf(stderr, "     -v verbose\n");  
-  fprintf(stderr, "     -s server address, e.g. tcp://127.0.0.1:3333\n");
+  fprintf(stderr, "     -e endpoint, e.g. tcp://127.0.0.1:3333\n");
   exit(-1);
 }
 
@@ -155,10 +155,10 @@ int main(int argc, char *argv[]) {
   int opt,rc,quit;
   char *line;
 
-  while ( (opt = getopt(argc, argv, "v+s:")) != -1) {
+  while ( (opt = getopt(argc, argv, "v+e:")) != -1) {
     switch (opt) {
       case 'v': CF.verbose++; break;
-      case 's': CF.zpath = strdup(optarg); break;
+      case 'e': CF.zpath = strdup(optarg); break;
       default: usage(argv[0]); break;
     }
   }

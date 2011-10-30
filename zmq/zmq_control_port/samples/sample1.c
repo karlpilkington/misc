@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
  program_exit:
   if (CF.zcontrol_socket) zmq_close(CF.zcontrol_socket);
   if (CF.zmq_context) zmq_term(CF.zmq_context);
-  cp_free(CF.zcontrol);
+  if (CF.zcontrol) cp_free(CF.zcontrol);
   return 0;
 }
 
