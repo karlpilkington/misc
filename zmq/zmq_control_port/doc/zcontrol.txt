@@ -6,7 +6,7 @@ v1.0, October 2011
 zcontrol
 --------
 The zcontrol library is a small API for embedding an administrative control port
-into a ØMQ program. The control port is an interactive command shell- like a
+into a ØMQ program. The control port is an interactive command shell -- like a
 Unix shell, but limited to those commands that you define yourself as C callback
 functions. Typically these are monitoring or control commands.
 
@@ -50,8 +50,17 @@ The control port is a ØMQ req-rep socket. Your ØMQ application should,
 5. Call `cp_exec` whenever a message comes in on the control port
 6. Call `cp_free` at program termination
 
+
+Note that the zcontrol library does not create any ØMQ sockets itself, nor does
+it do any polling on its own.  It relies on the application to provide a rep
+socket, and to poll it. When a a message is available, the application invokes
+`cp_exec`. At this point the zcontrol library internally handles the
+request/reply messaging on that socket.
+
+Complete example
+~~~~~~~~~~~~~~~~
 Here's a complete ØMQ application that embeds a control port. In particular
-it defines a couple of application-specific commands.
+it defines a couple of application-specific commands. 
 
 .An application that embeds a control port
 ----------------------------------------------------------------------
@@ -160,20 +169,16 @@ int main(int argc, char *argv[]) {
 
 This example is included with the zcontrol library in `samples/sample1.c`.
 To try it, build the zcontrol library then run `make` in the `samples/`
-directory.  Test it out by running `test1` in one terminal and `zcon` in
+directory.  Test it out by running `sample1` in one terminal and `zcon` in
 another:
 
-  ./test1 -e tcp://127.0.0.1:3333
+  ./sample1 -e tcp://127.0.0.1:3333
   zcon -e tcp://127.0.0.1:3333
 
 Built-in commands
-^^^^^^^^^^^^^^^^^
-These commands are built-in to the control port,
-
-help::
-  Lists all commands that are available on the control port
-quit::
-  Disconnect the zcon client (req socket) from the server (rep socket)
+~~~~~~~~~~~~~~~~~
+The `help` and `quit` commands are always built-in to the control port.
+The `quit` command disconnects zcon from the control port.
 
 Building and installing
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -184,14 +189,8 @@ Obtain the source code and simply run `make` to build `libzcontrol.a`.
  make
  sudo make install
 
-The last step copies the following files into these default locations,
-
- cp libzcontrol.a /usr/local/lib
- cp zcontrol.h /usr/local/include
- cp zcon /usr/local/bin
-
-While the Makefile does not currently build a shared library, there is no
-reason this cannot be done.
+The install target installs zcon, libzcontrol.a and zcontrol.h in the
+`/usr/local/` subdirectories `bin`, `lib` and `include`, respectively.
 
 API 
 ~~~
