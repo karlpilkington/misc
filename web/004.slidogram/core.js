@@ -2,23 +2,26 @@
 $(document).ready(startup);
 
 function update_slidogram(u) {
-  var max = d3.max(u, function(s){return s.n;});
+  //var max = d3.max(u, function(s){return s.n;});
+  var max = 100;
   var y = d3.scale.linear()
           .domain([0,max])
           .rangeRound([0,200]);
   var data = d3.select("#slidogram").selectAll("rect")
     .data(u, function(d) {return u.ts;});
-  data.transition()
-   .attr("y", function(d,i) {return 200-y(d.n);})
-   .attr("height", function(d,i) {return y(d.n);})
-   .attr("x", function(d,i) {return i*30 - 0.5;})
-   .duration(1000);
   data.enter().append("svg:rect")
    .attr("y", function(d,i) {return 200-y(d.n);})
    .attr("height", function(d,i) {return y(d.n);})
    .attr("x", function(d,i) {return i*30 - 0.5;})
-   .attr("width",30);
-  data.exit().remove();
+   .attr("width",30)
+  .transition()
+   .duration(1000)
+   .attr("x", function(d,i) {return i*30 - 0.5;});
+  data.exit()
+   //.transition()
+   //.duration(1000)
+   //.attr("x",function (d,i) {return 0;})
+   .remove();
 }
 
 var u = [];
@@ -31,5 +34,5 @@ function update() {
 }
 
 function startup() {
-  setInterval(update, 2000);
+  setInterval(update, 1000);
 }
