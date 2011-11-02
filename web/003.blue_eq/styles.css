@@ -9,7 +9,7 @@ body {
   width: 600px;
   height: 600px;
   position: absolute;
-  background: #111111;
+  /*background: #111111;*/
 }
 
 #eq rect {

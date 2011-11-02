@@ -26,29 +26,26 @@ function eq_update(u) {
 // each cell has a unix timestamp ts (from which its x/y is derived)
 // and a datum n (from which the map's cell is colored)
 var u = [];
-var day,hour;
+var hour;
 var start;
 function eq_data_refresh() {
   u.shift();
-  hour += 1; if (hour == 24) { day += 1; hour = 0;}
-  u.push( {"ts": start + (day*24*60*60) + (hour*60*60), 
+  u.push( {"ts": start + (hour*60*60), 
             "n": ((Math.random()*100 < 70)?0:1)} );
   eq_update(u);
+  hour += 1;
 }
 
 function make_initial_data() {
-  for(day=0; day < 7; day++) {
-    for(hour=0; hour < 24; hour++) {
-      u.push( {"ts": start + (day*24*60*60) + (hour*60*60), 
-                "n": ((Math.random()*100 < 70)?0:1)} );
-    }
+  for(hour=0; hour < 168; hour++) {
+    u.push( {"ts": start + (hour*60*60), 
+              "n": ((Math.random()*100 < 70)?0:1)} );
   }
-  day += 1; hour = 0;
 }
 
 function startup() {
-  start = Math.floor(new Date().getTime() / 1000);  // unixtime
+  start = 0;
   make_initial_data();
   eq_update(u);
-  //setInterval(eq_data_refresh, 1000);
+  setInterval(eq_data_refresh, 1000);
 }
