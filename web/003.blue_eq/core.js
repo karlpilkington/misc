@@ -13,10 +13,10 @@ function eq_update(u) {
    .attr("x", function(d) {return x(dow(d.ts));})
    .attr("y", function(d) {return 200-y(hod(d.ts));})
    .attr("height", 5)
-   .attr("width", 25);
+   .attr("width", 25)
+   .style("opacity", function(d) {return d.n ? 1.0 : 0.5;});
 
   data.transition()
-   .transition(1000)
    .style("opacity", function(d) {return d.n ? 1.0 : 0.5;});
 
   data.exit().remove();
@@ -29,11 +29,14 @@ var u = [];
 var hour;
 var start;
 function eq_data_refresh() {
-  u.shift();
-  u.push( {"ts": start + (hour*60*60), 
-            "n": ((Math.random()*100 < 70)?0:1)} );
+  var i;
+  for(i=hour; i < hour+24; i++) {
+    u.shift();
+    u.push( {"ts": start + (i*60*60), 
+              "n": ((Math.random()*100 < 70)?0:1)} );
+  }
   eq_update(u);
-  hour += 1;
+  hour = i;
 }
 
 function make_initial_data() {
