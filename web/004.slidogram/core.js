@@ -9,14 +9,19 @@ function update_slidogram(u) {
           .rangeRound([0,200]);
   var data = d3.select("#slidogram").selectAll("rect")
     .data(u, function(d) {return u.ts;});
-  data.enter().append("svg:rect")
+
+  data.transition()
    .attr("y", function(d,i) {return 200-y(d.n);})
    .attr("height", function(d,i) {return y(d.n);})
    .attr("x", function(d,i) {return i*30 - 0.5;})
-   .attr("width",30)
-  .transition()
-   .duration(1000)
-   .attr("x", function(d,i) {return i*30 - 0.5;});
+   .duration(1000);
+
+  data.enter().append("svg:rect")
+   .attr("x", function(d,i) {return i*30 - 0.5;})
+   .attr("y", function(d,i) {return 200-y(d.n);})
+   .attr("height", function(d,i) {return y(d.n);})
+   .attr("width",30);
+
   data.exit()
    //.transition()
    //.duration(1000)
