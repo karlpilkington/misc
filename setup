@@ -28,9 +28,9 @@ function h2b {
   echo "ibase=16; obase=2; $H"  | bc
 }
 EOF
-if [ -f ./remember ]
+if [ -f ./remember/remember ]
 then
-  cat ./remember >> $HOME/.bash_profile
+  cat ./remember/remember >> $HOME/.bash_profile
 else
   echo "skipping the 'remember' script, not found in the current directory"
 fi
