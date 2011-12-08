@@ -1,0 +1,18 @@
+body {
+  color: white;
+  background: black;
+}
+
+#container {
+  left: 20px;
+  top: 20px;
+  width: 600px;
+  height: 600px;
+  position: absolute;
+}
+
+#viz polyline {
+  stroke: blue;
+  stroke-width: 1px;
+}
+
