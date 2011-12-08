@@ -11,8 +11,13 @@ body {
   position: absolute;
 }
 
+#viz {
+  stroke: blue;
+  stroke-width: 5;
+}
+
 #viz polyline {
   stroke: blue;
-  stroke-width: 1px;
+  stroke-width: 3;
 }
 
