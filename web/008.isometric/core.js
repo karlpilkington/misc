@@ -57,6 +57,7 @@ function roll() {
    .style("stroke-width", 3);
 
   viz.transition()
+   .duration(1000)
    .attr("points",iso);
 
   viz.exit().remove();

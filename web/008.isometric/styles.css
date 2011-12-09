@@ -17,8 +17,8 @@ body {
 }
 
 #viz polyline {
-  stroke: blue;
+  stroke: "blue";
   stroke-width: 3;
-  fill: red;
+  fill: "red";
 }
 
