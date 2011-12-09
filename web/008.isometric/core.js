@@ -8,8 +8,8 @@ function startup() {
 var ts = 0;
 var alpha_degrees = 30.0;
 var beta_degrees = 30.0;
-var xs=1;
-var ys=1;
+var xs=10;
+var ys=10;
 var zs=1;
 var cos_alpha = xs * Math.cos(alpha_degrees/360 * 2*Math.PI);
 var sin_alpha = xs * Math.sin(alpha_degrees/360 * 2*Math.PI);
@@ -28,9 +28,11 @@ function iso(d,t) {
     var z = d.v[x];
     var u = Math.floor(x*cos_alpha - y*cos_beta);
     var v = Math.floor(x*sin_alpha + y*sin_beta + z*zs);
+    u += 100;
+    v += 100;
     v = height - v; // flip v for SVG (origin at upper-left)
     // append to polyline
-    polyline = polyline + (polyline.length ? "," : "") + u + "," + v;
+    polyline = polyline + (polyline.length ? " " : "") + u + "," + v;
   }
   return polyline;
 }
