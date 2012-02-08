@@ -4,3 +4,5 @@
 004.slidogram
 005.php_zmq_ajax
 006.segmented_svg
+
+perl/ contains example of perl webserver in a script
