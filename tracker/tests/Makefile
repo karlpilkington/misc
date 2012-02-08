@@ -2,10 +2,11 @@ SRCS = $(wildcard test*.c)
 PROGS = $(patsubst %.c,%,$(SRCS))
 
 LIBDIR = ..
+INCLUDE = ../include
 LIB = ../libtracker.a
 LDFLAGS = -L$(LIBDIR) -ltracker
 
-CFLAGS = -I$(LIBDIR) -fno-strict-aliasing -I../../..
+CFLAGS = -I$(LIBDIR) -I$(INCLUDE) -fno-strict-aliasing -I../../..
 CFLAGS += -g
 CFLAGS += -Wall 
 CFLAGS += ${EXTRA_CFLAGS}

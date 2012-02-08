@@ -1,6 +1,6 @@
 OBJS=libtracker.a 
 all: $(OBJS)
-CFLAGS= -I. -I.. -I../..
+CFLAGS= -I. -Iinclude
 #CFLAGS+=-O2
 CFLAGS+=-g 
 
