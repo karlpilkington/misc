@@ -74,6 +74,7 @@ Scripts
 | {t}bin2hex[bin2hex]   | convert stdin to hex bytes | Perl
 | {t}hex2bin[hex2bin]   | convert hex args to binary bytes on stdout | Perl
 | {t}fcut[fcut]         | print region (from position s of length l) from a file | Perl
+| {t}nfiles[nfiles]     | copy stdin or input files to sequential output files each having fixed number of lines| Perl
 | {t}pagehits[pagehits] | parse access.log and store daily hits for each url, or view cumulative hits | Perl
 | {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them {r}[notes] | sh
 | {t}rrd[rrd]           | sample of using rrdtool | Perl
