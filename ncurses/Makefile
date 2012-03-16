@@ -1,9 +1,13 @@
 SRCS=$(wildcard *.c)
-EXES=$(patsubst %.c,%,$(SRCS))
+EXES=histogram histo-test slidogram hello 
 CFLAGS=-g
 LDFLAGS=-lncurses
 
 all: $(EXES)
+
+histogram: histogram.o tpl.o
+
+histo-test: histo-test.o tpl.o
 
 .PHONY: clean
 clean: 
