@@ -12,7 +12,7 @@
 #include "tpl.h"
 
 char *fifo="/tmp/histogram.fifo";
-int verbose,bar_width,rows,cols,sum;
+int verbose,bar_width,rows,cols,sum,max;
 char buf[4000];
 
 void usage(char *prog) {
@@ -22,7 +22,7 @@ void usage(char *prog) {
 
 void draw_bar(int d, int start_col) {
   /* normalize d and figure height */
-  int height = (1.0 * d / sum) * rows;
+  int height = (1.0 * d / max) * rows;
   int i,j;
   for(i=start_col; i < start_col+bar_width; i++) {
     for(j=rows-1; j >= rows-height; j--) {
@@ -88,14 +88,19 @@ int main(int argc, char *argv[]) {
     }
     nitems = tpl_Alen(tn,1);
     data = realloc(data, nitems*sizeof(int)); assert(data);
-    n=0; sum=0;
-    while(tpl_unpack(tn,1) > 0) {data[n++] = d; sum += d; }
+    n=0; sum=0; max=0;
+    while(tpl_unpack(tn,1) > 0) {
+      data[n++] = d;
+      sum += d; 
+      if (d > max) max=d;
+    }
     tpl_free(tn);
 
     /* we have our data array in data[]. figure our bar_width */
-    bar_width = cols / nitems + ((cols % nitems) ? 1 : 0);
+    bar_width = cols / nitems; // + ((cols % nitems) ? 1 : 0);
     if ((cols < nitems) || (bar_width == 0) || (bar_width * nitems > cols)) {
-      fprintf(stderr,"insufficient window width\n"); 
+      fprintf(stderr,"window too narrow for %d bars of width %d (%d cols)\n",
+      nitems, bar_width,cols); 
       goto done;
     }
 
@@ -103,7 +108,7 @@ int main(int argc, char *argv[]) {
     clear();
     attron(A_REVERSE);
     for(i=0,n=0; n < nitems; i+=bar_width,n++) {
-      fprintf(stderr,"drawing bar %d width %u\n",n,bar_width);
+      //fprintf(stderr,"drawing bar %d width %u\n",n,bar_width);
       draw_bar(data[n],i);
     }
     refresh();
