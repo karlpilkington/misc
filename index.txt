@@ -55,6 +55,7 @@ Examples of using common libraries and other reusable bits:
 | {t}pexit[pexit]      | a C program that gets signalled when its parent exits using prctl | C
 | {t}utf8[utf8]        | macros for utf8 handling including character length, validity and utf32 conversion | C 
 | {t}looper[looper]    | example of iterating over lines of input from file or stdin using readline | C
+| {t}ncurses[ncurses]  | sliding bar charts and histograms using ncurses | C
 |=================================================================================================================
 
 :f: http://tkhanson.net/cgit.cgi/misc.git/plain/fifor/index.html
