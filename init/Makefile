@@ -1,2 +1,2 @@
 initscripts.html: initscripts.txt
-	asciidoc $<
+	asciidoc -a toc2 $<
