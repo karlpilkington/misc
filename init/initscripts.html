@@ -748,7 +748,7 @@ are only concerned with the minimum needed to run a daemon at boot on each one.<
 "exampled" (for example daemon).  It will be installed in this path,</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><tt>/usr/local/bin/exampled</tt></pre>
+<pre><tt>/usr/bin/exampled</tt></pre>
 </div></div>
 <div class="paragraph"><p>We assume that <tt>exampled</tt> runs in the foreground (it does not fork and exit)
 for the purposes of the job configuration below.</p></div>
@@ -770,7 +770,7 @@ for the purposes of the job configuration below.</p></div>
 start()
 {
     echo -n $"Starting exampled: "
-    daemon /usr/local/bin/exampled &amp;
+    daemon /usr/bin/exampled &amp;
     touch /var/lock/subsys/exampled
     echo
 }
@@ -783,7 +783,7 @@ stop()
     echo
 }
 
-[ -f /usr/local/bin/exampled ] || exit 0
+[ -f /usr/bin/exampled ] || exit 0
 
 # see how we were called
 case "$1" in
@@ -833,7 +833,7 @@ exit 0</tt></pre>
   stop on runlevel S
   respawn
   script
-  exec /usr/local/bin/exampled
+  exec /usr/bin/exampled
   end script</tt></pre>
 </div></div>
 <div class="paragraph"><p>It&#8217;s all ready to go. First time start up is just:</p></div>
@@ -856,7 +856,7 @@ exit 0</tt></pre>
     &lt;string&gt;exampled&lt;/string&gt;
     &lt;key&gt;ProgramArguments&lt;/key&gt;
     &lt;array&gt;
-      &lt;string&gt;/usr/local/bin/exampled&lt;/string&gt;
+      &lt;string&gt;/usr/bin/exampled&lt;/string&gt;
     &lt;/array&gt;
     &lt;key&gt;RunAtLoad&lt;/key&gt;
     &lt;true/&gt;
@@ -884,7 +884,7 @@ handing out a directory with an install script would be reasonable).</p></div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2012-06-06 23:39:38 EDT
+Last updated 2012-06-07 00:06:28 EDT
 </div>
 </div>
 </body>

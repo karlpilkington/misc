@@ -9,7 +9,7 @@ are only concerned with the minimum needed to run a daemon at boot on each one.
 For the purposes of illustration, suppose we have a daemon - we'll call it
 "exampled" (for example daemon).  It will be installed in this path,
 
-  /usr/local/bin/exampled
+  /usr/bin/exampled
 
 We assume that `exampled` runs in the foreground (it does not fork and exit)
 for the purposes of the job configuration below.
@@ -21,57 +21,7 @@ This platform uses sysvinit-style scripts.
 Place this in `/etc/rc.d/init.d/exampled`:
 
 ----------------------------------------------------------------
-#!/bin/sh
-#
-# exampled: sample daemon
-#
-# chkconfig:   2345 26 89
-# description: example daemon
-
-. /etc/rc.d/init.d/functions
-
-start()
-{
-    echo -n $"Starting exampled: "
-    daemon /usr/local/bin/exampled &
-    touch /var/lock/subsys/exampled
-    echo
-}
-
-stop()
-{
-    echo -n $"Shutting down exampled: "
-    killproc exampled
-    rm -f /var/lock/subsys/exampled
-    echo
-}
-
-[ -f /usr/local/bin/exampled ] || exit 0
-
-# see how we were called
-case "$1" in
-  start)
-        start
-        ;;
-  stop)
-        stop
-        ;;
-  restart|reload)
-        stop
-        start
-        ;;
-  condrestart)
-        [ -e /var/lock/subsys/exampled ] && (stop; start)
-        ;;
-  status)
-        status exampled
-        ;;
-  *)
-        echo $"Usage: $0 {start|stop|restart|reload|condrestart}"
-        exit 1
-esac
-
-exit 0
+include::centos-exampled[]
 ----------------------------------------------------------------
 
 Add the new script (internally this symlinks it to the various runlevels): 
@@ -91,13 +41,7 @@ This platform uses "upstart" to manage jobs.
 Place this in `/etc/init/exampled.conf`:
 
 ----------------------------------------------------------------
-  description "example daemon"
-  start on filesystem
-  stop on runlevel S
-  respawn
-  script
-  exec /usr/local/bin/exampled
-  end script
+include::ubuntu-exampled.conf[]
 ----------------------------------------------------------------
 
 It's all ready to go. First time start up is just:
@@ -111,20 +55,7 @@ Mac uses "launchd" to start daemons.
 Place this file in `/Library/LaunchDaemons/exampled.plist`:
 
 ----------------------------------------------------------------
-  <?xml version="1.0" encoding="UTF-8"?>
-  <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.appl.com/DTDs/PropertyList-1.0.dtd">
-  <plist version="1.0">
-  <dict>
-    <key>Label</key>
-    <string>exampled</string>
-    <key>ProgramArguments</key>
-    <array>
-      <string>/usr/local/bin/exampled</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
-  </dict>
-  </plist>
+include::mac-exampled.plist[]
 ----------------------------------------------------------------
 
 Load it in like this:
