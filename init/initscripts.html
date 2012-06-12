@@ -537,6 +537,40 @@ body.manpage div.sectionbody {
 @media print {
   body.manpage div#toc { display: none; }
 }
+@media screen {
+  body {
+    max-width: 50em; /* approximately 80 characters wide */
+    margin-left: 16em;
+  }
+
+  #toc {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 13em;
+    padding: 0.5em;
+    padding-bottom: 1.5em;
+    margin: 0;
+    overflow: auto;
+    border-right: 3px solid #f8f8f8;
+    background-color: white;
+  }
+
+  #toc .toclevel1 {
+    margin-top: 0.5em;
+  }
+
+  #toc .toclevel2 {
+    margin-top: 0.25em;
+    display: list-item;
+    color: #aaaaaa;
+  }
+
+  #toctitle {
+    margin-top: 0.5em;
+  }
+}
 </style>
 <script type="text/javascript">
 /*<![CDATA[*/
@@ -729,300 +763,158 @@ install: function(toclevels) {
 }
 
 }
-asciidoc.install();
+asciidoc.install(2);
 /*]]>*/
 </script>
 </head>
 <body class="article">
 <div id="header">
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_scripts_and_snippets">Scripts and Snippets</h2>
+<h2 id="_starting_jobs_at_boot">Starting jobs at boot</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Troy D. Hanson &lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</p></div>
-<a style="float: right; padding-right: 50px" href="http://tkhanson.net/misc"><img style="border: 0" src="sslogo.png" alt="scripts and snippets" /></a>
-<div class="paragraph"><p>Back to <a href="http://tkhanson.net">tkhanson.net main page</a>.</p></div>
+<div class="paragraph"><p>Starting jobs at system boot is generally platform specific. RHEL and CentOS use
+a traditional "sysvinit" mechanism, Ubuntu (at least since 10.x) uses "upstart",
+and Mac OS X uses "launchd". They are all featureful in their own ways. Here we
+are only concerned with the minimum needed to run a daemon at boot on each one.</p></div>
+<div class="paragraph"><div class="title">exampled: the daemon to run</div><p>For the purposes of illustration, suppose we have a daemon - we&#8217;ll call it
+"exampled" (for example daemon).  It will be installed in this path,</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>/usr/bin/exampled</tt></pre>
+</div></div>
+<div class="paragraph"><p>We assume that <tt>exampled</tt> runs in the foreground (it does not fork and exit)
+for the purposes of the job configuration below.</p></div>
 <div class="sect2">
-<h3 id="_about">About</h3>
-<div class="paragraph"><p>These are miscellaneous small scripts and snippets that I&#8217;ve written on Linux
-and OS X.  These are all placed in the public domain.</p></div>
-</div>
-<div class="sect2">
-<h3 id="_download_options">Download options</h3>
-<div class="ulist"><ul>
-<li>
-<p>
-Download <a href="http://tkhanson.net/misc/misc.tar.bz2">misc.tar.bz2</a>
-</p>
-</li>
-<li>
-<p>
-Browse <a href="http://tkhanson.net/cgit.cgi/misc.git/tree">source tree</a>
-</p>
-</li>
-<li>
-<p>
-Clone <tt>git clone http://tkhanson.net/misc.git</tt>
-</p>
-</li>
-</ul></div>
-</div>
-<div class="sect2">
-<h3 id="_snippets">Snippets</h3>
-<div class="paragraph"><p>Examples of using common libraries and other reusable bits:</p></div>
-<div class="tableblock">
-<table rules="none"
-width="90%"
-frame="border"
-cellspacing="0" cellpadding="4">
-<col width="11%" />
-<col width="82%" />
-<col width="5%" />
-<tbody>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/dlsym">dlsym</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of using dlsym()</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/lemon">lemon</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of using the Lemon parser generator</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/udp">udp</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of UDP client and server</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/tcp">tcp</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of TCP client and server</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/ifinfo">ifinfo</a></tt></p></td>
-<td align="left" valign="top"><p class="table">code to list network interfaces, their IPv4/v6 addresses and MACs</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/dns">dns</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of doing DNS lookup</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/sigio">sigio</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of signal driven I/O notification</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/asm">asm</a></tt></p></td>
-<td align="left" valign="top"><p class="table">a few x86 assembly programs that call C library functions or are called from C</p></td>
-<td align="left" valign="top"><p class="table">asm</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/inotify">inotify</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of getting inotify file events (Linux 2.6.13 and higher)</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/mworkers">mworkers</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of a parent process managing multiple worker processes</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/pcre">pcre</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of using pcre library</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/pcap">pcap</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of using libpcap to capture packets</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/readline">readline</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of using readline library</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/unixdomain">unixdomain</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of UNIX domain socket client and server <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/controlport">controlport</a></tt></p></td>
-<td align="left" valign="top"><p class="table">a control port library: an administrative interface to a server</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/bloom">bloom</a></tt></p></td>
-<td align="left" valign="top"><p class="table">builds a Bloom filter from lines of one text file, tests lines of another file on it</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/ts">timeseries</a></tt></p></td>
-<td align="left" valign="top"><p class="table">a time series library, series comprised of arbitrary elements</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/entropy">entropy</a></tt></p></td>
-<td align="left" valign="top"><p class="table">measuring entropy of a byte stream <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/zlib">zlib</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of implementing a simple gzip/gunzip using the zlib C API</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/tconf">tconf</a></tt></p></td>
-<td align="left" valign="top"><p class="table">simple function to read key-value configuration file entries</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/rw_wrap">rw_wrap</a></tt></p></td>
-<td align="left" valign="top"><p class="table">macros to wrap read/write, which loop until "len" bytes are read or written</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/iconv">iconv</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of using the iconv library</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/iscan">iscan</a></tt></p></td>
-<td align="left" valign="top"><p class="table">an incremental grep that reads a stream piecemeal scanning for a pattern</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/slurp">slurp</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of using <tt>read</tt> or <tt>mmap</tt> to "slurp" a whole file</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/pexit">pexit</a></tt></p></td>
-<td align="left" valign="top"><p class="table">a C program that gets signalled when its parent exits using prctl</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/utf8">utf8</a></tt></p></td>
-<td align="left" valign="top"><p class="table">macros for utf8 handling including character length, validity and utf32 conversion</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/looper">looper</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of iterating over lines of input from file or stdin using readline</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/ncurses">ncurses</a></tt></p></td>
-<td align="left" valign="top"><p class="table">sliding bar charts and histograms using ncurses</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<h3 id="_rhel_centos">RHEL/CentOS</h3>
+<div class="paragraph"><p>This platform uses sysvinit-style scripts.</p></div>
+<div class="paragraph"><p>Place this in <tt>/etc/rc.d/init.d/exampled</tt>:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>#!/bin/sh
+#
+# exampled: sample daemon
+#
+# chkconfig:   2345 26 89
+# description: example daemon
+
+. /etc/rc.d/init.d/functions
+
+start()
+{
+    echo -n $"Starting exampled: "
+    daemon /usr/bin/exampled &amp;
+    touch /var/lock/subsys/exampled
+    echo
+}
+
+stop()
+{
+    echo -n $"Shutting down exampled: "
+    killproc exampled
+    rm -f /var/lock/subsys/exampled
+    echo
+}
+
+[ -f /usr/bin/exampled ] || exit 0
+
+# see how we were called
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart|reload)
+        stop
+        start
+        ;;
+  condrestart)
+        [ -e /var/lock/subsys/exampled ] &amp;&amp; (stop; start)
+        ;;
+  status)
+        status exampled
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|reload|condrestart}"
+        exit 1
+esac
+
+exit 0</tt></pre>
+</div></div>
+<div class="paragraph"><p>Add the new script (internally this symlinks it to the various runlevels):</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>chkconfig --add exampled</tt></pre>
+</div></div>
+<div class="paragraph"><p>This makes symlinks in the runlevel-specific directories.</p></div>
+<div class="paragraph"><p>Manually start up the job (on reboot, it should get started automatically):</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>/etc/init.d/exampled start</tt></pre>
+</div></div>
 </div>
 <div class="sect2">
-<h3 id="_scripts">Scripts</h3>
-<div class="tableblock">
-<table rules="none"
-width="90%"
-frame="border"
-cellspacing="0" cellpadding="4">
-<col width="11%" />
-<col width="82%" />
-<col width="5%" />
-<tbody>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/init">init</a></tt></p></td>
-<td align="left" valign="top"><p class="table">sysinit scripts to start daemons on RHEL/CentOS, Ubuntu, Mac OS X <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/init/initscripts.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">text</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/fifor">fifor</a></tt></p></td>
-<td align="left" valign="top"><p class="table">run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/fifor/index.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/downsample">downsample</a></tt></p></td>
-<td align="left" valign="top"><p class="table">reduce a text file to x% of its lines (default 10%)</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/md5watch">md5watch</a></tt></p></td>
-<td align="left" valign="top"><p class="table">list files changed since last run <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/md5watch/index.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/mailpl">mailpl</a></tt></p></td>
-<td align="left" valign="top"><p class="table">send email with attachments, configurable from address, etc</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/anb">anb</a></tt></p></td>
-<td align="left" valign="top"><p class="table">list lines in file A but not in file B</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/bin2hex">bin2hex</a></tt></p></td>
-<td align="left" valign="top"><p class="table">convert stdin to hex bytes</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/hex2bin">hex2bin</a></tt></p></td>
-<td align="left" valign="top"><p class="table">convert hex args to binary bytes on stdout</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/fcut">fcut</a></tt></p></td>
-<td align="left" valign="top"><p class="table">print region (from position s of length l) from a file</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/nfiles">nfiles</a></tt></p></td>
-<td align="left" valign="top"><p class="table">copy stdin or input files to sequential output files each having fixed number of lines</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/pagehits">pagehits</a></tt></p></td>
-<td align="left" valign="top"><p class="table">parse access.log and store daily hits for each url, or view cumulative hits</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/remember">remember</a></tt></p></td>
-<td align="left" valign="top"><p class="table">type "remember", run some commands you want to remember, then "remember -s" to save them <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/remember/index.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">sh</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/rrd">rrd</a></tt></p></td>
-<td align="left" valign="top"><p class="table">sample of using rrdtool</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/ditaa_example">ditaa</a></tt></p></td>
-<td align="left" valign="top"><p class="table">embedding ditaa diagrams into Asciidoc documents <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/ditaa_example/ditaa_asciidoc.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">ditaa</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/setup">setup</a></tt></p></td>
-<td align="left" valign="top"><p class="table">configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc</p></td>
-<td align="left" valign="top"><p class="table">sh</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<h3 id="_ubuntu_10">Ubuntu 10+</h3>
+<div class="paragraph"><p>This platform uses "upstart" to manage jobs.</p></div>
+<div class="paragraph"><p>Place this in <tt>/etc/init/exampled.conf</tt>:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>  description "example daemon"
+  start on filesystem
+  stop on runlevel S
+  respawn
+  script
+  exec /usr/bin/exampled
+  end script</tt></pre>
+</div></div>
+<div class="paragraph"><p>It&#8217;s all ready to go. First time start up is just:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>start exampled</tt></pre>
+</div></div>
 </div>
 <div class="sect2">
-<h3 id="_other_resources">Other resources</h3>
-<div class="olist arabic"><ol class="arabic">
-<li>
-<p>
-<a href="http://tkhanson.net/virtual_memory.pdf">Virtual Memory in a Nutshell</a> slides I wrote in 2009.
-</p>
-</li>
-</ol></div>
+<h3 id="_mac_os_x">Mac OS X</h3>
+<div class="paragraph"><p>Mac uses "launchd" to start daemons.</p></div>
+<div class="paragraph"><p>Place this file in <tt>/Library/LaunchDaemons/exampled.plist</tt>:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.appl.com/DTDs/PropertyList-1.0.dtd"&gt;
+  &lt;plist version="1.0"&gt;
+  &lt;dict&gt;
+    &lt;key&gt;Label&lt;/key&gt;
+    &lt;string&gt;exampled&lt;/string&gt;
+    &lt;key&gt;ProgramArguments&lt;/key&gt;
+    &lt;array&gt;
+      &lt;string&gt;/usr/bin/exampled&lt;/string&gt;
+    &lt;/array&gt;
+    &lt;key&gt;RunAtLoad&lt;/key&gt;
+    &lt;true/&gt;
+  &lt;/dict&gt;
+  &lt;/plist&gt;</tt></pre>
+</div></div>
+<div class="paragraph"><p>Load it in like this:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>launchctl load /Library/LaunchDaemons/exampled.plist</tt></pre>
+</div></div>
+<div class="paragraph"><p>Since we used the directive to start it upon load, it should already be running.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_distributing_code_for_multiple_platforms">Distributing code for multiple platforms</h3>
+<div class="paragraph"><p>Normally it&#8217;s easiest if you use the platform-specific package management system
+to distribute code to users. That means, roll RPM&#8217;s for RedHat/CentOS, roll deb
+packages for Ubuntu, and for Mac &#8230; well, there is no package manager but .dmg
+files are the usual thing to hand out. (For a GUI app that is. Maybe for daemons
+handing out a directory with an install script would be reasonable).</p></div>
 </div>
 </div>
 </div>
@@ -1030,7 +922,7 @@ cellspacing="0" cellpadding="4">
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2012-06-07 00:13:39 EDT
+Last updated 2012-06-07 00:06:28 EDT
 </div>
 </div>
 </body>
