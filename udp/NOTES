@@ -1,6 +1,6 @@
 UDP sample code
 ---------------
 
-basic/   simple client and server that use read/write for UDP
-sendto/  same as the simple client/server but use sendto/recvfrom
-
+basic/    simple client and server that use read/write for UDP
+sendto/   same as the simple client/server but use sendto/recvfrom
+repeater/ proxy to get UDP on one ip/port and send to multiple dests
