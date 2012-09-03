@@ -1,9 +1,17 @@
 Starting jobs at boot
 ---------------------
 Starting jobs at system boot is generally platform specific. RHEL and CentOS use
-a traditional "sysvinit" mechanism, Ubuntu (at least since 10.x) uses "upstart",
-and Mac OS X uses "launchd". They are all featureful in their own ways. Here we
-are only concerned with the minimum needed to run a daemon at boot on each one.
+a traditional "sysvinit" mechanism, Ubuntu uses "upstart", and Mac OS X uses
+"launchd". They are all featureful in their own ways. These are quick notes on
+the minimum needed to run a daemon at boot on each one.
+
+Detecting OS
+~~~~~~~~~~~~
+Specific distributions of Linux can be detected by looking for certain files.
+
+ * RHEL/Centos: look for `/etc/redhat-release`
+ * Debian: look for `/etc/debian_version`
+ * Ubuntu: look for `/etc/lsb-release` and see if it contains Ubuntu
 
 .exampled: the daemon to run
 For the purposes of illustration, suppose we have a daemon - we'll call it
@@ -34,8 +42,8 @@ Manually start up the job (on reboot, it should get started automatically):
 
   /etc/init.d/exampled start
 
-Ubuntu 10+
-~~~~~~~~~~
+Ubuntu
+~~~~~~
 This platform uses "upstart" to manage jobs. 
 
 Place this in `/etc/init/exampled.conf`:
@@ -47,6 +55,22 @@ include::ubuntu-exampled.conf[]
 It's all ready to go. First time start up is just:
 
   start exampled
+
+Debian
+~~~~~~
+Place this in /etc/init.d/exampled:
+
+----------------------------------------------------------------
+include::debian-exampled.conf[]
+----------------------------------------------------------------
+
+Symlink things into place using:
+
+  /usr/sbin/update-rc.d exampled defaults
+
+Then start it up:
+
+  service exampled start
 
 Mac OS X
 ~~~~~~~~
@@ -64,10 +88,3 @@ Load it in like this:
 
 Since we used the directive to start it upon load, it should already be running.
 
-Distributing code for multiple platforms
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Normally it's easiest if you use the platform-specific package management system
-to distribute code to users. That means, roll RPM's for RedHat/CentOS, roll deb
-packages for Ubuntu, and for Mac ... well, there is no package manager but .dmg
-files are the usual thing to hand out. (For a GUI app that is. Maybe for daemons
-handing out a directory with an install script would be reasonable).

@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <unistd.h>
 #include <ncurses.h>
 #include "tpl.h"
@@ -33,9 +34,24 @@ void draw_bar(int d, int start_col) {
 }
 
 int main(int argc, char *argv[]) {
-  int n, nitems, i, opt, rc,fd, d, *data=NULL;
+  int n, nitems, i, opt, rc,fd, d, *data=NULL, sfd;
   fd_set rfds; 
   char *c;
+
+  /* this block is all about handling SIGWINCH. we convert
+     window size changes to readable events in our select loop */
+  sigset_t mask;
+  sigemptyset(&mask);
+  sigaddset(&mask, SIGWINCH);
+  if (sigprocmask(SIG_BLOCK, &mask, NULL) == -1) {
+    fprintf(stderr, "sigprocmask: %s\n", strerror(errno));
+    exit(-1);
+  }
+  sfd = signalfd(-1, &mask, 0);
+  if (sfd == -1) {
+    fprintf(stderr, "signalfd: %s\n", strerror(errno));
+    exit(-1);
+  }
 
   while ( (opt=getopt(argc,argv,"vf:h")) != -1) {
     switch(opt) {
@@ -56,22 +72,34 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
+ sigwinch:
   initscr();
   getmaxyx(stdscr, rows, cols);
+  clear();
   if (verbose) printw("screen is %dx%d. ", rows, cols);
-  printw("waiting for [%s]...", fifo);
+  //printw("waiting for [%s]...", fifo);
   refresh();
 
-  /* wait for data on pipe or keystroke to exit */
+  /* wait for data on pipe or keystroke or SIGWINCH */
   while(1) {
-    FD_ZERO(&rfds); FD_SET(STDIN_FILENO,&rfds); FD_SET(fd,&rfds);
+    FD_ZERO(&rfds); 
+    FD_SET(STDIN_FILENO,&rfds); 
+    FD_SET(sfd,&rfds); 
+    FD_SET(fd,&rfds); 
+    assert(fd > sfd);
     rc = select(fd+1, &rfds, NULL, NULL, NULL);
     switch(rc) {
       case 0: /* timeout */ assert(0); break; 
       case -1: fprintf(stderr,"select: %s\n", strerror(errno)); goto done;
-      default: /* one or both descriptors ready */ break;
+      default: /* one or more descriptors ready */ break;
     }
     if (FD_ISSET(STDIN_FILENO,&rfds)) goto done;
+    if (FD_ISSET(sfd,&rfds)) {
+      char tmp[1000];
+      //fprintf(stderr, "got winch\n");
+      read(sfd,tmp,sizeof(tmp)); // clear it
+      goto sigwinch;
+    }
 
     /* fifo is readable if we're here.. read and update screen */
     rc = read(fd,buf,sizeof(buf));
