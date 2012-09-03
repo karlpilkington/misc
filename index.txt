@@ -58,7 +58,7 @@ Examples of using common libraries and other reusable bits:
 | {t}ncurses[ncurses]  | sliding bar charts and histograms using ncurses | C
 |=================================================================================================================
 
-:i: http://tkhanson.net/cgit.cgi/misc.git/plain/init/initscripts.html
+:i: http://troydhanson.wordpress.com/2012/08/21/minimal-sysvinit-launchd-and-upstart/
 :f: http://tkhanson.net/cgit.cgi/misc.git/plain/fifor/index.html
 :r: http://tkhanson.net/cgit.cgi/misc.git/plain/remember/index.html
 :m: http://tkhanson.net/cgit.cgi/misc.git/plain/md5watch/index.html
@@ -68,7 +68,7 @@ Scripts
 ~~~~~~~
 [width="90%",cols="10^m,70,5",grid="none"]
 |=================================================================================================================
-| {t}init[init]         | sysinit scripts to start daemons on RHEL/CentOS, Ubuntu, Mac OS X {i}[notes]| text
+| {t}init[init]         | initscripts to start daemons on RHEL/CentOS, Ubuntu, Debian, Mac OS X {i}[notes]| text
 | {t}fifor[fifor]       | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) {f}[notes] | Perl
 | {t}downsample[downsample] |  reduce a text file to x% of its lines (default 10%) | Perl
 | {t}md5watch[md5watch] | list files changed since last run {m}[notes] | Perl
