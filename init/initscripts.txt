@@ -5,6 +5,13 @@ a traditional "sysvinit" mechanism, Ubuntu uses "upstart", and Mac OS X uses
 "launchd". They are all featureful in their own ways. These are quick notes on
 the minimum needed to run a daemon at boot on each one.
 
+.Sometimes there's an easier way
+*******************************************************************************
+You might find my http://tkhanson.net/pmtr[pmtr tool] much easier to use than
+writing your initscript. Initscripts are typically used to start low-level
+services that are shipped with the operating system. 
+*******************************************************************************
+
 Detecting OS
 ~~~~~~~~~~~~
 Specific distributions of Linux can be detected by looking for certain files.
