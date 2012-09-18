@@ -37,7 +37,7 @@ fi
 echo $HOME/.bash_profile
 
 cat >>$HOME/.gdbinit <<"EOF"
-set history filename $HOME/.gdb_history
+set history filename .gdb_history
 set history save on
 set history expansion on
 EOF
