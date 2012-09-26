@@ -31,7 +31,7 @@ struct {
   int query;
   int dry_run;
   char *sz;
-  long sz_bytes;
+  int64_t sz_bytes;
   char *dir;
 } cf = {
   .sz="90%",
@@ -116,7 +116,7 @@ int do_attrition(void) {
   if (get_files(files,stats) == -1) goto done;
 
   /* tally up their sizes */
-  long total_sz=0;
+  int64_t total_sz=0;
   file_stat_t *fs=NULL;
   while ( (fs=(file_stat_t*)utarray_next(stats,fs))) total_sz += fs->sb.st_size;
   if (total_sz < cf.sz_bytes) { rc = 0; goto done; }
@@ -163,7 +163,7 @@ int do_query(void) {
   if (get_files(files,stats) == -1) goto done;
 
   /* tally up their sizes */
-  long total_sz=0;
+  int64_t total_sz=0;
   file_stat_t *fs=NULL;
   while ( (fs=(file_stat_t*)utarray_next(stats,fs))) total_sz += fs->sb.st_size;
 
@@ -181,24 +181,23 @@ int do_query(void) {
 
 /* lookup the size of the filesystem underlying cf.dir and 
  * calculate pct% of that size */
-long get_fs_pct(int pct) {
+int64_t get_fs_pct(int pct) {
   assert(pct > 0 && pct < 100);
   struct statfs fb;
   if (statfs(cf.dir, &fb) == -1) {
     syslog(LOG_ERR,"can't statfs %s: %s", cf.dir, strerror(errno));
     return -1;
   }
-  long fsz = fb.f_bsize * fb.f_blocks; /* filesystem size */
-  long cap = (fsz*pct) * 0.01;
-  //syslog(LOG_ERR,"fs size: %ld * %ld%% = cap %ld bytes", fsz, pct, cap);
+  int64_t fsz = fb.f_bsize * fb.f_blocks; /* filesystem size */
+  int64_t cap = (fsz*pct) * 0.01;
   return cap;
 }
 
 /* convert something like "20%" or "20m" to bytes.
  * percentage means 'percent of filesystem size' */
-long sztobytes(void) {
-  long n; int l; char unit;
-  if (sscanf(cf.sz,"%ld",&n) != 1) return -1; /* e.g. 20 from "20m" */
+int64_t sztobytes(void) {
+  int64_t n; int l; char unit;
+  if (sscanf(cf.sz,"%lld",&n) != 1) return -1; /* e.g. 20 from "20m" */
   l = strlen(cf.sz); unit = cf.sz[l-1];
   if (unit >= '0' && unit <= '9') return n; /* no unit suffix */
   switch(unit) {
