@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
   switch(signo) {
     case 0:      /* not a signal yet, first time setup */
       break;
-    case SIGIO:  /* our UDP listener (if enabled) got a datagram */
+    case SIGIO:  /* our UDP listener got a datagram */
       handle_datagram();
       break;
     default:
