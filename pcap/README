@@ -4,6 +4,7 @@ sniff3: compiles a filter expression
 sniff4: filter expression hardcoded from tcpdump -dd 
 sniff5: decode link level, ip and udp or tcp header 
 sniff6: gather interface statistics periodically
+sniff7: use signal driven I/O with pcap socket, iface stats
 
 Perl samples using Net::Pcap binding
 -------------------------------------------------------------
