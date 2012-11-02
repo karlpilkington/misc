@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <netdb.h>
 #include <libgen.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -66,12 +67,18 @@ int send_file(char *filename) {
     exit(-1);
   }
 
+  struct hostent *h=gethostbyname(server);
+  if (!h) {
+    printf("cannot resolve name: %s\n", hstrerror(h_errno));
+    exit(-1);
+  }
+    
   /**********************************************************
    * internet socket address structure, for the remote side
    *********************************************************/
   struct sockaddr_in sin;
   sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = inet_addr(server);
+  sin.sin_addr.s_addr = ((struct in_addr*)h->h_addr)->s_addr;
   sin.sin_port = htons(port);
 
   if (sin.sin_addr.s_addr == INADDR_NONE) {
