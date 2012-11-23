@@ -1,9 +1,10 @@
-SRCS=$(wildcard *.c)
-OBJS=$(patsubst %.c,%,$(SRCS))
-all: $(OBJS)
-LDFLAGS=-lpcap
+DIRS=basic
+all: $(DIRS)
 
-.PHONY: clean
+.PHONY: clean $(DIRS)
+
+$(DIRS):
+	$(MAKE) -C $@ $(TARGET)
 
 clean:
-	rm -f $(OBJS) *.o
+	for d in $(DIRS); do $(MAKE) -C $$d clean; done
