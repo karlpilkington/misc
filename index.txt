@@ -23,7 +23,8 @@ Download options
 
 // this defines an attribute called {t} used below
 //:t: https://github.com/troydhanson/tpl/raw/master/
-:t: https://github.com/troydhanson/tpl/blob/master/
+:t: https://github.com/troydhanson/tpl/tree/master/
+:b: https://github.com/troydhanson/tpl/blob/master/
 :f: http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html
 :e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html
 
@@ -74,21 +75,18 @@ Scripts
 ~~~~~~~
 [width="90%",cols="10^m,70,5",grid="none"]
 |=================================================================================================================
-| {t}init[init]         | initscripts to start daemons on RHEL/CentOS, Ubuntu, Debian, Mac OS X {i}[notes]| text
+| {t}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
 | {t}fifor[fifor]       | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) {f}[notes] | Perl
-| {t}downsample[downsample] |  reduce a text file to x% of its lines (default 10%) | Perl
-| {t}md5watch[md5watch] | list files changed since last run {m}[notes] | Perl
-| {t}mailpl[mailpl]     | send email with attachments, configurable from address, etc | Perl
+| {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them {r}[notes] | sh
 | {t}anb[anb]           | list lines in file A but not in file B | Perl
+| {t}fcut[fcut]         | print region (from position s of length l) from a file | Perl
 | {t}bin2hex[bin2hex]   | convert stdin to hex bytes | Perl
 | {t}hex2bin[hex2bin]   | convert hex args to binary bytes on stdout | Perl
-| {t}fcut[fcut]         | print region (from position s of length l) from a file | Perl
+| {t}downsample[downsample] |  reduce a text file to x% of its lines (default 10%) | Perl
+| {t}init[init]         | initscripts to start daemons on RHEL/CentOS, Ubuntu, Debian, Mac OS X {i}[notes]| text
+| {t}md5watch[md5watch] | list files changed since last run {m}[notes] | Perl
+| {t}mailpl[mailpl]     | send email with attachments, configurable from address, etc | Perl
 | {t}nfiles[nfiles]     | copy stdin or input files to sequential output files each having fixed number of lines| Perl
-| {t}pagehits[pagehits] | parse access.log and store daily hits for each url, or view cumulative hits | Perl
-| {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them {r}[notes] | sh
-| {t}rrd[rrd]           | sample of using rrdtool | Perl
-| {t}ditaa_example[ditaa] | embedding ditaa diagrams into Asciidoc documents {d}[notes] | ditaa
-| {t}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
 |=================================================================================================================
 
 Other resources
