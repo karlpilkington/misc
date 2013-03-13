@@ -2,7 +2,11 @@ Scripts and Snippets
 --------------------
 Troy D. Hanson <tdh@tkhanson.net>
 
-include::sslogo.txt[]
+ifdef::backend-xhtml11[]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<a style="float: right; padding-right: 50px" href="http://tkhanson.net/misc"><img style="border: 0" src="sslogo.png" alt="scripts and snippets" /></a>
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+endif::backend-xhtml11[]
 
 Back to http://tkhanson.net[tkhanson.net main page].
 
@@ -13,13 +17,13 @@ and OS X.  These are all placed in the public domain.
 
 Download options
 ~~~~~~~~~~~~~~~~
-* Download http://tkhanson.net/misc/misc.tar.bz2[misc.tar.bz2]
-* Browse http://tkhanson.net/cgit.cgi/misc.git/tree[source tree]
-* Clone `git clone http://tkhanson.net/misc.git`
+* Download https://github.com/troydhanson/misc/archive/master.zip[misc-master.zip]
+* Browse https://github.com/troydhanson/misc[source tree]
+* Clone `git clone git://github.com/troydhanson/misc.git`
 
 // this defines an attribute called {t} used below
-//:t: http://tkhanson.net/cgit.cgi/misc.git/plain/
-:t: http://tkhanson.net/cgit.cgi/misc.git/tree/
+//:t: https://github.com/troydhanson/tpl/raw/master/
+:t: https://github.com/troydhanson/tpl/blob/master/
 :f: http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html
 :e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html
 

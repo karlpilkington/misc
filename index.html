@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.6" />
+<meta name="generator" content="AsciiDoc 8.6.8" />
 <title></title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -87,10 +87,14 @@ ul, ol, li > p {
 ul > li     { color: #aaa; }
 ul > li > * { color: black; }
 
-pre {
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
   padding: 0;
   margin: 0;
 }
+
 
 #author {
   color: #527bbd;
@@ -219,7 +223,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; }
+span.image img { border-style: none; vertical-align: text-bottom; }
 a.image:visited { color: white; }
 
 dl {
@@ -349,7 +353,7 @@ div.colist td img {
   margin-bottom: 0.1em;
 }
 
-div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -407,17 +411,13 @@ span.underline { text-decoration: underline; }
 span.overline { text-decoration: overline; }
 span.line-through { text-decoration: line-through; }
 
+div.unbreakable { page-break-inside: avoid; }
+
 
 /*
  * xhtml11 specific
  *
  * */
-
-tt {
-  font-family: monospace;
-  font-size: inherit;
-  color: navy;
-}
 
 div.tableblock {
   margin-top: 1.0em;
@@ -451,12 +451,6 @@ div.tableblock > table[frame="vsides"] {
  * html5 specific
  *
  * */
-
-.monospaced {
-  font-family: monospace;
-  font-size: inherit;
-  color: navy;
-}
 
 table.tableblock {
   margin-top: 1.0em;
@@ -537,6 +531,8 @@ body.manpage div.sectionbody {
 @media print {
   body.manpage div#toc { display: none; }
 }
+
+
 </style>
 <script type="text/javascript">
 /*<![CDATA[*/
@@ -581,7 +577,7 @@ toc: function (toclevels) {
 
   function tocEntries(el, toclevels) {
     var result = new Array;
-    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
     // Function that scans the DOM tree for header elements (the DOM2
     // nodeIterator API would be a better technique but not supported by all
     // browsers).
@@ -610,7 +606,7 @@ toc: function (toclevels) {
   var i;
   for (i = 0; i < toc.childNodes.length; i++) {
     var entry = toc.childNodes[i];
-    if (entry.nodeName == 'div'
+    if (entry.nodeName.toLowerCase() == 'div'
      && entry.getAttribute("class")
      && entry.getAttribute("class").match(/^toclevel/))
       tocEntriesToRemove.push(entry);
@@ -656,7 +652,7 @@ footnotes: function () {
   var entriesToRemove = [];
   for (i = 0; i < noteholder.childNodes.length; i++) {
     var entry = noteholder.childNodes[i];
-    if (entry.nodeName == 'div' && entry.getAttribute("class") == "footnote")
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
       entriesToRemove.push(entry);
   }
   for (i = 0; i < entriesToRemove.length; i++) {
@@ -753,17 +749,17 @@ and OS X.  These are all placed in the public domain.</p></div>
 <div class="ulist"><ul>
 <li>
 <p>
-Download <a href="http://tkhanson.net/misc/misc.tar.bz2">misc.tar.bz2</a>
+Download <a href="https://github.com/troydhanson/misc/archive/master.zip">misc-master.zip</a>
 </p>
 </li>
 <li>
 <p>
-Browse <a href="http://tkhanson.net/cgit.cgi/misc.git/tree">source tree</a>
+Browse <a href="https://github.com/troydhanson/misc">source tree</a>
 </p>
 </li>
 <li>
 <p>
-Clone <tt>git clone http://tkhanson.net/misc.git</tt>
+Clone <code>git clone git://github.com/troydhanson/misc.git</code>
 </p>
 </li>
 </ul></div>
@@ -781,152 +777,152 @@ cellspacing="0" cellpadding="4">
 <col width="5%" />
 <tbody>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/dlsym">dlsym</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/dlsym">dlsym</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of using dlsym()</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/lemon">lemon</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/lemon">lemon</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of using the Lemon parser generator</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/udp">udp</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/udp">udp</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of UDP client and server</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/tcp">tcp</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/tcp">tcp</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of TCP client and server</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/ifinfo">ifinfo</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/ifinfo">ifinfo</a></code></p></td>
 <td align="left" valign="top"><p class="table">code to list network interfaces, their IPv4/v6 addresses and MACs</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/dns">dns</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/dns">dns</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of doing DNS lookup</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/sigio">sigio</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/sigio">sigio</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of signal driven I/O notification</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/asm">asm</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/asm">asm</a></code></p></td>
 <td align="left" valign="top"><p class="table">a few x86 assembly programs that call C library functions or are called from C</p></td>
 <td align="left" valign="top"><p class="table">asm</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/inotify">inotify</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/inotify">inotify</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of getting inotify file events (Linux 2.6.13 and higher)</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/mworkers">mworkers</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/mworkers">mworkers</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of a parent process managing multiple worker processes</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/pcre">pcre</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/pcre">pcre</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of using pcre library</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/pcap">pcap</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/pcap">pcap</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of using libpcap to capture packets</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/readline">readline</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/readline">readline</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of using readline library</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/unixdomain">unixdomain</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/unixdomain">unixdomain</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of UNIX domain socket client and server <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/controlport">controlport</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/controlport">controlport</a></code></p></td>
 <td align="left" valign="top"><p class="table">a control port library: an administrative interface to a server</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/bloom">bloom</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/bloom">bloom</a></code></p></td>
 <td align="left" valign="top"><p class="table">builds a Bloom filter from lines of one text file, tests lines of another file on it</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/ts">timeseries</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/ts">timeseries</a></code></p></td>
 <td align="left" valign="top"><p class="table">a time series library, series comprised of arbitrary elements</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/entropy">entropy</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/entropy">entropy</a></code></p></td>
 <td align="left" valign="top"><p class="table">measuring entropy of a byte stream <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/zlib">zlib</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/zlib">zlib</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of implementing a simple gzip/gunzip using the zlib C API</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/tconf">tconf</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/tconf">tconf</a></code></p></td>
 <td align="left" valign="top"><p class="table">simple function to read key-value configuration file entries</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/rw_wrap">rw_wrap</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/rw_wrap">rw_wrap</a></code></p></td>
 <td align="left" valign="top"><p class="table">macros to wrap read/write, which loop until "len" bytes are read or written</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/iconv">iconv</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/iconv">iconv</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of using the iconv library</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/iscan">iscan</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/iscan">iscan</a></code></p></td>
 <td align="left" valign="top"><p class="table">an incremental grep that reads a stream piecemeal scanning for a pattern</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/sized">sized</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/sized">sized</a></code></p></td>
 <td align="left" valign="top"><p class="table">keep a flat directory under a certain size</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/slurp">slurp</a></tt></p></td>
-<td align="left" valign="top"><p class="table">example of using <tt>read</tt> or <tt>mmap</tt> to "slurp" a whole file</p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/slurp">slurp</a></code></p></td>
+<td align="left" valign="top"><p class="table">example of using <code>read</code> or <code>mmap</code> to "slurp" a whole file</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/pexit">pexit</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/pexit">pexit</a></code></p></td>
 <td align="left" valign="top"><p class="table">a C program that gets signalled when its parent exits using prctl</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/utf8">utf8</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/utf8">utf8</a></code></p></td>
 <td align="left" valign="top"><p class="table">macros for utf8 handling including character length, validity and utf32 conversion</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/looper">looper</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/looper">looper</a></code></p></td>
 <td align="left" valign="top"><p class="table">example of iterating over lines of input from file or stdin using readline</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/ncurses">ncurses</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/ncurses">ncurses</a></code></p></td>
 <td align="left" valign="top"><p class="table">sliding bar charts and histograms using ncurses</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/qcp">qcp</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/qcp">qcp</a></code></p></td>
 <td align="left" valign="top"><p class="table">quick copy files from client to server without authentication</p></td>
 <td align="left" valign="top"><p class="table">C</p></td>
 </tr>
@@ -946,77 +942,77 @@ cellspacing="0" cellpadding="4">
 <col width="5%" />
 <tbody>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/init">init</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/init">init</a></code></p></td>
 <td align="left" valign="top"><p class="table">initscripts to start daemons on RHEL/CentOS, Ubuntu, Debian, Mac OS X <a href="http://troydhanson.wordpress.com/2012/08/21/minimal-sysvinit-launchd-and-upstart/">notes</a></p></td>
 <td align="left" valign="top"><p class="table">text</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/fifor">fifor</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/fifor">fifor</a></code></p></td>
 <td align="left" valign="top"><p class="table">run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/fifor/index.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/downsample">downsample</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/downsample">downsample</a></code></p></td>
 <td align="left" valign="top"><p class="table">reduce a text file to x% of its lines (default 10%)</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/md5watch">md5watch</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/md5watch">md5watch</a></code></p></td>
 <td align="left" valign="top"><p class="table">list files changed since last run <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/md5watch/index.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/mailpl">mailpl</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/mailpl">mailpl</a></code></p></td>
 <td align="left" valign="top"><p class="table">send email with attachments, configurable from address, etc</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/anb">anb</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/anb">anb</a></code></p></td>
 <td align="left" valign="top"><p class="table">list lines in file A but not in file B</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/bin2hex">bin2hex</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/bin2hex">bin2hex</a></code></p></td>
 <td align="left" valign="top"><p class="table">convert stdin to hex bytes</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/hex2bin">hex2bin</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/hex2bin">hex2bin</a></code></p></td>
 <td align="left" valign="top"><p class="table">convert hex args to binary bytes on stdout</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/fcut">fcut</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/fcut">fcut</a></code></p></td>
 <td align="left" valign="top"><p class="table">print region (from position s of length l) from a file</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/nfiles">nfiles</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/nfiles">nfiles</a></code></p></td>
 <td align="left" valign="top"><p class="table">copy stdin or input files to sequential output files each having fixed number of lines</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/pagehits">pagehits</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/pagehits">pagehits</a></code></p></td>
 <td align="left" valign="top"><p class="table">parse access.log and store daily hits for each url, or view cumulative hits</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/remember">remember</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/remember">remember</a></code></p></td>
 <td align="left" valign="top"><p class="table">type "remember", run some commands you want to remember, then "remember -s" to save them <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/remember/index.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">sh</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/rrd">rrd</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/rrd">rrd</a></code></p></td>
 <td align="left" valign="top"><p class="table">sample of using rrdtool</p></td>
 <td align="left" valign="top"><p class="table">Perl</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/ditaa_example">ditaa</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/ditaa_example">ditaa</a></code></p></td>
 <td align="left" valign="top"><p class="table">embedding ditaa diagrams into Asciidoc documents <a href="http://tkhanson.net/cgit.cgi/misc.git/plain/ditaa_example/ditaa_asciidoc.html">notes</a></p></td>
 <td align="left" valign="top"><p class="table">ditaa</p></td>
 </tr>
 <tr>
-<td align="center" valign="top"><p class="table"><tt><a href="http://tkhanson.net/cgit.cgi/misc.git/tree/setup">setup</a></tt></p></td>
+<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/tpl/blob/master/setup">setup</a></code></p></td>
 <td align="left" valign="top"><p class="table">configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc</p></td>
 <td align="left" valign="top"><p class="table">sh</p></td>
 </tr>
@@ -1040,7 +1036,7 @@ cellspacing="0" cellpadding="4">
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2012-10-11 05:46:54 EDT
+Last updated 2013-03-12 21:58:24 EDT
 </div>
 </div>
 </body>

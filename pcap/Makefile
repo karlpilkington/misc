@@ -1,4 +1,4 @@
-DIRS=basic
+DIRS=basic session
 all: $(DIRS)
 
 .PHONY: clean $(DIRS)
