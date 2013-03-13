@@ -10,11 +10,3 @@ warning:
 # we use a static pattern rule. 
 $(HTML): %.html: %.txt
 	asciidoc $<
-
-TMP=/tmp/misc-gh-pages
-stage:
-	mkdir -p ${TMP}
-	rm -rif ${TMP}/*
-	find . -name '*.html' -exec cp {} ${TMP} \;
-	cp *.png ${TMP}
-

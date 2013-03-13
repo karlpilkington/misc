@@ -23,10 +23,10 @@ Download options
 
 // this defines an attribute called {t} used below
 //:t: https://github.com/troydhanson/tpl/raw/master/
-:t: https://github.com/troydhanson/tpl/tree/master/
-:b: https://github.com/troydhanson/tpl/blob/master/
-:f: http://tkhanson.net/cgit.cgi/misc.git/plain/unixdomain/Unix_domain_sockets.html
-:e: http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/Entropy.html
+:t: https://github.com/troydhanson/misc/tree/master/
+:b: https://github.com/troydhanson/misc/blob/master/
+:f: http://troydhanson.github.com/misc/Unix_domain_sockets.html
+:e: http://troydhanson.github.com/misc/Entropy.html
 
 Snippets 
 ~~~~~~~~
@@ -66,27 +66,26 @@ Examples of using common libraries and other reusable bits:
 |=================================================================================================================
 
 :i: http://troydhanson.wordpress.com/2012/08/21/minimal-sysvinit-launchd-and-upstart/
-:f: http://tkhanson.net/cgit.cgi/misc.git/plain/fifor/index.html
-:r: http://tkhanson.net/cgit.cgi/misc.git/plain/remember/index.html
-:m: http://tkhanson.net/cgit.cgi/misc.git/plain/md5watch/index.html
-:d: http://tkhanson.net/cgit.cgi/misc.git/plain/ditaa_example/ditaa_asciidoc.html
+:f: http://troydhanson.github.com/misc/fifor.html
+:r: http://troydhanson.github.com/misc/remember.html
+:m: http://troydhanson.github.com/misc/md5watch.html
+:m: http://troydhanson.github.com/misc/ditaa_asciidoc.html
 
 Scripts
 ~~~~~~~
 [width="90%",cols="10^m,70,5",grid="none"]
 |=================================================================================================================
-| {t}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
+| {b}setup[setup]       | configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc | sh
 | {t}fifor[fifor]       | run commands whenever a fifo is readable (useful when triggered by a vim hotkey) {f}[notes] | Perl
 | {t}remember[remember] | type "remember", run some commands you want to remember, then "remember -s" to save them {r}[notes] | sh
-| {t}anb[anb]           | list lines in file A but not in file B | Perl
-| {t}fcut[fcut]         | print region (from position s of length l) from a file | Perl
-| {t}bin2hex[bin2hex]   | convert stdin to hex bytes | Perl
-| {t}hex2bin[hex2bin]   | convert hex args to binary bytes on stdout | Perl
-| {t}downsample[downsample] |  reduce a text file to x% of its lines (default 10%) | Perl
+| {b}anb[anb]           | list lines in file A but not in file B | Perl
+| {b}fcut[fcut]         | print region (from position s of length l) from a file | Perl
+| {b}bin2hex[bin2hex]   | convert stdin to hex bytes | Perl
+| {b}hex2bin[hex2bin]   | convert hex args to binary bytes on stdout | Perl
+| {b}downsample[downsample] |  reduce a text file to x% of its lines (default 10%) | Perl
 | {t}init[init]         | initscripts to start daemons on RHEL/CentOS, Ubuntu, Debian, Mac OS X {i}[notes]| text
 | {t}md5watch[md5watch] | list files changed since last run {m}[notes] | Perl
-| {t}mailpl[mailpl]     | send email with attachments, configurable from address, etc | Perl
-| {t}nfiles[nfiles]     | copy stdin or input files to sequential output files each having fixed number of lines| Perl
+| {b}mailpl[mailpl]     | send email with attachments, configurable from address, etc | Perl
 |=================================================================================================================
 
 Other resources
