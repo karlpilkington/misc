@@ -734,289 +734,47 @@ asciidoc.install();
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_scripts_and_snippets">Scripts and Snippets</h2>
+<h2 id="_fifor">fifor</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>Troy D. Hanson &lt;<a href="mailto:tdh@tkhanson.net">tdh@tkhanson.net</a>&gt;</p></div>
-<a style="float: right; padding-right: 50px" href="http://tkhanson.net/misc"><img style="border: 0" src="sslogo.png" alt="scripts and snippets" /></a>
-<div class="paragraph"><p>Back to <a href="http://tkhanson.net">tkhanson.net main page</a>.</p></div>
-<div class="sect2">
-<h3 id="_about">About</h3>
-<div class="paragraph"><p>These are miscellaneous small scripts and snippets that I&#8217;ve written on Linux
-and OS X.  These are all placed in the public domain.</p></div>
-</div>
-<div class="sect2">
-<h3 id="_download_options">Download options</h3>
-<div class="ulist"><ul>
-<li>
-<p>
-Download <a href="https://github.com/troydhanson/misc/archive/master.zip">misc-master.zip</a>
-</p>
-</li>
-<li>
-<p>
-Browse <a href="https://github.com/troydhanson/misc">source tree</a>
-</p>
-</li>
-<li>
-<p>
-Clone <code>git clone git://github.com/troydhanson/misc.git</code>
-</p>
-</li>
-</ul></div>
-</div>
-<div class="sect2">
-<h3 id="_snippets">Snippets</h3>
-<div class="paragraph"><p>Examples of using common libraries and other reusable bits:</p></div>
-<div class="tableblock">
-<table rules="none"
-width="90%"
-frame="border"
-cellspacing="0" cellpadding="4">
-<col width="11%" />
-<col width="82%" />
-<col width="5%" />
-<tbody>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/dlsym">dlsym</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of using dlsym()</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/lemon">lemon</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of using the Lemon parser generator</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/udp">udp</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of UDP client and server</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/tcp">tcp</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of TCP client and server</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/ifinfo">ifinfo</a></code></p></td>
-<td align="left" valign="top"><p class="table">code to list network interfaces, their IPv4/v6 addresses and MACs</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/dns">dns</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of doing DNS lookup</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/sigio">sigio</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of signal driven I/O notification</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/asm">asm</a></code></p></td>
-<td align="left" valign="top"><p class="table">a few x86 assembly programs that call C library functions or are called from C</p></td>
-<td align="left" valign="top"><p class="table">asm</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/inotify">inotify</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of getting inotify file events (Linux 2.6.13 and higher)</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/mworkers">mworkers</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of a parent process managing multiple worker processes</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/pcre">pcre</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of using pcre library</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/pcap">pcap</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of using libpcap to capture packets</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/readline">readline</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of using readline library</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/unixdomain">unixdomain</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of UNIX domain socket client and server <a href="http://troydhanson.github.com/misc/Unix_domain_sockets.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/controlport">controlport</a></code></p></td>
-<td align="left" valign="top"><p class="table">a control port library: an administrative interface to a server</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/bloom">bloom</a></code></p></td>
-<td align="left" valign="top"><p class="table">builds a Bloom filter from lines of one text file, tests lines of another file on it</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/ts">timeseries</a></code></p></td>
-<td align="left" valign="top"><p class="table">a time series library, series comprised of arbitrary elements</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/entropy">entropy</a></code></p></td>
-<td align="left" valign="top"><p class="table">measuring entropy of a byte stream <a href="http://troydhanson.github.com/misc/Entropy.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/zlib">zlib</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of implementing a simple gzip/gunzip using the zlib C API</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/tconf">tconf</a></code></p></td>
-<td align="left" valign="top"><p class="table">simple function to read key-value configuration file entries</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/rw_wrap">rw_wrap</a></code></p></td>
-<td align="left" valign="top"><p class="table">macros to wrap read/write, which loop until "len" bytes are read or written</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/iconv">iconv</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of using the iconv library</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/iscan">iscan</a></code></p></td>
-<td align="left" valign="top"><p class="table">an incremental grep that reads a stream piecemeal scanning for a pattern</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/sized">sized</a></code></p></td>
-<td align="left" valign="top"><p class="table">keep a flat directory under a certain size</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/slurp">slurp</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of using <code>read</code> or <code>mmap</code> to "slurp" a whole file</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/pexit">pexit</a></code></p></td>
-<td align="left" valign="top"><p class="table">a C program that gets signalled when its parent exits using prctl</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/utf8">utf8</a></code></p></td>
-<td align="left" valign="top"><p class="table">macros for utf8 handling including character length, validity and utf32 conversion</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/looper">looper</a></code></p></td>
-<td align="left" valign="top"><p class="table">example of iterating over lines of input from file or stdin using readline</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/ncurses">ncurses</a></code></p></td>
-<td align="left" valign="top"><p class="table">sliding bar charts and histograms using ncurses</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/qcp">qcp</a></code></p></td>
-<td align="left" valign="top"><p class="table">quick copy files from client to server without authentication</p></td>
-<td align="left" valign="top"><p class="table">C</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_scripts">Scripts</h3>
-<div class="tableblock">
-<table rules="none"
-width="90%"
-frame="border"
-cellspacing="0" cellpadding="4">
-<col width="11%" />
-<col width="82%" />
-<col width="5%" />
-<tbody>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/blob/master/setup">setup</a></code></p></td>
-<td align="left" valign="top"><p class="table">configure some of my preferences in .bash_profile, .gdbinit, .vimrc and .inputrc</p></td>
-<td align="left" valign="top"><p class="table">sh</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/fifor">fifor</a></code></p></td>
-<td align="left" valign="top"><p class="table">run commands whenever a fifo is readable (useful when triggered by a vim hotkey) <a href="http://troydhanson.github.com/misc/fifor.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/remember">remember</a></code></p></td>
-<td align="left" valign="top"><p class="table">type "remember", run some commands you want to remember, then "remember -s" to save them <a href="http://troydhanson.github.com/misc/remember.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">sh</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/blob/master/anb">anb</a></code></p></td>
-<td align="left" valign="top"><p class="table">list lines in file A but not in file B</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/blob/master/fcut">fcut</a></code></p></td>
-<td align="left" valign="top"><p class="table">print region (from position s of length l) from a file</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/blob/master/bin2hex">bin2hex</a></code></p></td>
-<td align="left" valign="top"><p class="table">convert stdin to hex bytes</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/blob/master/hex2bin">hex2bin</a></code></p></td>
-<td align="left" valign="top"><p class="table">convert hex args to binary bytes on stdout</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/blob/master/downsample">downsample</a></code></p></td>
-<td align="left" valign="top"><p class="table">reduce a text file to x% of its lines (default 10%)</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/init">init</a></code></p></td>
-<td align="left" valign="top"><p class="table">initscripts to start daemons on RHEL/CentOS, Ubuntu, Debian, Mac OS X <a href="http://troydhanson.wordpress.com/2012/08/21/minimal-sysvinit-launchd-and-upstart/">notes</a></p></td>
-<td align="left" valign="top"><p class="table">text</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/tree/master/md5watch">md5watch</a></code></p></td>
-<td align="left" valign="top"><p class="table">list files changed since last run <a href="http://troydhanson.github.com/misc/ditaa_asciidoc.html">notes</a></p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-<tr>
-<td align="center" valign="top"><p class="table"><code><a href="https://github.com/troydhanson/misc/blob/master/mailpl">mailpl</a></code></p></td>
-<td align="left" valign="top"><p class="table">send email with attachments, configurable from address, etc</p></td>
-<td align="left" valign="top"><p class="table">Perl</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_other_resources">Other resources</h3>
-<div class="olist arabic"><ol class="arabic">
-<li>
-<p>
-<a href="http://tkhanson.net/virtual_memory.pdf">Virtual Memory in a Nutshell</a> slides I wrote in 2009.
-</p>
-</li>
-</ol></div>
-</div>
+<div class="paragraph"><p>Back to <a href="http://tkhanson.net/misc">Scripts and Snippets</a>.</p></div>
+<div class="paragraph"><p>Say you have <code>vim</code> running in one window, and wish to have <code>make</code> kicked off
+<em>in a different window</em> whenever you type backslash in vim. This is the sort of
+thing you can do with <code>fifor</code>.  This utility does "something" every time a fifo
+becomes readable.  You need to do a one-time setup to create the fifo:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>mkfifo /tmp/fifo</code></pre>
+</div></div>
+<div class="paragraph"><p>In the window where you want the "something" to happen, start <code>fifor</code> with the
+command to be run:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>fifor make</code></pre>
+</div></div>
+<div class="paragraph"><p>Now it will wait. Anytime a line is written to <code>/tmp/fifo</code>, it will execute
+<code>make</code>.  (You can use options to specify a different fifo file. Run <code>fifor -h</code>
+for usage).  Note that if you want a <em>sequence</em> of commands to run when the fifo
+triggers, separate each command in the sequence with a quoted semicolon:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>fifor make \; cp tool /usr/bin</code></pre>
+</div></div>
+<div class="paragraph"><p>Whenever you want the commands to run, write a line (anything) to the fifo.  You
+could just <code>echo &gt; /tmp/fifo</code> to write an empty line to it.  I automate this by
+mapping it to a keystroke in <code>vim</code>, using this line in <code>~/.vimrc</code>:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>map &lt;Bslash&gt; :!echo &gt;/tmp/fifo&lt;CR&gt;&lt;CR&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>Now whenever I hit backslash in vim, the make kicks off in the other window.</p></div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-03-12 23:42:04 EDT
+Last updated 2013-03-12 23:36:32 EDT
 </div>
 </div>
 </body>
