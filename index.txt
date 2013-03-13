@@ -69,7 +69,7 @@ Examples of using common libraries and other reusable bits:
 :f: http://troydhanson.github.com/misc/fifor.html
 :r: http://troydhanson.github.com/misc/remember.html
 :m: http://troydhanson.github.com/misc/md5watch.html
-:m: http://troydhanson.github.com/misc/ditaa_asciidoc.html
+:v: http://troydhanson.github.com/misc/virtual_memory.pdf
 
 Scripts
 ~~~~~~~
@@ -90,6 +90,6 @@ Scripts
 
 Other resources
 ~~~~~~~~~~~~~~~
-1. http://tkhanson.net/virtual_memory.pdf[Virtual Memory in a Nutshell] slides I wrote in 2009.
+1. {v}[Virtual Memory in a Nutshell] slides I wrote in 2009.
 
 // vim: set tw=80 wm=2 nowrap syntax=asciidoc: 

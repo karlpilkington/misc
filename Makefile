@@ -17,4 +17,5 @@ stage:
 	rm -rif ${TMP}/*
 	find . -name '*.html' -exec cp {} ${TMP} \;
 	cp *.png ${TMP}
+	cp *.pdf ${TMP}
 
