@@ -19,7 +19,9 @@ Download options
 ~~~~~~~~~~~~~~~~
 * Download https://github.com/troydhanson/misc/archive/master.zip[misc-master.zip]
 * Browse https://github.com/troydhanson/misc[source tree]
-* Clone `git clone git://github.com/troydhanson/misc.git`
+* Clone `git clone https://github.com/troydhanson/misc.git`
+
+For other downlink options, see https://github.com/troydhanson/misc[the Github page].
 
 // this defines an attribute called {t} used below
 //:t: https://github.com/troydhanson/tpl/raw/master/
