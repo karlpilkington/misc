@@ -247,14 +247,16 @@ symbol were equally likely, we'd need to send enough bits to distinguish each
 symbol (every time we send a symbol); since they're not necessarily equally
 likely, we can use fewer bits for the common ones.
 
-Entropy reflects the data not how you send it
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Just because the entropy of a file is (for example), 2 bits per byte, we can
-still transmit it inefficiently (using 8 bits per byte). That doesn't change the
-entropy measure of the file itself. If the sender and receiver do not have an
-encoding scheme, they are disregarding an opportunity for efficiency
-quantified by entropy, but the entropy is unchanged. The entropy is a limit
-to which encoding schemes can strive to attain.
+Linux kernel entropy pool
+^^^^^^^^^^^^^^^^^^^^^^^^^
+The Linux kernel maintains an "entropy pool", generated from "random" events
+such as timing of interrupts to the operating system. It exposes the entropy
+pool as the files `/dev/urandom` and `/dev/random` (the latter is a blocking
+version which only produces output when the kernel has sufficient entropy).
+
+  dd if=/dev/urandom of=/tmp/rand bs=1M count=1
+  ./entropy1 /tmp/rand
+  8.00 bits per byte
 
 Resources
 ---------

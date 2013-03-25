@@ -1,6 +1,6 @@
 #CFLAGS = -g
 OBJS = mkprob entropy1 entropy2 shlimit
-ASCIIDOC=/usr/bin/asciidoc
+ASCIIDOC=/usr/local/bin/asciidoc
 DOC = Entropy.html
 MATH = -lm
 
