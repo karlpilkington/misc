@@ -1,7 +1,7 @@
 Measuring Entropy in a Byte Stream
 ==================================
 Troy D. Hanson <tdh@tkhanson.net>
-v1.0.0, June 2011
+v1.0.1, March 2013
 
 Entropy is a measure of the unpredictability of an information stream. A
 perfectly consistent stream of bits (all zeroes, or all ones) is totally
@@ -258,17 +258,17 @@ version which only produces output when the kernel has sufficient entropy).
   ./entropy1 /tmp/rand
   8.00 bits per byte
 
+:t: https://github.com/troydhanson/misc/tree/master/entropy
+:b: https://github.com/troydhanson/misc/blob/master/entropy
+
 Resources
 ---------
-Here are http://tkhanson.net/cgit.cgi/misc.git/tree/entropy/[some C programs]
-that implement entropy measure. These are placed in the public domain.
+Here are {t}[some C programs] that implement entropy measure. These are placed
+in the public domain.
 
-* A http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/entropy1.c[program]
-  that prints the entropy of stdin or a file, in bits per byte.
-* This http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/shlimit.c[version]
-  also shows the percentage to which the input file could be compressed.
-* A http://tkhanson.net/cgit.cgi/misc.git/plain/entropy/mkprob.c[tool] that
-  produces byte streams having a given probability distribution, for testing.
+* A {b}/entropy1.c[program] that prints the entropy of stdin or a file, in bits per byte.
+* This {b}/shlimit.c[version] also shows the percentage to which the input file could be compressed.
+* A {b}/mkprob.c[tool] that produces byte streams having a given probability distribution, for testing.
 
 Example 1
 ~~~~~~~~~
